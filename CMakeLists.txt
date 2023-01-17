@@ -18,6 +18,7 @@ endif()
 
 add_library(strings MODULE
     src/main.cpp
+    src/impl/multiplayer/controller.c
     src/impl/multiplayer/item_collection.c
     src/impl/rng.c
     src/impl/tag.c

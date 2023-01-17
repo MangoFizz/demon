@@ -1,6 +1,7 @@
 {
-    "calculate_total_item_collection_weight": {"address": "0x45F6C0", "replace": true, "use_return_value": true, "arguments": [ "eax" ]},
-    "pick_item_collection_object": {"address": "0x45F700", "replace": true, "use_return_value": true, "arguments": [ "eax" ]},
+    "calculate_total_item_collection_weight": {"address": "0x45F6C0", "replace": true, "use_return_value": true, "arguments": ["eax"]},
+    "pick_item_collection_object": {"address": "0x45F700", "replace": true, "use_return_value": true, "arguments": ["eax"]},
 
-    "lookup_tag": {"address": "0x442550", "replace": true, "use_return_value": true, "arguments": [ "0", "edi" ]}
+    "lookup_tag": {"address": "0x442550", "replace": true, "use_return_value": true, "arguments": [ "0", "edi" ]},
+    "axis_analog_to_digital": {"address": "0x470020", "replace": true, "arguments": ["0"]}
 }
