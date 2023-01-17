@@ -24,6 +24,7 @@ add_library(strings MODULE
     src/impl/tag.c
     "${CMAKE_CURRENT_BINARY_DIR}/hook.cpp"
     src/strings/strings.rc
+    version.rc
 )
 set_property(TARGET strings PROPERTY CXX_STANDARD 20)
 set_property(TARGET strings PROPERTY C_STANDARD 17)
