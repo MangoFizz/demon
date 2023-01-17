@@ -23,10 +23,12 @@ add_library(strings MODULE
     src/impl/rng.c
     src/impl/tag.c
     "${CMAKE_CURRENT_BINARY_DIR}/hook.cpp"
+    src/strings/strings.rc
 )
 set_property(TARGET strings PROPERTY CXX_STANDARD 20)
 set_property(TARGET strings PROPERTY C_STANDARD 17)
 set_property(TARGET strings PROPERTY PREFIX "") # don't prepend with "lib"
+target_compile_definitions(strings PRIVATE STRINGS_CUSTOM_VERSION_RC)
 
 add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/hook.cpp"

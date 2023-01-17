@@ -1,0 +1,4 @@
+[submodule "src/strings"]
+	path = src/strings
+	url = https://github.com/Vaporeon/strings
+	branch = "demo"
