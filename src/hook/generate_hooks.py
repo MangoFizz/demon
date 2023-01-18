@@ -15,6 +15,9 @@ for hook in hooks:
     if "disabled" in hook_info and hook_info["disabled"]:
         continue
 
+    if "flag" in hook_info:
+        hook_fn += "        #ifdef {flag}\n".format(flag=hook_info["flag"])
+
     if "replace" in hook_info and hook_info["replace"]:
         lib_fns += "    extern int {};\n".format(hook)
         hook_fn += "        Hook({address}, reinterpret_cast<std::uintptr_t>(&{output}))".format(address=hook_info["address"], output=hook)
@@ -32,6 +35,9 @@ for hook in hooks:
         hook_fn += "\n            .has_return_value()"
 
     hook_fn += "\n            .write_hook();\n"
+
+    if "flag" in hook_info:
+        hook_fn += "        #endif\n"
 
 cpp_source_code = """// AUTO-GENERATED! DO NOT EDIT UNLESS YOU LIKE REGRETTING THINGS!
 
