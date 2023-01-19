@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <vector>
+#include <stdexcept>
 #include "hook/hook.hpp"
 
 using namespace Demon;
@@ -27,10 +28,16 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved
             VirtualProtect(crash_if_dll_is_different, 6, old_protection, &old_protection);
 
             // Allocate the heap
-            hook_heap = reinterpret_cast<std::byte *>(VirtualAlloc(NULL, hook_heap_size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE));
+            hook_heap = reinterpret_cast<std::byte *>(VirtualAlloc(nullptr, hook_heap_size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE));
             hook_heap_usage = 0;
 
-            set_up_all_hooks();
+            try {
+                set_up_all_hooks();
+            }
+            catch(std::exception &e) {
+                MessageBox(nullptr, e.what(), "Error patching the game!", 0);
+                std::terminate();
+            }
 
             // Once done, set the protection to execute/read only so we don't get pwned.
             VirtualProtect(hook_heap, hook_heap_size, PAGE_EXECUTE_READ, &old_protection);
@@ -63,6 +70,7 @@ void Hook::write_hook() {
     // Current stack offset (0x20 bytes from pushad, 0x4 bytes from pushfd, 0x4 bytes from call)
     std::size_t starting_stack_offset = 0x28;
     std::size_t stack_offset = starting_stack_offset;
+    std::size_t fp_stack_offset = 0;
 
     // Push parameters
     if(!this->parameters.empty()) {
@@ -93,29 +101,71 @@ void Hook::write_hook() {
                             switch(p.second) {
                                 case EAX:
                                     HOOK_PUSH_BYTE(0x50);
+                                    stack_offset += sizeof(std::uint32_t);
                                     break;
                                 case EBX:
                                     HOOK_PUSH_BYTE(0x53);
+                                    stack_offset += sizeof(std::uint32_t);
                                     break;
                                 case ECX:
                                     HOOK_PUSH_BYTE(0x51);
+                                    stack_offset += sizeof(std::uint32_t);
                                     break;
                                 case EDX:
                                     HOOK_PUSH_BYTE(0x52);
+                                    stack_offset += sizeof(std::uint32_t);
                                     break;
                                 case ESI:
                                     HOOK_PUSH_BYTE(0x56);
+                                    stack_offset += sizeof(std::uint32_t);
                                     break;
                                 case EDI:
                                     HOOK_PUSH_BYTE(0x57);
+                                    stack_offset += sizeof(std::uint32_t);
                                     break;
                                 case EBP:
                                     HOOK_PUSH_BYTE(0x55);
+                                    stack_offset += sizeof(std::uint32_t);
                                     break;
+                                case ESP:
+                                    throw std::logic_error("ESP register is not supported");
+                                case ST0:
+                                case ST1:
+                                case ST2:
+                                case ST3:
+                                case ST4:
+                                case ST5:
+                                case ST6:
+                                case ST7: {
+                                    std::size_t fp_offset = p.second - ST0;
+                                    if(fp_stack_offset > fp_offset) {
+                                        char error_message[1024];
+                                        std::snprintf(error_message, sizeof(error_message) - 1, "Can't use FP register ST%zu because we already popped %zu float(s)."
+                                                                                                "For example, ST0 is now what ST%zu was.\n\n"
+                                                                                                "Try re-arranging the registers!", fp_offset, fp_stack_offset, fp_stack_offset);
+                                        throw std::logic_error(error_message);
+                                    }
+
+                                    // sub esp, 0x8 (makes room in the stack)
+                                    HOOK_PUSH_BYTE(0x83);
+                                    HOOK_PUSH_BYTE(0xEC);
+                                    HOOK_PUSH_BYTE(0x08);
+                                    stack_offset += sizeof(double);
+
+                                    // pop the float stack until we get what we want
+                                    for(; fp_stack_offset <= fp_offset; fp_stack_offset++) {
+                                        // fstp qword ptr [esp]
+                                        HOOK_PUSH_BYTE(0xDD);
+                                        HOOK_PUSH_BYTE(0x1C);
+                                        HOOK_PUSH_BYTE(0x24);
+                                    }
+
+                                    break;
+                                }
+
                                 default:
-                                    throw std::exception();
+                                    throw std::logic_error("Unknown register!");
                             }
-                            stack_offset += sizeof(std::uint32_t);
                             break;
                         }
                         case LibToGame: {
@@ -147,8 +197,10 @@ void Hook::write_hook() {
                                 case EBP:
                                     operand = 0x6C;
                                     break;
+                                case ESP:
+                                    throw std::logic_error("ESP register is not supported");
                                 default:
-                                    throw std::exception();
+                                    throw std::logic_error("Unknown register!");
                             }
 
                             if(offset <= 0x7F) {

@@ -27,7 +27,8 @@ namespace Demon {
     };
 
     enum ParameterRegister {
-        EAX, EBX, ECX, EDX, ESI, EDI, EBP, /* ESP */
+        ST0, ST1, ST2, ST3, ST4, ST5, ST6, ST7,
+        EAX, EBX, ECX, EDX, ESI, EDI, EBP, ESP
     };
 
     class Hook {

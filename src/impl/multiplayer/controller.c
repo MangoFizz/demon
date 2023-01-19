@@ -1,4 +1,8 @@
-#define ON_THRESHOLD 0.05
+#ifndef DEMON_ENABLE_ENHANCEMENTS
+#define ON_THRESHOLD 0.05 // stock diagonals - too narrow in most cases
+#else
+#define ON_THRESHOLD 0.50 // better diagonals
+#endif
 
 /**
  * Convert controller input from analog to digital in multiplayer.
