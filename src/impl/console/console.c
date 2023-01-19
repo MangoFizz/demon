@@ -17,7 +17,7 @@ static uint16_t *command_history_selected_index = (uint16_t *)(0x6AEC80);
 static uint8_t *console_enabled = (uint8_t *)(0x6AE2C1);
 static ColorARGB *console_prompt_color = (ColorARGB *)(0x6AE348);
 
-void set_console_prompt_display_params() {
+void set_console_prompt_display_params(void) {
     // set prompt to these colors
     *console_prompt_color = *default_prompt_colors;
 
@@ -40,7 +40,7 @@ void set_console_prompt_display_params() {
     #endif
 }
 
-bool command_allowed() {
+bool command_allowed(void) {
     // stubbed: the actual function does a series of checks to see if the command is 'whitelisted' so it can be shown in a non-devmode environment
     return true;
 }

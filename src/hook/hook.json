@@ -6,5 +6,7 @@
     "collision_bsp_leaf_for_point": {"address": "0x4fC8b0", "replace": true, "use_return_value": true, "arguments": ["ecx", "edx", "eax"]},
     "set_console_prompt_display_params": {"address": "0x4C4220", "replace": true},
     "pow_float": {"address": "0x622370", "replace": true, "arguments": ["st1", "st0"]},
+    "allocate_heaps": {"address": "0x444A10", "replace": true},
     "command_allowed": {"address": "0x481BC0", "replace": true, "use_return_value": true, "flag": "DEMON_ENABLE_ENHANCEMENTS", "comment": "NOT FULLY DECOMPED! STUBBED TO ALLOW BETTER TESTING"}
+
 }
