@@ -1,4 +1,4 @@
 [submodule "src/strings"]
 	path = src/strings
-	url = https://github.com/Vaporeon/strings
+	url = https://github.com/Aerocatia/strings
 	branch = "demo"
