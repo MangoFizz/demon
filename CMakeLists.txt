@@ -43,6 +43,7 @@ endif()
 
 add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/hook.cpp"
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/hook/hook.json"
     COMMAND Python3::Interpreter "${CMAKE_CURRENT_SOURCE_DIR}/src/hook/generate_hooks.py" "${CMAKE_CURRENT_SOURCE_DIR}/src/hook/hook.json" "${CMAKE_CURRENT_BINARY_DIR}/hook.cpp"
 )
 
