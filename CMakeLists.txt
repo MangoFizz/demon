@@ -20,11 +20,11 @@ add_library(strings MODULE
     src/main.cpp
     src/impl/bsp/collision.c
     src/impl/console/console.c
-    src/impl/multiplayer/controller.c
+    src/impl/input/controller.c
     src/impl/multiplayer/item_collection.c
     src/impl/object/object.c
+    src/impl/math.c
     src/impl/memory.c
-    src/impl/pow.c
     src/impl/rng.c
     src/impl/tag.c
     "${CMAKE_CURRENT_BINARY_DIR}/hook.cpp"

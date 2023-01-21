@@ -13,14 +13,22 @@ typedef struct TagReference {
     char unused2[4];
     TableID tag_id;
 } TagReference;
+_Static_assert(sizeof(TagReference) == 0x10);
 
 /**
  * Get the data for the tag.
+ *
+ * @param tag_id
+ *
+ * @return pointer to tag data
  */
 void *get_tag_data(TableID tag_id);
 
 /**
  * Lookup the tag.
+ *
+ * @param path  path of the tag (not including file extension)
+ * @param group group of the tag
  *
  * @return tag ID if found, NULL_ID if not
  */

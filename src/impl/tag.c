@@ -12,6 +12,7 @@ typedef struct TagEntry {
     void *data;
     char padding[0x8];
 } TagEntry;
+_Static_assert(sizeof(TagEntry) == 0x20);
 
 typedef struct TagDataHeader {
     TagEntry *tags;
@@ -25,6 +26,7 @@ typedef struct TagDataHeader {
     uint32_t model_data_size;
     FourCC tags_fourcc;
 } TagDataHeader;
+_Static_assert(sizeof(TagDataHeader) == 0x28);
 
 TagDataHeader **tag_data_header_loaded = (TagDataHeader **)(0x69FCFC);
 

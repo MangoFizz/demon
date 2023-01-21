@@ -1,28 +1,9 @@
 #include <stdint.h>
 
+#include "item_collection.h"
+
 #include "../rng.h"
-#include "../tag.h"
 
-typedef struct ItemCollectionPermutation {
-    char padding[0x20];
-    float weight;
-    TagReference item;
-    char padding2[0x20];
-} ItemCollectionPermutation;
-
-typedef struct ItemCollectionPermutationReflexive {
-    uint32_t count;
-    ItemCollectionPermutation *first_element;
-    char padding[4];
-} ItemCollectionPermutationReflexive;
-
-/**
- * Sums up the item collection weight into an integer value.
- *
- * @param ref  Reflexive of the item collection permutations.
- *
- * @return total sum
- */
 uint32_t calculate_total_item_collection_weight(ItemCollectionPermutationReflexive *ref) {
     uint32_t total = 0;
     ItemCollectionPermutation *permutation = ref->first_element;
@@ -33,15 +14,6 @@ uint32_t calculate_total_item_collection_weight(ItemCollectionPermutationReflexi
     return total;
 }
 
-/**
- * Pick a random object in the item collection.
- *
- * Note: Items with fractional weights will be rounded down. Also, collections with a total weight above 32768 may randomly fail!
- *
- * @param item_collection_tag_id  Tag ID of the item collection
- *
- * @return item to spawn or NULL_ID if none spawned
- */
 TableID pick_item_collection_object(TableID item_collection_tag_id) {
     // Get RNG
     uint32_t rng = advance_rng() >> 0x10;

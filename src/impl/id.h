@@ -20,6 +20,7 @@ typedef uint32_t TableID;
     uint16_t count; \
     uint16_t next_id; \
     object_type *first_element; \
-} table_struct_name;
+} table_struct_name; \
+_Static_assert(sizeof(table_struct_name) == 0x38);
 
 #endif

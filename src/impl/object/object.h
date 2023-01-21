@@ -15,8 +15,8 @@ typedef enum ObjectType {
     ObjectType_device_machine,
     ObjectType_device_control,
     ObjectType_device_light_fixture,
-    ObjectType_device_placeholder0,
-    ObjectType_device_sound_scenery1
+    ObjectType_device_placeholder,
+    ObjectType_device_sound_scenery
 } ObjectType;
 
 typedef struct DynamicObjectBase {
@@ -118,7 +118,7 @@ typedef struct DynamicObjectBase {
     char field95_0xae;
     char field96_0xaf;
     float scale;
-    uint16_t object_type; // ObjectType in object.h
+    uint16_t object_type; // ObjectType
     char field99_0xb6;
     char field100_0xb7;
     char field101_0xb8;
@@ -299,7 +299,6 @@ typedef struct DynamicObjectBase {
     char field276_0x1f2;
     char field277_0x1f3;
 } DynamicObjectBase;
-
 _Static_assert(sizeof(DynamicObjectBase) == 0x1F4);
 
 /**

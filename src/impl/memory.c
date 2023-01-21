@@ -1,6 +1,8 @@
 #include <windows.h>
 #include <stdint.h>
 
+#include "memory.h"
+
 #define MANAGED_HEAP_ADDRESS_START (void *)(0x4BAD0000)
 #define TAG_DATA_LOAD_ADDRESS (void *)(0x4BF10000)
 
