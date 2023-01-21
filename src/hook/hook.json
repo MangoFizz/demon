@@ -8,5 +8,6 @@
     "resolve_object_id": {"address": "0x4F23D0", "replace": true, "use_return_value": true, "arguments": ["0", "ecx"]},
     "pow_float": {"address": "0x622370", "replace": true, "arguments": ["st1", "st0"]},
     "allocate_heaps": {"address": "0x444A10", "replace": true},
+    "resolve_parent_object_id": {"address": "0x4F24C0", "replace": true, "use_return_value": true, "arguments": ["ecx"]},
     "command_allowed": {"address": "0x481BC0", "replace": true, "use_return_value": true, "flag": "DEMON_ENABLE_ENHANCEMENTS", "comment": "NOT FULLY DECOMPED! STUBBED TO ALLOW BETTER TESTING"}
 }

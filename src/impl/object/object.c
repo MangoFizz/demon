@@ -56,3 +56,17 @@ DynamicObjectBase *resolve_object_id(uint32_t flag_check, TableID object_id) {
     // Done
     return table_entry->object;
 }
+
+TableID resolve_parent_object_id(TableID object_id) {
+    ObjectTableEntry *entries = (*object_table)->first_element;
+    if(!ID_IS_NULL(object_id)) {
+        while(1) {
+            TableID parent_id = entries[ID_INDEX_PART(object_id)].object->parent;
+            if(ID_IS_NULL(parent_id)) {
+                break;
+            }
+            object_id = parent_id;
+        }
+    }
+    return object_id;
+}
