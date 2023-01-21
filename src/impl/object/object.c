@@ -81,3 +81,7 @@ TableID resolve_object_name_to_id(uint16_t name_index) {
     }
     return (*object_name_ids)[name_index];
 }
+
+DynamicObjectBase *resolve_object_index_to_data_unchecked(uint16_t object_index) {
+    return (*object_table)->first_element[object_index].object;
+}

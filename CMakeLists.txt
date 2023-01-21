@@ -23,6 +23,8 @@ add_library(strings MODULE
     src/impl/input/controller.c
     src/impl/multiplayer/item_collection.c
     src/impl/object/object.c
+    src/impl/player/player.c
+    src/impl/3d.c
     src/impl/math.c
     src/impl/memory.c
     src/impl/rng.c

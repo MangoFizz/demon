@@ -6,17 +6,17 @@
 // TODO: Use tag definitions from Invader!
 
 typedef struct ItemCollectionPermutation {
-    char padding[0x20];
+    uint8_t padding[0x20];
     float weight;
     TagReference item;
-    char padding2[0x20];
+    uint8_t padding2[0x20];
 } ItemCollectionPermutation;
 _Static_assert(sizeof(ItemCollectionPermutation) == 0x54);
 
 typedef struct ItemCollectionPermutationReflexive {
     uint32_t count;
     ItemCollectionPermutation *first_element;
-    char padding[4];
+    uint8_t padding[4];
 } ItemCollectionPermutationReflexive;
 _Static_assert(sizeof(ItemCollectionPermutationReflexive) == 0xC);
 

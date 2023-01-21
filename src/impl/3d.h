@@ -8,6 +8,18 @@ typedef struct VectorXYZ {
 } VectorXYZ;
 _Static_assert(sizeof(VectorXYZ) == 0xC);
 
+/**
+ * Calculate the distance squared between two points.
+ *
+ * Doing distance squared is preferred for speed for doing distance comparisons.
+ *
+ * @param a first vector
+ * @param b second vector
+ *
+ * @return distance squared
+ */
+double vectorxyz_distance_squared(VectorXYZ *a, VectorXYZ *b);
+
 typedef struct VectorIJK {
     float i;
     float j;
