@@ -41,6 +41,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved
 
             // Once done, set the protection to execute/read only so we don't get pwned.
             VirtualProtect(hook_heap, hook_heap_size, PAGE_EXECUTE_READ, &old_protection);
+
             break;
         }
         case DLL_PROCESS_DETACH: {

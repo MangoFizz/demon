@@ -1,6 +1,5 @@
 #include <string.h>
 #include "tag.h"
-#include <windows.h>
 
 uint8_t *map_loaded = (uint8_t *)(0x69F4F8);
 
