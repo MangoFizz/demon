@@ -3,11 +3,11 @@
 
 #include "memory.h"
 
-#define MANAGED_HEAP_ADDRESS_START (void *)(0x4BAD0000)
-#define TAG_DATA_LOAD_ADDRESS (void *)(0x4BF10000)
-
 #define BASE_HEAP_AMOUNT (size_t)(4352 * 1024) // 4.25 MiB
 #define TAG_DATA_LENGTH (size_t)(23 * 1024 * 1024) // 23 MiB
+
+#define MANAGED_HEAP_ADDRESS_START (void *)(0x4BAD0000)
+#define TAG_DATA_LOAD_ADDRESS (void *)(MANAGED_HEAP_ADDRESS_START + BASE_HEAP_AMOUNT) // 0x4BF10000
 
 #define UNK1_SIZE (size_t)(16 * 1024) // 16 KiB
 
