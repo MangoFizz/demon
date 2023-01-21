@@ -17,7 +17,7 @@ MAKE_TABLE_STRUCT(ObjectTable, ObjectTableEntry);
 
 static ObjectTable **object_table = (ObjectTable **)(0x84F850);
 
-DynamicObjectBase *resolve_object_id(uint32_t flag_check, TableID object_id) {
+DynamicObjectBase *resolve_object_id_to_data(uint32_t flag_check, TableID object_id) {
     ObjectTable *halo_object_table = *object_table;
 
     // Split it
@@ -69,4 +69,15 @@ TableID resolve_parent_object_id(TableID object_id) {
         }
     }
     return object_id;
+}
+
+#define MAX_OBJECT_NAMES 0x200
+
+TableID **object_name_ids = (TableID **)(0x6AFF58);
+
+TableID resolve_object_name_to_id(uint16_t name_index) {
+    if(name_index == 0xFFFF || name_index >= MAX_OBJECT_NAMES) {
+        return NULL_ID;
+    }
+    return (*object_name_ids)[name_index];
 }

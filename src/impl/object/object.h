@@ -309,15 +309,24 @@ _Static_assert(sizeof(DynamicObjectBase) == 0x1F4);
  *
  * @return pointer to object or NULL if object_id does not match anything
  */
-DynamicObjectBase *resolve_object_id(uint32_t flag_check, TableID object_id);
+DynamicObjectBase *resolve_object_id_to_data(uint32_t flag_check, TableID object_id);
 
 /**
  * Resolve the parent ID of the object recursively (i.e. until it gets an object that has no parent).
  *
- * @param object_id
+ * @param object_id object ID to start with
  *
  * @return parent object ID or a null object ID if object_id is null
  */
 TableID resolve_parent_object_id(TableID object_id);
+
+/**
+ * Resolve the object name index to an object ID
+ *
+ * @param name_index index of the object name in the scenario
+ *
+ * @return object ID that corresponds to the object name
+ */
+TableID resolve_object_name_to_data(uint16_t name_index);
 
 #endif
