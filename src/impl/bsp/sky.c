@@ -46,13 +46,19 @@ void set_skybox_info(VectorXYZ *point) {
     void *bsp = *loaded_bsp_data;
     void *clusters = *(void **)(bsp + 0x134 + 0x4);
 
+    // Get the current sky index.
     *current_sky_index = *(uint16_t *)(clusters + *current_cluster_index * 0x68);
+
+    // Special case for an index of 65535: it uses 'indoor' fog.
+    if(*current_sky_index == 0xFFFF) {
+        return;
+    }
 
     // Get the scenario data
     void *scenario_data = get_scenario_tag_data();
     uint32_t sky_count = *(uint32_t *)(scenario_data + 0x30);
 
-    // Try to resolve the sky index
+    // Otherwise, if this is an invalid skybox, it will just use no skybox (black) and no fog, which shouldn't even happen on valid tag data.
     if(*current_sky_index >= sky_count) {
         return;
     }
@@ -81,9 +87,11 @@ uint32_t bsp_cluster_for_leaf(uint32_t leaf) {
         return 0xFFFFFFFF;
     }
 
+    // It's worth noting that this check is NOT necessary if the tag data is valid.
     if(leaf >= CURRENT_BSP_LEAF_COUNT) {
         return 0xFFFFFFFF;
     }
+
     void *leaves = *(void **)(*loaded_bsp_data + 0xE0 + 0x4);
     void *leaf_data = leaves + leaf * 0x10;
     return *(uint16_t *)(leaf_data + 0x8);
