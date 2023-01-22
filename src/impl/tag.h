@@ -34,4 +34,9 @@ void *get_tag_data(TableID tag_id);
  */
 TableID lookup_tag(const char *path, FourCC group);
 
+/**
+ * Get the data of the currently loaded scenario tag.
+ */
+void *get_scenario_tag_data(void);
+
 #endif

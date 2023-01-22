@@ -2,6 +2,7 @@
 #include "tag.h"
 
 uint8_t *map_loaded = (uint8_t *)(0x69F4F8);
+void **scenario_tag_data = (void **)(0x7367AC);
 
 typedef struct TagEntry {
     FourCC primary_group;
@@ -49,4 +50,8 @@ TableID lookup_tag(const char *path, FourCC group) {
         }
     }
     return NULL_ID;
+}
+
+void *get_scenario_tag_data(void) {
+    return *scenario_tag_data;
 }

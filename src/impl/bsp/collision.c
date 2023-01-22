@@ -1,5 +1,6 @@
 #include <stdint.h>
-#include <stdbool.h>
+
+#include "collision.h"
 
 typedef struct BSP3DNode {
     uint32_t plane;
@@ -8,13 +9,6 @@ typedef struct BSP3DNode {
     uint32_t back_child;
     uint32_t front_child;
 } BSP3DNode;
-
-typedef struct Plane {
-    float i;
-    float j;
-    float k;
-    float w;
-} Plane;
 
 // TODO: use tag structs
 typedef struct CollisionBSP {
@@ -30,17 +24,6 @@ typedef struct CollisionBSP {
     } planes;
 } CollisionBSP;
 
-typedef struct VectorXYZ {
-    float x;
-    float y;
-    float z;
-} VectorXYZ;
-
-/**
- * Traverse the collision BSP to determine the leaf for a given point.
- *
- * @return leaf index if found, or 0xFFFFFFFF if the point falls outside of the BSP
- */
 uint32_t collision_bsp_leaf_for_point(CollisionBSP *bsp, VectorXYZ *position, uint32_t node_index) {
     while((node_index & 0x80000000) == 0) {
         BSP3DNode *node = &bsp->bsp3d_nodes.elements[node_index];
