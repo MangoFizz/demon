@@ -12,23 +12,35 @@ uint32_t *current_cluster_index = (uint32_t *)(0x7B27E8);
 uint16_t *current_sky_index = (uint16_t *)(0x7B27EE);
 uint8_t *should_draw_skybox = (uint8_t *)(0x7B27ED);
 
+// TODO: USE STRUCTS
+#define CURRENT_BSP_LEAF_COUNT (*(uint32_t *)(*loaded_bsp_data + 0xE0))
+
 void set_skybox_info(VectorXYZ *point) {
     // TODO: USE STRUUUUUUUUUUUCTS HERE
     CollisionBSP *collision_bsp_addr = *(CollisionBSP **)(*loaded_bsp_data + 0xB0 + 0x4);
 
+    // Find the leaf we're in. If our leaf is not null, we can use it.
+    //
+    // Otherwise, if it is null, we can use it only if our last leaf was invalid for our *CURRENT* BSP. This is
+    // SUUUUUUUUUUUUPER hacky, but the whole BSP and skybox disappear if the camera goes out of bounds if you don't do
+    // this in this exact way, and the camera goes out of bounds on several cutscenes. -.-'
+    uint32_t new_leaf_index = collision_bsp_leaf_for_point(collision_bsp_addr, point, 0);
+
+    if(new_leaf_index != 0xFFFFFFFF || *current_leaf_index >= CURRENT_BSP_LEAF_COUNT) {
+        *current_leaf_index = new_leaf_index;
+    }
+
     // These parameters are safe.
-    *current_leaf_index = collision_bsp_leaf_for_point(collision_bsp_addr, point, 0);
-    *current_cluster_index = 0xFFFFFFFF;
     *current_sky_index = 0xFFFF;
     *should_draw_skybox = 0;
 
-    // No leaf? Do nothing then.
-    if(*current_leaf_index == 0xFFFFFFFF) {
+    // Resolve the current cluster index too.
+    *current_cluster_index = bsp_cluster_for_leaf(*current_leaf_index);
+
+    // No cluster? Do nothing then.
+    if(*current_cluster_index == 0xFFFFFFFF) {
         return;
     }
-
-    // Resolve the current cluster index. Again should use structs later with Invader's definitions
-    *current_cluster_index = bsp_cluster_for_leaf(*current_leaf_index);
 
     // Resolve the sky index.
     void *bsp = *loaded_bsp_data;
@@ -69,9 +81,7 @@ uint32_t bsp_cluster_for_leaf(uint32_t leaf) {
         return 0xFFFFFFFF;
     }
 
-    // TODO: USE STRUCTS
-    uint32_t leaf_count = *(uint32_t *)(*loaded_bsp_data + 0xE0);
-    if(leaf >= leaf_count) {
+    if(leaf >= CURRENT_BSP_LEAF_COUNT) {
         return 0xFFFFFFFF;
     }
     void *leaves = *(void **)(*loaded_bsp_data + 0xE0 + 0x4);
