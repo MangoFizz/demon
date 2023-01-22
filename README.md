@@ -1,6 +1,8 @@
 # Demon
 
-Demon is a project with the goal of reverse engineering and reimplementing the functionality of the Halo PC demo, a game also known as Halo Trial.
+Demon is a project with the goal of reverse engineering and reimplementing the functionality of the Halo PC demo, AKA Halo Trial.
+
+Please see the [Frequently Asked Questions](https://github.com/Aerocatia/demon/wiki/FAQ) for more information.
 
 ## Compiling Demon
 
