@@ -3,6 +3,7 @@
 
 #include "../id.h"
 #include "../3d.h"
+#include "../misc_types.h"
 
 typedef enum ObjectType {
     ObjectType_biped,

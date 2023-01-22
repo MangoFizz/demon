@@ -1,33 +1,13 @@
 #include <stdint.h>
 
 #include "collision.h"
+#include "ringhopper/model_collision_geometry.h"
+#include "ringhopper/scenario_structure_bsp.h"
 
-typedef struct BSP3DNode {
-    uint32_t plane;
-
-    // if signed bit is set, refers to a leaf instead
-    uint32_t back_child;
-    uint32_t front_child;
-} BSP3DNode;
-
-// TODO: use tag structs
-typedef struct CollisionBSP {
-    struct {
-        uint32_t count;
-        BSP3DNode *elements;
-        char padding[4];
-    } bsp3d_nodes;
-    struct {
-        uint32_t count;
-        Plane *elements;
-        char padding[4];
-    } planes;
-} CollisionBSP;
-
-uint32_t collision_bsp_leaf_for_point(CollisionBSP *bsp, VectorXYZ *position, uint32_t node_index) {
+uint32_t collision_bsp_leaf_for_point(ModelCollisionGeometryBSP *bsp, VectorXYZ *position, uint32_t node_index) {
     while((node_index & 0x80000000) == 0) {
-        BSP3DNode *node = &bsp->bsp3d_nodes.elements[node_index];
-        Plane *plane = &bsp->planes.elements[node->plane];
+        ModelCollisionGeometryBSP3DNode *node = &bsp->bsp3d_nodes.elements[node_index];
+        Plane3D *plane = &bsp->planes.elements[node->plane].plane;
 
         float dot = plane->i * position->x + plane->j * position->y + plane->k * position->z - plane->w;
         if(dot > 0.0) {

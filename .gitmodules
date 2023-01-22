@@ -2,3 +2,6 @@
 	path = src/strings
 	url = https://github.com/Aerocatia/strings
 	branch = "demo"
+[submodule "src/invader"]
+	path = src/invader
+	url = https://git.sr.ht/~snowymouse/invader

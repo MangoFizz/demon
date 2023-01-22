@@ -3,31 +3,16 @@
 
 #include "../tag.h"
 
-// TODO: Use tag definitions from Invader!
-
-typedef struct ItemCollectionPermutation {
-    uint8_t padding[0x20];
-    float weight;
-    TagReference item;
-    uint8_t padding2[0x20];
-} ItemCollectionPermutation;
-_Static_assert(sizeof(ItemCollectionPermutation) == 0x54);
-
-typedef struct ItemCollectionPermutationReflexive {
-    uint32_t count;
-    ItemCollectionPermutation *first_element;
-    uint8_t padding[4];
-} ItemCollectionPermutationReflexive;
-_Static_assert(sizeof(ItemCollectionPermutationReflexive) == 0xC);
+#include "ringhopper/item_collection.h"
 
 /**
  * Sums up the item collection weight into an integer value.
  *
- * @param ref  Reflexive of the item collection permutations.
+ * @param pointer to the item collection
  *
  * @return total sum
  */
-uint32_t calculate_total_item_collection_weight(ItemCollectionPermutationReflexive *ref);
+uint32_t calculate_total_item_collection_weight(ItemCollection *item_collection);
 
 /**
  * Pick a random object in the item collection.

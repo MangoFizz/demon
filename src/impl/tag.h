@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+struct Scenario;
+
 typedef uint32_t FourCC;
 
 #include "id.h"
@@ -37,6 +39,6 @@ TableID lookup_tag(const char *path, FourCC group);
 /**
  * Get the data of the currently loaded scenario tag.
  */
-void *get_scenario_tag_data(void);
+struct Scenario *get_scenario_tag_data(void);
 
 #endif

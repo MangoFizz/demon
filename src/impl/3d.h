@@ -1,12 +1,9 @@
 #ifndef DEMON__IMPL_3D_H
 #define DEMON__IMPL_3D_H
 
-typedef struct VectorXYZ {
-    float x;
-    float y;
-    float z;
-} VectorXYZ;
-_Static_assert(sizeof(VectorXYZ) == 0xC);
+#include <stdint.h>
+
+struct VectorXYZ;
 
 /**
  * Calculate the distance squared between two points.
@@ -18,7 +15,20 @@ _Static_assert(sizeof(VectorXYZ) == 0xC);
  *
  * @return distance squared
  */
-double vectorxyz_distance_squared(VectorXYZ *a, VectorXYZ *b);
+double vectorxyz_distance_squared(struct VectorXYZ *a, struct VectorXYZ *b);
+
+typedef struct VectorXYZ {
+    float x;
+    float y;
+    float z;
+} VectorXYZ;
+_Static_assert(sizeof(VectorXYZ) == 0xC);
+
+typedef struct VectorXY {
+    float x;
+    float y;
+} VectorXY;
+_Static_assert(sizeof(VectorXY) == 0x8);
 
 typedef struct VectorIJK {
     float i;
@@ -27,6 +37,14 @@ typedef struct VectorIJK {
 } VectorIJK;
 _Static_assert(sizeof(VectorIJK) == 0xC);
 
+typedef struct Quaternion {
+    float i;
+    float j;
+    float k;
+    float l;
+} Quaternion;
+_Static_assert(sizeof(Quaternion) == 0x10);
+
 typedef struct VectorPYR {
     float pitch;
     float yaw;
@@ -34,19 +52,33 @@ typedef struct VectorPYR {
 } VectorPYR;
 _Static_assert(sizeof(VectorPYR) == 0xC);
 
-typedef struct ColorRGB {
-    float r;
-    float g;
-    float b;
-} ColorRGB;
-_Static_assert(sizeof(ColorRGB) == 0xC);
+typedef struct VectorPY {
+    float pitch;
+    float yaw;
+} VectorPY;
+_Static_assert(sizeof(VectorPY) == 0x8);
 
-typedef struct Plane {
+typedef struct Rectangle2D {
+    uint16_t top;
+    uint16_t left;
+    uint16_t bottom;
+    uint16_t right;
+} Rectangle2D;
+_Static_assert(sizeof(Rectangle2D) == 0x8);
+
+typedef struct Plane2D {
+    float i;
+    float j;
+    float w;
+} Plane2D;
+_Static_assert(sizeof(Plane2D) == 0xC);
+
+typedef struct Plane3D {
     float i;
     float j;
     float k;
     float w;
-} Plane;
-_Static_assert(sizeof(Plane) == 0x10);
+} Plane3D;
+_Static_assert(sizeof(Plane3D) == 0x10);
 
 #endif

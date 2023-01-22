@@ -2,12 +2,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef struct ColorARGB {
-    float a;
-    float r;
-    float g;
-    float b;
-} ColorARGB;
+#include "../misc_types.h"
 
 static char *console_text = (char *)(0x6AE378);
 static const ColorARGB *default_prompt_colors = (ColorARGB *)(0x68E274);

@@ -4,24 +4,22 @@
 
 #include "../rng.h"
 
-uint32_t calculate_total_item_collection_weight(ItemCollectionPermutationReflexive *ref) {
+uint32_t calculate_total_item_collection_weight(ItemCollection *item_collection) {
     uint32_t total = 0;
-    ItemCollectionPermutation *permutation = ref->first_element;
+    ItemCollectionPermutation *permutation = item_collection->permutations.elements;
 
-    for(size_t i = 0; i < ref->count; i++, permutation++) {
-        total += (uint32_t)permutation->weight;
+    for(size_t i = 0; i < item_collection->permutations.count; i++, permutation++) {
+        total += (uint32_t)(permutation->weight);
     }
     return total;
 }
 
 TableID pick_item_collection_object(TableID item_collection_tag_id) {
     // Get item collection tag data
-    //
-    // TODO: Use definitions for this
-    ItemCollectionPermutationReflexive *permutations = (ItemCollectionPermutationReflexive *)(get_tag_data(item_collection_tag_id));
+    ItemCollection *item_collection = (ItemCollection *)(get_tag_data(item_collection_tag_id));
 
     // Get total weight
-    uint32_t total_weight = calculate_total_item_collection_weight(permutations);
+    uint32_t total_weight = calculate_total_item_collection_weight(item_collection);
 
     // Calculate the random item we want to find (note: this CAN overflow if total weight exceeds 2^15)
     //
@@ -34,8 +32,8 @@ TableID pick_item_collection_object(TableID item_collection_tag_id) {
     }
 
     // Now we just need to pull items until we exceed random_weight
-    ItemCollectionPermutation *permutation = permutations->first_element;
-    for(size_t i = 0; i < permutations->count; i++, permutation++) {
+    ItemCollectionPermutation *permutation = item_collection->permutations.elements;
+    for(size_t i = 0; i < item_collection->permutations.count; i++, permutation++) {
         random_weight -= (int32_t)(permutation->weight);
         if(random_weight < 0) {
             return permutation->item.tag_id;
