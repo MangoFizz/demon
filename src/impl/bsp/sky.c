@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 #include "sky.h"
 #include "collision.h"
 #include "../id.h"

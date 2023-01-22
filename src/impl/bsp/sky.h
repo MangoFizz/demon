@@ -1,7 +1,7 @@
 #ifndef DEMON__IMPL_BSP_SKY_H
 #define DEMON__IMPL_BSP_SKY_H
 
-#include <stdint.h>
+#include "../3d.h"
 
 /**
  * Resolve a cluster index from a leaf.
