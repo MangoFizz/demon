@@ -4,7 +4,7 @@
 
 #include "../rng.h"
 
-uint32_t calculate_total_item_collection_weight(ItemCollection *item_collection) {
+uint32_t calculate_total_item_collection_weight(const ItemCollection *item_collection) {
     uint32_t total = 0;
     ItemCollectionPermutation *permutation = item_collection->permutations.elements;
 

@@ -4,7 +4,7 @@
 #include "ringhopper/model_collision_geometry.h"
 #include "ringhopper/scenario_structure_bsp.h"
 
-uint32_t collision_bsp_leaf_for_point(ModelCollisionGeometryBSP *bsp, VectorXYZ *position, uint32_t node_index) {
+uint32_t collision_bsp_leaf_for_point(const ModelCollisionGeometryBSP *bsp, const VectorXYZ *position, uint32_t node_index) {
     while((node_index & 0x80000000) == 0) {
         ModelCollisionGeometryBSP3DNode *node = &bsp->bsp3d_nodes.elements[node_index];
         Plane3D *plane = &bsp->planes.elements[node->plane].plane;

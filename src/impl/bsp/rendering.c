@@ -4,7 +4,7 @@
 #include "ringhopper/scenario_structure_bsp.h"
 #include "ringhopper/sky.h"
 
-#include "sky.h"
+#include "rendering.h"
 #include "collision.h"
 #include "../id.h"
 #include "../tag.h"
@@ -16,7 +16,7 @@ uint32_t *current_cluster_index = (uint32_t *)(0x7B27E8);
 uint16_t *current_sky_index = (uint16_t *)(0x7B27EE);
 uint8_t *should_draw_skybox = (uint8_t *)(0x7B27ED);
 
-void set_skybox_info(VectorXYZ *point) {
+void set_skybox_info(const VectorXYZ *point) {
     // Find the leaf we're in. If our leaf is not null, we can use it.
     //
     // Otherwise, if it is null, we can use it only if our last leaf was invalid for our *CURRENT* BSP. This is
@@ -84,4 +84,15 @@ uint32_t bsp_cluster_for_leaf(uint32_t leaf) {
     }
 
     return (*loaded_bsp_data)->leaves.elements[leaf].cluster;
+}
+
+void unknown_function_5092f0(const void *input, float *output) {
+    double a = -*(float *)(input + 0x164);
+    double b = -*(float *)(input + 0x168);
+    double c = -*(float *)(input + 0x144);
+    double d = -*(float *)(input + 0x158);
+    output[0] = (a - 1.0) / c;
+    output[1] = (a + 1.0) / c;
+    output[2] = (b - 1.0) / d;
+    output[3] = (b + 1.0) / d;
 }

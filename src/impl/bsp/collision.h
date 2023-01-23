@@ -10,6 +10,6 @@ struct ModelCollisionGeometryBSP;
  *
  * @return leaf index if found, or 0xFFFFFFFF if the point falls outside of the BSP
  */
-uint32_t collision_bsp_leaf_for_point(struct ModelCollisionGeometryBSP *bsp, VectorXYZ *position, uint32_t node_index);
+uint32_t collision_bsp_leaf_for_point(const struct ModelCollisionGeometryBSP *bsp, const VectorXYZ *position, uint32_t node_index);
 
 #endif

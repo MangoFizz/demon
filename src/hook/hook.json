@@ -15,5 +15,7 @@
 
     "update_player_interaction": {"address": "0x4779A0", "replace": true, "arguments": ["0", "4", "ebx", "eax"]},
 
+    "unknown_function_5092f0": {"address": "0x5092F0", "replace": true, "arguments": ["ecx", "eax"], "comment": "appears to do something with portals/render culling"},
+
     "command_allowed": {"address": "0x481BC0", "replace": true, "use_return_value": true, "flag": "DEMON_ENABLE_ENHANCEMENTS", "comment": "NOT FULLY DECOMPED! STUBBED TO ALLOW BETTER TESTING"}
 }
