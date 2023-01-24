@@ -123,6 +123,7 @@ endforeach()
 add_library(strings MODULE
     src/main.cpp
     src/impl/bsp/collision.c
+    src/impl/bsp/loading.c
     src/impl/bsp/rendering.c
     src/impl/console/console.c
     src/impl/input/controller.c

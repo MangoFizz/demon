@@ -6,10 +6,10 @@
 
 #include "rendering.h"
 #include "collision.h"
+#include "loading.h"
+
 #include "../id.h"
 #include "../tag.h"
-
-ScenarioStructureBSP **loaded_bsp_data = (ScenarioStructureBSP **)(0x7367BC);
 
 uint32_t *current_leaf_index = (uint32_t *)(0x7B27E4);
 uint32_t *current_cluster_index = (uint32_t *)(0x7B27E8);
@@ -17,14 +17,17 @@ uint16_t *current_sky_index = (uint16_t *)(0x7B27EE);
 uint8_t *should_draw_skybox = (uint8_t *)(0x7B27ED);
 
 void set_skybox_info(const VectorXYZ *point) {
+    // Get the loaded BSP.
+    ScenarioStructureBSP *loaded_bsp_data = get_loaded_bsp_tag_data();
+
     // Find the leaf we're in. If our leaf is not null, we can use it.
     //
     // Otherwise, if it is null, we can use it only if our last leaf was invalid for our *CURRENT* BSP. This is
     // SUUUUUUUUUUUUPER hacky, but the whole BSP and skybox disappear if the camera goes out of bounds if you don't do
     // this in this exact way, and the camera goes out of bounds on several cutscenes. -.-'
-    uint32_t new_leaf_index = collision_bsp_leaf_for_point((*loaded_bsp_data)->collision_bsp.elements, point, 0);
+    uint32_t new_leaf_index = collision_bsp_leaf_for_point(loaded_bsp_data->collision_bsp.elements, point, 0);
 
-    if(new_leaf_index != 0xFFFFFFFF || *current_leaf_index >= (*loaded_bsp_data)->leaves.count) {
+    if(new_leaf_index != 0xFFFFFFFF || *current_leaf_index >= loaded_bsp_data->leaves.count) {
         *current_leaf_index = new_leaf_index;
     }
 
@@ -41,7 +44,7 @@ void set_skybox_info(const VectorXYZ *point) {
     }
 
     // Get the current sky index.
-    *current_sky_index = (*loaded_bsp_data)->clusters.elements[*current_cluster_index].sky;
+    *current_sky_index = loaded_bsp_data->clusters.elements[*current_cluster_index].sky;
 
     // Special case for an index of 65535: it uses 'indoor' fog.
     if(*current_sky_index == 0xFFFF) {
@@ -79,11 +82,12 @@ uint32_t bsp_cluster_for_leaf(uint32_t leaf) {
     }
 
     // It's worth noting that this check is NOT necessary if the tag data is valid.
-    if(leaf >= (*loaded_bsp_data)->leaves.count) {
+    ScenarioStructureBSP *loaded_bsp_data = get_loaded_bsp_tag_data();
+    if(leaf >= loaded_bsp_data->leaves.count) {
         return 0xFFFFFFFF;
     }
 
-    return (*loaded_bsp_data)->leaves.elements[leaf].cluster;
+    return loaded_bsp_data->leaves.elements[leaf].cluster;
 }
 
 void unknown_function_5092f0(const void *input, float *output) {

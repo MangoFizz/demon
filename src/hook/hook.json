@@ -15,6 +15,12 @@
 
     "update_player_interaction": {"address": "0x4779A0", "replace": true, "arguments": ["0", "4", "ebx", "eax"]},
 
+    "switch_bsp": {"address": "0x539BA0", "replace": true, "arguments": ["esi"]},
+    "switch_bsp_00539350": {"address": "0x539350", "comment": "subroutine used in switching bsps"},
+    "switch_bsp_00442520": {"address": "0x442520", "arguments": ["0"], "comment": "subroutine used in switching bsps"},
+    "switch_bsp_004424B0": {"address": "0x4424B0", "use_return_value": true, "arguments": ["edi"], "comment": "subroutine used in switching bsps"},
+    "switch_bsp_00539370": {"address": "0x539370", "comment": "subroutine used in switching bsps"},
+
     "unknown_function_5092f0": {"address": "0x5092F0", "replace": true, "arguments": ["ecx", "eax"], "comment": "appears to do something with portals/render culling"},
 
     "command_allowed": {"address": "0x481BC0", "replace": true, "use_return_value": true, "flag": "DEMON_ENABLE_ENHANCEMENTS", "comment": "NOT FULLY DECOMPED! STUBBED TO ALLOW BETTER TESTING"}

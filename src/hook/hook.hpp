@@ -67,8 +67,10 @@ namespace Demon {
 
             /**
              * Write the hook.
+             *
+             * @return hook address
              */
-            void write_hook();
+            void *write_hook();
 
         private:
             std::uintptr_t function_address;

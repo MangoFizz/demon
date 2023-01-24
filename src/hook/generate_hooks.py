@@ -22,7 +22,8 @@ for hook in hooks:
         lib_fns += "    extern int {};\n".format(hook)
         hook_fn += "        Hook({address}, reinterpret_cast<std::uintptr_t>(&{output}))".format(address=hook_info["address"], output=hook)
     else:
-        hook_fn += "        Hook({address})".format(address=hook_info["address"])
+        lib_fns += "    void *{} = nullptr;\n".format(hook)
+        hook_fn += "        {hook} = Hook({address})".format(hook=hook, address=hook_info["address"])
 
     if "arguments" in hook_info:
         for arg in hook_info["arguments"]:

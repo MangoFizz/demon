@@ -1,6 +1,10 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdarg.h>
+#include <stdio.h>
+
+#include <windows.h>
 
 #include "../misc_types.h"
 

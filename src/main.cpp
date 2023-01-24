@@ -2,6 +2,7 @@
 #include <cstring>
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 #include <vector>
 #include <stdexcept>
 #include "hook/hook.hpp"
@@ -55,7 +56,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved
     return TRUE;
 }
 
-void Hook::write_hook() {
+void *Hook::write_hook() {
     std::byte *hook_offset = hook_heap + hook_heap_usage;
     std::byte *starting_hook_offset = hook_offset;
 
@@ -170,7 +171,7 @@ void Hook::write_hook() {
                             break;
                         }
                         case LibToGame: {
-                            std::size_t offset = starting_stack_offset + stack_offset;
+                            std::size_t offset = stack_offset;
                             HOOK_PUSH_BYTE(0x8B);
 
                             std::uint8_t operand;
@@ -214,7 +215,6 @@ void Hook::write_hook() {
                                 HOOK_PUSH_BYTE(0x24);
                                 HOOK_PUSH_DWORD(offset);
                             }
-
                             break;
                         }
                     }
@@ -291,4 +291,6 @@ void Hook::write_hook() {
         *reinterpret_cast<std::uintptr_t *>(addr + 1) = static_cast<std::uintptr_t>((starting_hook_offset) - (addr + 5));
         VirtualProtect(reinterpret_cast<void *>(addr), 5, old_protection, &old_protection);
     }
+
+    return reinterpret_cast<void *>(starting_hook_offset);
 }
