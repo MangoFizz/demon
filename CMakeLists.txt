@@ -151,6 +151,11 @@ if(DEMON_ENABLE_ENHANCEMENTS)
     target_compile_definitions(strings PRIVATE DEMON_ENABLE_ENHANCEMENTS)
 endif()
 
+option(DEMON_ENABLE_DEBUG_MESSAGES "Enable debug messages to improve debugging" OFF)
+if(DEMON_ENABLE_DEBUG_MESSAGES)
+    target_compile_definitions(strings PRIVATE DEMON_ENABLE_DEBUG_MESSAGES)
+endif()
+
 add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/hook.cpp"
     DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/hook/hook.json"

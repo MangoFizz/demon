@@ -36,14 +36,21 @@ cmake --build build
 
 Demon has some build time options that change functionality.
 
-Option                    | Default
---------------------------|---------
-DEMON_ENABLE_ENHANCEMENTS | OFF
+Option                      | Default
+----------------------------|---------
+DEMON_ENABLE_DEBUG_MESSAGES | OFF
+DEMON_ENABLE_ENHANCEMENTS   | OFF
+
+#### DEMON_ENABLE_DEBUG_MESSAGES
+This option enables extra debug logging to the console to assist with handling common issues that can be caught in-game.
+It is recommended to enable `DEMON_ENABLE_ENHANCEMENTS` at the same time, but it is not required.
+
+By default this setting is off.
 
 #### DEMON_ENABLE_ENHANCEMENTS
 This option enables some enhancements to re-implemented functions, adding extra features to assist in debugging and running the game.
 Some examples of of these are enabling the in-game console and enabling "devmode" (unlocked console command access).
-In the future it may also enable some core features seen in the mod [Chimera](https://github.com/SnowyMouse/chimera).
+In the future it may also enable some core features and fixes seen in the mod [Chimera](https://github.com/SnowyMouse/chimera).
 
 By default this setting is off and only direct re-implementations of functions will be compiled by the project.
 

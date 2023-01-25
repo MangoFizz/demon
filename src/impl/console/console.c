@@ -43,3 +43,14 @@ bool command_allowed(void) {
     // stubbed: the actual function does a series of checks to see if the command is 'whitelisted' so it can be shown in a non-devmode environment
     return true;
 }
+
+extern void (*console_printf_in)(const ColorARGB *color, const char *fmt, ...);
+
+void console_printf(const ColorARGB *color, const char *fmt, ...) {
+    char passed_text[256];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(passed_text, sizeof(passed_text), fmt, args);
+    va_end(args);
+    console_printf_in(color, "%s", passed_text);
+}

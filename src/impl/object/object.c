@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#include "../console/console.h"
+
 typedef struct ObjectTableEntry {
     uint16_t salt;
     uint8_t flags_low;
@@ -24,10 +26,16 @@ DynamicObjectBase *resolve_object_id_to_data(uint32_t flag_check, TableID object
     uint16_t input_index = ID_INDEX_PART(object_id);
     uint16_t input_salt = ID_SALT_PART(object_id);
 
+    // Is it null?
+    if(ID_IS_NULL(object_id)) {
+        return NULL;
+    }
+
     // Check if out of bounds.
     //
     // NOTE: The original code does a signed check which isn't necessary here.
-    if(ID_IS_NULL(object_id) || input_index >= halo_object_table->max_elements) {
+    if(input_index >= halo_object_table->max_elements) {
+        console_printf_debug_err("Tried to access dynamic object #%u when there are #%u max element(s)", input_index, halo_object_table->max_elements);
         return NULL;
     }
 

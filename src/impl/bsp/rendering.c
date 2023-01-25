@@ -8,6 +8,7 @@
 #include "collision.h"
 #include "loading.h"
 
+#include "../console/console.h"
 #include "../id.h"
 #include "../tag.h"
 
@@ -56,6 +57,7 @@ void set_skybox_info(const VectorXYZ *point) {
 
     // Otherwise, if this is an invalid skybox, it will just use no skybox (black) and no fog, which shouldn't even happen on valid tag data.
     if(*current_sky_index >= scenario_data->skies.count) {
+        console_printf_debug_err("Cluster #%u references sky #%u but there are only %zu sky(s)", *current_cluster_index, *current_sky_index, scenario_data->skies.count);
         return;
     }
 
@@ -84,6 +86,7 @@ uint32_t bsp_cluster_for_leaf(uint32_t leaf) {
     // It's worth noting that this check is NOT necessary if the tag data is valid.
     ScenarioStructureBSP *loaded_bsp_data = get_loaded_bsp_tag_data();
     if(leaf >= loaded_bsp_data->leaves.count) {
+        console_printf_debug_err("Can't get a BSP cluster for leaf #%u when there are only %u leaves", leaf, loaded_bsp_data->leaves.count);
         return 0xFFFFFFFF;
     }
 

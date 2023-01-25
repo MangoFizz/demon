@@ -13,7 +13,7 @@ static uint16_t *current_bsp_index = (uint16_t *)(0x696090);
 static uint16_t **current_bsp_index_ptr = (uint16_t **)(0x7367B4);
 static ModelCollisionGeometryBSP **current_collision_bsp_address = (ModelCollisionGeometryBSP **)(0x7367B0);
 static ModelCollisionGeometryBSP **current_collision_bsp_address2 = (ModelCollisionGeometryBSP **)(0x7367B8);
-static uint8_t *value_007090aa = (uint8_t *)(0x007090AA);
+static uint8_t *value_007090aa = (uint8_t *)(0x7090AA);
 
 extern void (*switch_bsp_00539350)(void);
 extern void (*switch_bsp_00442520)(ScenarioBSP *bsp_entry);
@@ -33,6 +33,7 @@ bool switch_bsp(uint16_t bsp_index) {
     // Don't switch to an out-of-bounds BSP.
     Scenario *scenario = get_scenario_tag_data();
     if(bsp_index >= scenario->structure_bsps.count) {
+        console_printf_debug_err("Trying to switch to BSP#%u, but there are only %u BSP(s)!", bsp_index, scenario->structure_bsps.count);
         return false;
     }
 
