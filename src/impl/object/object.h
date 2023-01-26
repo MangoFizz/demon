@@ -5,21 +5,6 @@
 #include "../3d.h"
 #include "../misc_types.h"
 
-typedef enum ObjectType {
-    ObjectType_biped,
-    ObjectType_vehicle,
-    ObjectType_weapon,
-    ObjectType_equipment,
-    ObjectType_garbage,
-    ObjectType_projectile,
-    ObjectType_scenery,
-    ObjectType_device_machine,
-    ObjectType_device_control,
-    ObjectType_device_light_fixture,
-    ObjectType_device_placeholder,
-    ObjectType_device_sound_scenery
-} ObjectType;
-
 typedef struct DynamicObjectBase {
     TableID tag;
     uint8_t field_0x4[0x4];
@@ -100,5 +85,14 @@ TableID resolve_parent_object_id(TableID object_id);
  * @return object ID that corresponds to the object name
  */
 TableID resolve_object_name_to_data(uint16_t name_index);
+
+/**
+ * Find the object's center and render bounding radius.
+ *
+ * @param object_id              object to check
+ * @param center                 (out) center coordinates
+ * @param render_bounding_radius (out) render bounding radius
+ */
+void get_center_and_render_bounding_radius_of_object(TableID object_id, VectorXYZ *center, float *render_bounding_radius);
 
 #endif

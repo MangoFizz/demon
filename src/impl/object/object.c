@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "../console/console.h"
+#include "ringhopper/object.h"
 
 typedef struct ObjectTableEntry {
     uint16_t salt;
@@ -92,4 +93,10 @@ TableID resolve_object_name_to_id(uint16_t name_index) {
 
 DynamicObjectBase *resolve_object_index_to_data_unchecked(uint16_t object_index) {
     return (*object_table)->first_element[object_index].object;
+}
+
+void get_center_and_render_bounding_radius_of_object(TableID object_id, VectorXYZ *center, float *render_bounding_radius) {
+    DynamicObjectBase *object = resolve_object_index_to_data_unchecked(ID_INDEX_PART(object_id));
+    *center = object->center;
+    *render_bounding_radius = ((Object *)(get_tag_data(object->tag)))->render_bounding_radius;
 }

@@ -100,6 +100,10 @@ header_code = ""
 for s in j:
     if s["type"] == "struct":
         struct_data = "typedef struct {} {{\n".format(s["name"])
+
+        if "inherits" in s:
+            struct_data = struct_data + "    {} base_struct;\n".format(s["inherits"])
+
         for f in s["fields"]:
             struct_data = struct_data + make_field(f)
 
