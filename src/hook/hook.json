@@ -16,7 +16,7 @@
 
     "update_player_interaction": {"address": "0x4779A0", "replace": true, "arguments": ["0", "4", "ebx", "eax"]},
 
-    "switch_bsp": {"address": "0x539BA0", "replace": true, "arguments": ["esi"]},
+    "switch_bsp": {"address": "0x539BA0", "replace": true, "use_return_value": true, "arguments": ["esi"]},
     "switch_bsp_00539350": {"address": "0x539350", "comment": "subroutine used in switching bsps"},
     "switch_bsp_00442520": {"address": "0x442520", "arguments": ["0"], "comment": "subroutine used in switching bsps"},
     "switch_bsp_004424B0": {"address": "0x4424B0", "use_return_value": true, "arguments": ["edi"], "comment": "subroutine used in switching bsps"},

@@ -13,6 +13,7 @@ static uint16_t *current_bsp_index = (uint16_t *)(0x696090);
 static uint16_t **current_bsp_index_ptr = (uint16_t **)(0x7367B4);
 static ModelCollisionGeometryBSP **current_collision_bsp_address = (ModelCollisionGeometryBSP **)(0x7367B0);
 static ModelCollisionGeometryBSP **current_collision_bsp_address2 = (ModelCollisionGeometryBSP **)(0x7367B8);
+static uint8_t *value_007090a9 = (uint8_t *)(0x7090A9);
 static uint8_t *value_007090aa = (uint8_t *)(0x7090AA);
 
 extern void (*switch_bsp_00539350)(void);
@@ -37,18 +38,20 @@ bool switch_bsp(uint16_t bsp_index) {
         return false;
     }
 
+    // Unknown what this does.
+    *value_007090a9 = 0;
+    *value_007090aa = 0;
+
     // Are we loading a BSP from something else?
     bool switching_bsp = *current_bsp_index != 0xFFFF;
     if(switching_bsp) {
         ScenarioBSP *old_entry = &scenario->structure_bsps.elements[*current_bsp_index];
         switch_bsp_00539350();
         switch_bsp_00442520(old_entry);
-        **current_bsp_index_ptr = 0xFFFF;
-        *current_bsp_index = 0xFFFF;
+        *current_bsp_index = (**current_bsp_index_ptr = 0xFFFF);
     }
 
     ScenarioBSP *entry = &scenario->structure_bsps.elements[bsp_index];
-
     bool loaded = switch_bsp_004424B0(entry);
     if(loaded) {
         *loaded_bsp_data = get_tag_data(entry->structure_bsp.tag_id);
