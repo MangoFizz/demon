@@ -54,3 +54,41 @@ void console_printf(const ColorARGB *color, const char *fmt, ...) {
     va_end(args);
     console_printf_in(color, "%s", passed_text);
 }
+
+#ifndef DEMON_ENABLE_ENHANCEMENTS
+
+// TODO: The exact meanings of these is not known. This should be figured out later.
+extern uint8_t (*unknown_function_00481b70)(uint32_t a, uint32_t b);
+uint32_t *unknown_006a8854 = (uint32_t *)(0x6A8854);
+
+uint8_t command_is_allowed(uint8_t a) {
+    uint32_t flags = *unknown_006a8854;
+
+    if((uint16_t)(flags) == 0) {
+        return true;
+    }
+
+    if((flags & 1) && !(a & 1)) {
+        return false;
+    }
+
+    if(((flags & 0x100) != 0) && !(a & 1)) {
+        return false;
+    }
+
+    return unknown_function_00481b70(a, 1)
+        && unknown_function_00481b70(a, 2)
+        && unknown_function_00481b70(a, 3)
+        && unknown_function_00481b70(a, 4)
+        && unknown_function_00481b70(a, 6)
+        && unknown_function_00481b70(a, 5);
+}
+
+#else
+
+// Allow all commands!
+uint8_t command_is_allowed(uint8_t a) {
+    return true;
+}
+
+#endif
