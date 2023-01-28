@@ -1,5 +1,4 @@
 #include <windows.h>
-#include <winbase.h>
 #include <ctype.h>
 #include <string.h>
 
@@ -76,10 +75,15 @@ void add_custom_mp_map(const char *scenario) {
     add_mp_map_with_index(scenario, MapUIIndex_UnknownMap);
 }
 
+static MapEntry *reallocate_mp_map_list(size_t new_count) {
+    mp_map_allocated_size = new_count;
+    return (*mp_maps = realloc(*mp_maps, new_count * sizeof(**mp_maps)));
+}
+
 static void add_mp_map_with_index(const char *scenario_path, uint32_t name_index) {
     // Get the base name to store.
     //
-    // Note that the original game stores tag paths as-is! But later games JUST store the base name, likely as an optimization
+    // Note that the original game stores tag paths as-is! But later versions JUST store the base name, likely as an optimization
     // and to prevent loading the wrong map since the original game also checks for substrings rather than complete matches in
     // search_map_list_for_scenario()
     const char *scenario = get_tag_base_name(scenario_path);
@@ -87,19 +91,16 @@ static void add_mp_map_with_index(const char *scenario_path, uint32_t name_index
     MapEntry *entries = *mp_maps;
     size_t scenario_strlen = strlen(scenario);
     size_t next_index = *mp_map_count;
-    size_t next_size = *mp_map_count + 1;
+    size_t next_size = next_index + 1;
 
-    // If we don't have any maps allocated, start with allocating enough for MapIndex_UnknownMap
+    // If we don't have any maps allocated, start with allocating enough for all stock maps.
     if(entries == NULL) {
-        mp_map_allocated_size = MapUIIndex_UnknownMap;
-        entries = (*mp_maps = calloc(mp_map_allocated_size * sizeof(**mp_maps), 1));
-        *mp_map_count = 0;
+        entries = reallocate_mp_map_list(MapUIIndex_UnknownMap);
     }
 
     // If we do not have enough space, reallocate and double the space
-    else if(next_size == mp_map_allocated_size) {
-        mp_map_allocated_size *= 2;
-        entries = (*mp_maps = realloc(*mp_maps, mp_map_allocated_size * sizeof(**mp_maps)));
+    else if(next_index == mp_map_allocated_size) {
+        entries = reallocate_mp_map_list(mp_map_allocated_size * 2);
     }
 
     // Allocate the path to the next scenario
