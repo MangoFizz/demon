@@ -59,6 +59,15 @@ struct Scenario *get_scenario_tag_data(void);
  */
 const char *group_fourcc_to_name(FourCC group_fourcc);
 
+/**
+ * Get the base name of the tag path.
+ *
+ * @param path tag path to look
+ *
+ * @return base name
+ */
+const char *get_tag_base_name(const char *path);
+
 #define FOURCC_ACTOR ((FourCC)(0x61637472))
 #define FOURCC_ACTOR_VARIANT ((FourCC)(0x61637476))
 #define FOURCC_ANTENNA ((FourCC)(0x616E7421))

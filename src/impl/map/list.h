@@ -3,38 +3,57 @@
 
 #include <stdint.h>
 
-typedef enum MapIndex {
-    MapIndex_BattleCreek = 0,
-    MapIndex_Sidewinder = 1,
-    MapIndex_Damnation = 2,
-    MapIndex_RatRace = 3,
-    MapIndex_Prisoner = 4,
-    MapIndex_HangEmHigh = 5,
-    MapIndex_ChillOut = 6,
-    MapIndex_Derelict = 7,
-    MapIndex_BoardingAction = 8,
-    MapIndex_BloodGulch = 9,
-    MapIndex_Wizard = 10,
-    MapIndex_ChironTL34 = 11,
-    MapIndex_Longest = 12,
-    MapIndex_IceFields = 13,
-    MapIndex_DeathIsland = 14,
-    MapIndex_DangerCanyon = 15,
-    MapIndex_Infinity = 16,
-    MapIndex_Timberland = 17,
-    MapIndex_Gephyrophobia = 18,
-    MapIndex_UnknownMap = 19
-} MapIndex;
+/**
+ * Name indices which correspond to the original 19 maps.
+ */
+typedef enum MapUIIndex {
+    MapUIIndex_BattleCreek = 0,
+    MapUIIndex_Sidewinder = 1,
+    MapUIIndex_Damnation = 2,
+    MapUIIndex_RatRace = 3,
+    MapUIIndex_Prisoner = 4,
+    MapUIIndex_HangEmHigh = 5,
+    MapUIIndex_ChillOut = 6,
+    MapUIIndex_Derelict = 7,
+    MapUIIndex_BoardingAction = 8,
+    MapUIIndex_BloodGulch = 9,
+    MapUIIndex_Wizard = 10,
+    MapUIIndex_ChironTL34 = 11,
+    MapUIIndex_Longest = 12,
+    MapUIIndex_IceFields = 13,
+    MapUIIndex_DeathIsland = 14,
+    MapUIIndex_DangerCanyon = 15,
+    MapUIIndex_Infinity = 16,
+    MapUIIndex_Timberland = 17,
+    MapUIIndex_Gephyrophobia = 18,
+    MapUIIndex_UnknownMap = 19
+} MapUIIndex;
 
 typedef struct MapEntry {
-    const char *scenario;
-    uint16_t map_index;
-    uint8_t padding[2];
+    char *scenario;
+    uint32_t name_index; // corresponds to MapIndex
 } MapEntry;
 
 /**
- * Get the map index by its scenario name.
+ * Get the map index by its scenario name. This is case insensitive.
+ *
+ * @param scenario scenario to check
  */
 uint32_t get_mp_map_index(const char *scenario);
+
+/**
+ * Add a map to the MP map list with an indirect offset to the UI index. Note the name will be lowercased when added.
+ *
+ * @param scenario          scenario name or tag path
+ * @param name_index_offset index of the index
+ */
+void add_mp_map(const char *scenario, uint32_t ui_index_offset);
+
+/**
+ * Add a custom MP map to the map list.
+ *
+ * @param scenario_path scenario name or tag path
+ */
+void add_custom_mp_map(const char *scenario_path);
 
 #endif

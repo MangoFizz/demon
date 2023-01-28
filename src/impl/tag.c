@@ -238,3 +238,13 @@ const char *group_fourcc_to_name(FourCC group_fourcc) {
             return "???";
     }
 }
+
+const char *get_tag_base_name(const char *path) {
+    const char *last = path;
+    for(const char *c = path; *c != 0; c++) {
+        if(*c == '\\') {
+            last = c + 1;
+        }
+    }
+    return last;
+}
