@@ -1,4 +1,4 @@
-#include "strings.h"
+#include "string.h"
 #include "../tag.h"
 #include "ringhopper/unicode_string_list.h"
 
@@ -25,7 +25,7 @@ const char16_t *get_unicode_string(TableID unicode_string_list_id, uint16_t inde
     // The original game will simply "fix" it by editing the actual tag data to null terminate it if it isn't null terminated, even
     // though no tools that make unicode_string_list tags would ever produce tags that need this to work.
     //
-    // Allowing this means maps can essentially write memory to any arbitrary addres in RAM. This is not desirable and can likely be
+    // Allowing this means maps can essentially write memory to any arbitrary address in RAM. This is not desirable and can likely be
     // exploited, so we handle this properly instead.
     if(string_data == NULL || string_length == 0 || string_length != string_chars * sizeof(char16_t) || string_data[string_chars - 1] != 0) {
         return invalid_string_utf16;

@@ -2,6 +2,7 @@
 #define DEMON__IMPL_MAP_LIST_H
 
 #include <stdint.h>
+#include <uchar.h>
 
 /**
  * Name indices which correspond to the original 19 maps.
@@ -60,5 +61,14 @@ void add_custom_mp_map(const char *scenario);
  * Free the MP map list, clearing all maps from it.
  */
 void free_mp_map_list(void);
+
+/**
+ * Copy the localized multiplayer map name from the mp_map_list string list if it is present.
+ *
+ * @param scenario     scenario to check
+ * @param output_chars number of 16-bit characters in the output
+ * @param output       output buffer
+ */
+void copy_localized_mp_map_name(const char *scenario, uint32_t output_chars, char16_t *output);
 
 #endif

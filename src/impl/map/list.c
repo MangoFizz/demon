@@ -4,8 +4,16 @@
 
 #include "list.h"
 #include "../tag.h"
+#include "../string/string.h"
 
 #define MAX_SCENARIO_NAME_LENGTH 259
+
+// This is the first index before the game says "Unknown Map"
+#ifndef DEMON_ENABLE_ENHANCEMENTS
+#define STOCK_MP_FIRST_UNKNOWN_MAP_INDEX 1
+#else
+#define STOCK_MP_FIRST_UNKNOWN_MAP_INDEX MapUIIndex_UnknownMap
+#endif
 
 static size_t mp_map_allocated_size = 0;
 static uint32_t *mp_map_count = (uint32_t *)(0x702870); // used for the menu list
@@ -51,9 +59,7 @@ uint32_t get_mp_map_index(const char *scenario) {
 }
 
 static uint32_t *mp_map_name_indices = (uint32_t *)(0x686458);
-
 static void add_mp_map_with_index(const char *scenario, uint32_t name_index);
-
 static void add_all_stock_mp_maps(void);
 
 void add_mp_map(const char *scenario, uint32_t ui_index_offset) {
@@ -73,6 +79,24 @@ void add_mp_map(const char *scenario, uint32_t ui_index_offset) {
 
 void add_custom_mp_map(const char *scenario) {
     add_mp_map_with_index(scenario, MapUIIndex_UnknownMap);
+}
+
+void copy_localized_mp_map_name(const char *scenario, uint32_t output_chars, char16_t *output) {
+    uint32_t index = get_mp_map_index(scenario);
+    if(index != 0xFFFFFFFF && index < STOCK_MP_FIRST_UNKNOWN_MAP_INDEX) {
+        const char16_t *name = get_unicode_string(
+            lookup_tag("ui\\shell\\main_menu\\mp_map_list", FOURCC_UNICODE_STRING_LIST),
+            (*mp_maps)[index].name_index
+        );
+        while(*name && output_chars > 1) {
+            *(output++) = *(name++);
+            output_chars--;
+        }
+        *output = 0;
+    }
+    else {
+        convert_8bit_string_to_16bit(output_chars * 2, output, get_tag_base_name(scenario));
+    }
 }
 
 static MapEntry *reallocate_mp_map_list(size_t new_count) {
@@ -163,13 +187,4 @@ static void add_all_stock_mp_maps(void) {
     add_mp_map_with_index("levels\\test\\infinity\\infinity", MapUIIndex_Infinity);
     add_mp_map_with_index("levels\\test\\timberland\\timberland", MapUIIndex_Timberland);
     add_mp_map_with_index("levels\\test\\gephyrophobia\\gephyrophobia", MapUIIndex_Gephyrophobia);
-
-    // BINARY HACK TO MAKE IT SO ALL THE MAPS SHOW THEIR NAMES FROM THE TAG DATA RATHER THAN FILENAMES
-    //
-    // TODO: Decomp the function that gets this instead!
-    DWORD old;
-    uint8_t *count = (uint8_t *)(0x4935E7);
-    VirtualProtect(count, 1, PAGE_READWRITE, &old);
-    *count = 19;
-    VirtualProtect(count, 1, old, &old);
 }
