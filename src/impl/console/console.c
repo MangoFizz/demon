@@ -61,7 +61,7 @@ void console_printf(const ColorARGB *color, const char *fmt, ...) {
 extern uint8_t (*unknown_function_00481b70)(uint32_t a, uint32_t b);
 uint32_t *unknown_006a8854 = (uint32_t *)(0x6A8854);
 
-uint8_t command_is_allowed(uint8_t a) {
+bool command_is_allowed(uint8_t a) {
     uint32_t flags = *unknown_006a8854;
 
     if((uint16_t)(flags) == 0) {
@@ -87,7 +87,7 @@ uint8_t command_is_allowed(uint8_t a) {
 #else
 
 // Allow all commands!
-uint8_t command_is_allowed(uint8_t a) {
+bool command_is_allowed(uint8_t a) {
     return true;
 }
 

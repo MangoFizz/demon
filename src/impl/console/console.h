@@ -1,6 +1,8 @@
 #ifndef DEMON__IMPL_CONSOLE_H
 #define DEMON__IMPL_CONSOLE_H
 
+#include <stdbool.h>
+
 /**
  * Set console prompt display parameters. This is run on startup.
  */
@@ -25,5 +27,14 @@ void console_printf(const struct ColorARGB *color, const char *fmt, ...);
 #undef console_printf_debug_err
 #define console_printf_debug_err(...) {}
 #endif
+
+/**
+ * Check if a command is allowed.
+ *
+ * TODO: This is not fully understood yet.
+ *
+ * @return true if allowed, false if not
+ */
+bool command_is_allowed(uint8_t a);
 
 #endif
