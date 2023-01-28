@@ -1,6 +1,8 @@
 #ifndef DEMON__IMPL_MISC_TYPES_H
 #define DEMON__IMPL_MISC_TYPES_H
 
+#include <uchar.h>
+
 #include "id.h"
 
 typedef uint32_t ColorARGBInt;
@@ -42,5 +44,14 @@ typedef struct Data {
     char padding[4];
 } Data;
 _Static_assert(sizeof(Data) == 0x14);
+
+/**
+ * Convert an 8-bit C string to a 16-bit string.
+ *
+ * @param output_capacity_bytes length in bytes of the output buffer
+ * @param output                pointer to output
+ * @param input                 pointer to input
+ */
+void convert_8bit_string_to_16bit(uint32_t output_capacity_bytes, char16_t *output, const char *input);
 
 #endif

@@ -240,11 +240,11 @@ const char *group_fourcc_to_name(FourCC group_fourcc) {
 }
 
 const char *get_tag_base_name(const char *path) {
-    const char *last = path;
-    for(const char *c = path; *c != 0; c++) {
-        if(*c == '\\') {
-            last = c + 1;
-        }
+    const char *end = strrchr(path, '\\');
+    if(end) {
+        return end + 1;
     }
-    return last;
+    else {
+        return path;
+    }
 }

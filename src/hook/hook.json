@@ -1,4 +1,5 @@
 {
+    "convert_8bit_string_to_16bit": {"address": "0x5528c0", "replace": true, "arguments": ["0", "eax", "edi"]},
     "calculate_total_item_collection_weight": {"address": "0x45F6C0", "replace": true, "use_return_value": true, "arguments": ["eax"]},
     "pick_item_collection_object": {"address": "0x45F700", "replace": true, "use_return_value": true, "arguments": ["eax"]},
     "lookup_tag": {"address": "0x442550", "replace": true, "use_return_value": true, "arguments": [ "0", "edi" ]},
