@@ -128,10 +128,10 @@ add_library(strings MODULE
     src/impl/console/console.c
     src/impl/input/controller.c
     src/impl/map/list.c
-    src/impl/misc_types.c
     src/impl/multiplayer/item_collection.c
     src/impl/object/object.c
     src/impl/player/player.c
+    src/impl/strings/strings.c
     src/impl/3d.c
     src/impl/math.c
     src/impl/memory.c
