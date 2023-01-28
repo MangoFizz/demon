@@ -14,7 +14,8 @@ typedef uint32_t TableID;
     char name[32]; \
     uint16_t max_elements; \
     uint16_t element_size; \
-    uint8_t unknown1[8]; \
+    uint8_t unknown1[4]; \
+    uint32_t data_fourcc; \
     uint8_t unknown2[2]; \
     uint16_t current_size; \
     uint16_t count; \

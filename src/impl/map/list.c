@@ -1,6 +1,6 @@
-#include <windows.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "list.h"
 #include "../tag.h"

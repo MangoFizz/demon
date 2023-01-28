@@ -30,6 +30,8 @@
     "switch_bsp_004424B0": {"address": "0x4424B0", "use_return_value": true, "arguments": ["edi"], "comment": "subroutine used in switching bsps"},
     "switch_bsp_00539370": {"address": "0x539370", "comment": "subroutine used in switching bsps"},
 
+    "create_table": {"address": "0x5331D0", "replace": true, "use_return_value": true, "arguments": ["0", "4", "ebx"]},
+
     "command_is_allowed": {"address": "0x481BC0", "replace": true, "use_return_value": true, "arguments": ["ebx"]},
     "unknown_function_00481b70": {"address": "0x481B70", "use_return_value": true, "arguments": ["eax", "0"], "comment": "called by command_is_allowed"},
 
