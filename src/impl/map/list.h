@@ -52,8 +52,8 @@ void add_mp_map(const char *scenario, uint32_t ui_index_offset);
 /**
  * Add a custom MP map to the map list.
  *
- * @param scenario_path scenario name or tag path
+ * @param scenario scenario name or tag path
  */
-void add_custom_mp_map(const char *scenario_path);
+void add_custom_mp_map(const char *scenario);
 
 #endif

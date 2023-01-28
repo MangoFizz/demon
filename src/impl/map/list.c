@@ -9,19 +9,18 @@
 #define MAX_SCENARIO_NAME_LENGTH 259
 
 static size_t mp_map_allocated_size = 0;
-static uint32_t *mp_map_count = (uint32_t *)(0x702870);
-static uint32_t *mp_map_count2 = (uint32_t *)(0x702874);
+static uint32_t *mp_map_count = (uint32_t *)(0x702870); // used for the menu list
+static uint32_t *mp_map_count2 = (uint32_t *)(0x702874); // unknown what this is for
 static MapEntry **mp_maps = (MapEntry **)(0x70286C);
 
 static size_t search_map_list_for_scenario(const char *scenario, MapEntry *maps, size_t maps_count) {
-    // Get the base name
-    scenario = get_tag_base_name(scenario);
+    const char *scenario_base_name = get_tag_base_name(scenario);
 
     // Copy the scenario until we hit a null byte
     char scenario_lower[MAX_SCENARIO_NAME_LENGTH];
     size_t scenario_length;
     for(scenario_length = 0; scenario_length < sizeof(scenario_lower); scenario_length++) {
-        if((scenario_lower[scenario_length] = tolower(scenario[scenario_length])) == 0) {
+        if((scenario_lower[scenario_length] = tolower(scenario_base_name[scenario_length])) == 0) {
             break;
         }
     }
@@ -32,6 +31,12 @@ static size_t search_map_list_for_scenario(const char *scenario, MapEntry *maps,
     }
 
     // Search it
+    //
+    // Note that the original game checks for a substring rather than an exact match, but this can lead to the wrong
+    // map being opened if there are other maps involved.
+    //
+    // This is fine to change to an exact match here since the demo only has one MP and one SP map, thus no effective
+    // difference since it will only ever ask for those maps.
     for(size_t i = 0; i < maps_count; i++) {
         if(strcmp(maps[i].scenario, scenario_lower) == 0) {
             return i;
@@ -59,9 +64,9 @@ void add_mp_map(const char *scenario, uint32_t ui_index_offset) {
 
     #else
 
-    // Hijack this function to add all stock maps since it's only called once.
+    // Hijack this function to add all stock maps since it's only called once on the demo because there's only one MP map.
     //
-    // TODO: When the caller of this is reverse engineered, the add_all_stock_mp_maps function can go away.
+    // TODO: When the caller of this is reverse engineered, we won't need to hijack this poor function anymore.
     add_all_stock_mp_maps();
 
     #endif
@@ -72,7 +77,11 @@ void add_custom_mp_map(const char *scenario) {
 }
 
 static void add_mp_map_with_index(const char *scenario_path, uint32_t name_index) {
-    // Get the base name
+    // Get the base name to store.
+    //
+    // Note that the original game stores tag paths as-is! But later games JUST store the base name, likely as an optimization
+    // and to prevent loading the wrong map since the original game also checks for substrings rather than complete matches in
+    // search_map_list_for_scenario()
     const char *scenario = get_tag_base_name(scenario_path);
 
     MapEntry *entries = *mp_maps;
@@ -115,6 +124,7 @@ static void add_mp_map_with_index(const char *scenario_path, uint32_t name_index
 }
 
 static void add_all_stock_mp_maps(void) {
+    // Add the stock maps.
     add_mp_map_with_index("levels\\test\\beavercreek\\beavercreek", MapUIIndex_BattleCreek);
     add_mp_map_with_index("levels\\test\\sidewinder\\sidewinder", MapUIIndex_Sidewinder);
     add_mp_map_with_index("levels\\test\\damnation\\damnation", MapUIIndex_Damnation);
