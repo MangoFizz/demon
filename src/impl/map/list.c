@@ -92,19 +92,19 @@ static void add_mp_map_with_index(const char *scenario_path, uint32_t name_index
     // If we don't have any maps allocated, start with allocating enough for MapIndex_UnknownMap
     if(entries == NULL) {
         mp_map_allocated_size = MapUIIndex_UnknownMap;
-        entries = (*mp_maps = GlobalAlloc(GMEM_FIXED, mp_map_allocated_size * sizeof(**mp_maps)));
+        entries = (*mp_maps = calloc(mp_map_allocated_size * sizeof(**mp_maps), 1));
         *mp_map_count = 0;
     }
 
     // If we do not have enough space, reallocate and double the space
     else if(next_size == mp_map_allocated_size) {
         mp_map_allocated_size *= 2;
-        entries = (*mp_maps = GlobalReAlloc(*mp_maps, mp_map_allocated_size * sizeof(**mp_maps), GMEM_MOVEABLE));
+        entries = (*mp_maps = realloc(*mp_maps, mp_map_allocated_size * sizeof(**mp_maps)));
     }
 
     // Allocate the path to the next scenario
     size_t string_length = strlen(scenario);
-    char *scenario_out = GlobalAlloc(GMEM_FIXED, string_length + 1);
+    char *scenario_out = malloc(string_length + 1);
 
     // Set the path/name index up
     entries[next_index].scenario = scenario_out;
@@ -121,6 +121,24 @@ static void add_mp_map_with_index(const char *scenario_path, uint32_t name_index
     // Done
     *mp_map_count = next_size;
     *mp_map_count2 = next_size;
+}
+
+void free_mp_map_list(void) {
+    MapEntry *all_mp_maps = *mp_maps;
+
+    // We have to loop through all the maps to free the scenarios.
+    if(all_mp_maps != NULL) {
+        for(size_t i = 0; i < *mp_map_count; i++) {
+            free(all_mp_maps[i].scenario);
+        }
+        free(all_mp_maps);
+    }
+
+    // Set these to 0. All clean now!
+    *mp_maps = NULL;
+    *mp_map_count = 0;
+    *mp_map_count2 = 0;
+    mp_map_allocated_size = 0;
 }
 
 static void add_all_stock_mp_maps(void) {

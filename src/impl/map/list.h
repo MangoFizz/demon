@@ -56,4 +56,9 @@ void add_mp_map(const char *scenario, uint32_t ui_index_offset);
  */
 void add_custom_mp_map(const char *scenario);
 
+/**
+ * Free the MP map list, clearing all maps from it.
+ */
+void free_mp_map_list(void);
+
 #endif

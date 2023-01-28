@@ -17,6 +17,7 @@
 
     "get_mp_map_index": {"address": "0x493650", "replace": true, "use_return_value": true, "arguments": ["eax"]},
     "add_mp_map": {"address": "0x4936E0", "replace": true, "arguments": ["0", "4"]},
+    "free_mp_map_list": {"address": "0x493830", "replace": true},
 
     "update_player_interaction": {"address": "0x4779A0", "replace": true, "arguments": ["0", "4", "ebx", "eax"]},
 

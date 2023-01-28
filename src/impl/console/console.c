@@ -39,11 +39,6 @@ void set_console_prompt_display_params(void) {
     #endif
 }
 
-bool command_allowed(void) {
-    // stubbed: the actual function does a series of checks to see if the command is 'whitelisted' so it can be shown in a non-devmode environment
-    return true;
-}
-
 extern void (*console_printf_in)(const ColorARGB *color, const char *fmt, ...);
 
 void console_printf(const ColorARGB *color, const char *fmt, ...) {
