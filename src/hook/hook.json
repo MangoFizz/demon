@@ -11,6 +11,7 @@
     "allocate_heaps": {"address": "0x444A10", "replace": true},
     "set_skybox_info": {"address": "0x54E3C0", "replace": true, "arguments": ["edx"]},
     "get_center_and_render_bounding_radius_of_object": {"address": "0x509E00", "replace": true, "arguments": ["0", "4", "8"]},
+    "transition_skybox_fog": {"address": "0x46FCF0", "replace": true, "arguments": ["ecx", "0", "4"]},
     "console_printf_in": {"address": "0x495120", "arguments": ["eax", "4", "8"], "comment": "takes variable args but the bridge doesn't support varargs so two are passed for now plus color"},
 
     "resolve_object_id_to_data": {"address": "0x4F23D0", "replace": true, "use_return_value": true, "arguments": ["0", "ecx"]},

@@ -27,4 +27,13 @@ void set_skybox_info(const VectorXYZ *point);
  */
 void unknown_function_5092f0(const void *input, float *output);
 
+/**
+ * Transition fog values from one value to the other. This is used to seamlessly transition between different fog settings.
+ *
+ * @param current  pointer to the current value (output)
+ * @param target   desired value
+ * @param velocity velocity of the camera
+ */
+void transition_skybox_fog(float *current, float target, float velocity);
+
 #endif

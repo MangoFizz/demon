@@ -103,3 +103,17 @@ void unknown_function_5092f0(const void *input, float *output) {
     output[2] = (b - 1.0) / d;
     output[3] = (b + 1.0) / d;
 }
+
+void transition_skybox_fog(float *current, float target, float velocity) {
+    double difference = target - *current;
+
+    if(velocity >= fabs(difference)) {
+        *current = target;
+    }
+    else if(difference < 0) {
+        *current -= velocity;
+    }
+    else {
+        *current += velocity;
+    }
+}
