@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <math.h>
 
 #include "ringhopper/scenario.h"
 #include "ringhopper/scenario_structure_bsp.h"
@@ -104,16 +105,22 @@ void unknown_function_5092f0(const void *input, float *output) {
     output[3] = (b + 1.0) / d;
 }
 
-void transition_skybox_fog(float *current, float target, float velocity) {
+void transition_skybox_fog_value(float *current, float target, float delta) {
     double difference = target - *current;
 
-    if(velocity >= fabs(difference)) {
+    if(delta >= fabs(difference)) {
         *current = target;
     }
     else if(difference < 0) {
-        *current -= velocity;
+        *current -= delta;
     }
     else {
-        *current += velocity;
+        *current += delta;
     }
+}
+
+void transition_skybox_fog_color(ColorRGB *current, const ColorRGB *target, float delta) {
+    transition_skybox_fog_value(&current->r, target->r, delta);
+    transition_skybox_fog_value(&current->g, target->g, delta);
+    transition_skybox_fog_value(&current->b, target->b, delta);
 }

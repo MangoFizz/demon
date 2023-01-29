@@ -126,6 +126,7 @@ add_library(strings MODULE
     src/impl/bsp/loading.c
     src/impl/bsp/rendering.c
     src/impl/console/console.c
+    src/impl/exception/exception.c
     src/impl/input/controller.c
     src/impl/map/list.c
     src/impl/multiplayer/item_collection.c

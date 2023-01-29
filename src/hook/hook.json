@@ -11,7 +11,8 @@
     "allocate_heaps": {"address": "0x444A10", "replace": true},
     "set_skybox_info": {"address": "0x54E3C0", "replace": true, "arguments": ["edx"]},
     "get_center_and_render_bounding_radius_of_object": {"address": "0x509E00", "replace": true, "arguments": ["0", "4", "8"]},
-    "transition_skybox_fog": {"address": "0x46FCF0", "replace": true, "arguments": ["ecx", "0", "4"]},
+    "transition_skybox_fog_value": {"address": "0x46FCF0", "replace": true, "arguments": ["ecx", "0", "4"]},
+    "transition_skybox_fog_color": {"address": "0x53A300", "replace": true, "arguments": ["ecx", "edx", "0"]},
     "console_printf_in": {"address": "0x495120", "arguments": ["eax", "4", "8"], "comment": "takes variable args but the bridge doesn't support varargs so two are passed for now plus color"},
 
     "resolve_object_id_to_data": {"address": "0x4F23D0", "replace": true, "use_return_value": true, "arguments": ["0", "ecx"]},
@@ -36,5 +37,7 @@
     "command_is_allowed": {"address": "0x481BC0", "replace": true, "use_return_value": true, "arguments": ["ebx"]},
     "unknown_function_00481b70": {"address": "0x481B70", "use_return_value": true, "arguments": ["eax", "0"], "comment": "called by command_is_allowed"},
 
-    "unknown_function_5092f0": {"address": "0x5092F0", "replace": true, "arguments": ["ecx", "eax"], "comment": "appears to do something with portals/render culling"}
+    "unknown_function_5092f0": {"address": "0x5092F0", "replace": true, "arguments": ["ecx", "eax"], "comment": "appears to do something with portals/render culling"},
+
+    "exception_handler": {"address": "0x622DAC", "replace": true}
 }
