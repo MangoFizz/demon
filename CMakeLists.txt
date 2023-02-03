@@ -126,10 +126,12 @@ add_library(strings MODULE
     src/impl/bsp/loading.c
     src/impl/bsp/rendering.c
     src/impl/console/console.c
+    src/impl/engine_loop/tick.c
     src/impl/exception/exception.c
     src/impl/input/controller.c
     src/impl/map/list.c
     src/impl/multiplayer/item_collection.c
+    src/impl/multiplayer/mode.c
     src/impl/object/object.c
     src/impl/player/player.c
     src/impl/string/string.c
