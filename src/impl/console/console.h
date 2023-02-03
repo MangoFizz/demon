@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+struct ColorARGB;
+
 /**
  * Set console prompt display parameters. This is run on startup.
  */
