@@ -10,7 +10,7 @@
 #include "loading.h"
 
 #include "../console/console.h"
-#include "../id.h"
+#include "../table/table.h"
 #include "../tag.h"
 
 uint32_t *current_leaf_index = (uint32_t *)(0x7B27E4);

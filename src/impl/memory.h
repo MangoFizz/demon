@@ -2,7 +2,7 @@
 #define DEMON__IMPL_MEMORY_H
 
 /**
- * Allocate a table of objects. See id.h for the table structure.
+ * Allocate a table of objects. See table/table.h for the table structure.
  *
  * @param name          name of table
  * @param maximum_count maximum element count

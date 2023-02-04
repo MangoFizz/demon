@@ -1,7 +1,7 @@
 #ifndef DEMON__IMPL_OBJECT_OBJECT_H
 #define DEMON__IMPL_OBJECT_OBJECT_H
 
-#include "../id.h"
+#include "../table/table.h"
 #include "../3d.h"
 #include "../misc_types.h"
 

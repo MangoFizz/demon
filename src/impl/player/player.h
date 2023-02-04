@@ -4,7 +4,7 @@
 #include <uchar.h>
 
 #include "../3d.h"
-#include "../id.h"
+#include "../table/table.h"
 
 typedef struct Player {
     uint16_t player_id;

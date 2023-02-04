@@ -1,5 +1,5 @@
-#ifndef DEMON__IMPL_ID_H
-#define DEMON__IMPL_ID_H
+#ifndef DEMON__IMPL_TABLE_TABLE_H
+#define DEMON__IMPL_TABLE_TABLE_H
 
 #include <stdint.h>
 

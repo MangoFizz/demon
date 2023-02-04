@@ -7,7 +7,7 @@ struct Scenario;
 
 typedef uint32_t FourCC;
 
-#include "id.h"
+#include "table/table.h"
 
 typedef struct TagReference {
     FourCC group_fourcc;

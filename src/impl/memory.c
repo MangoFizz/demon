@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 #include "memory.h"
-#include "id.h"
+#include "table/table.h"
 
 #define BASE_HEAP_AMOUNT (size_t)(4352 * 1024) // 4.25 MiB
 #define TAG_DATA_LENGTH (size_t)(23 * 1024 * 1024) // 23 MiB
