@@ -33,8 +33,6 @@ void allocate_heaps(void) {
 static void **alloc_base_address = (void **)(0x6DA068);
 static uint32_t *alloc_size = (uint32_t *)(0x6DA06C);
 
-MAKE_TABLE_STRUCT(GenericTable, void);
-
 void *create_table(const char *name, uint16_t maximum_count, uint16_t element_size) {
     GenericTable *table = *alloc_base_address + *alloc_size;
     uint32_t allocation_amount = sizeof(*table) + (size_t)(maximum_count) * (size_t)(element_size);

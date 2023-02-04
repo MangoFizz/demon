@@ -32,7 +32,7 @@ extern void (*unknown_function_472EE0)(void);
 extern void (*unknown_function_473360)(void);
 extern void (*unknown_function_450B20)(float);
 extern void (*unknown_function_490A30)(void);
-extern void (*unknown_function_45FF10)(void);
+extern void (*multiplayer_tick)(void);
 extern void (*unknown_function_488760)(void);
 extern void (*unknown_function_44AB20)(void);
 extern void (*unknown_function_4F03A0)(void);
@@ -82,7 +82,7 @@ static void do_tick(int32_t p) {
     unknown_function_490A30();
     (*unknown_709614)--;
 
-    unknown_function_45FF10(); // MP logic?
+    multiplayer_tick();
     unknown_function_488760();
     unknown_function_44AB20();
     unknown_function_4F03A0(); // physics?

@@ -136,6 +136,7 @@ add_library(strings MODULE
     src/impl/player/player.c
     src/impl/string/string.c
     src/impl/3d.c
+    src/impl/id.c
     src/impl/math.c
     src/impl/memory.c
     src/impl/rng.c

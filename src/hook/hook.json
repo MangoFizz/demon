@@ -39,6 +39,7 @@
 
     "unknown_function_5092f0": {"address": "0x5092F0", "replace": true, "arguments": ["ecx", "eax"], "comment": "appears to do something with portals/render culling"},
 
+    "iterate_table": {"address": "0x4CE280", "replace": true, "use_return_value": true, "arguments": ["edi"]},
 
     "process_tick": {"address": "0x45B810", "replace": true, "arguments": ["0"]},
 
@@ -51,7 +52,7 @@
     "unknown_function_473360" : { "address": "0x473360", "replace": false, "arguments": [] },
     "unknown_function_450B20" : { "address": "0x450B20", "replace": false, "arguments": ["0"] },
     "unknown_function_490A30" : { "address": "0x490A30", "replace": false, "arguments": [] },
-    "unknown_function_45FF10" : { "address": "0x45FF10", "replace": false, "arguments": [], "comment": "multiplayer item respawning and gametype stuff" },
+    "multiplayer_tick" : { "address": "0x45FF10", "replace": false, "arguments": [], "comment": "multiplayer item respawning and gametype stuff" },
     "unknown_function_488760" : { "address": "0x488760", "replace": false, "arguments": [] },
     "unknown_function_44AB20" : { "address": "0x44AB20", "replace": false, "arguments": [] },
     "unknown_function_4F03A0" : { "address": "0x4F03A0", "replace": false, "arguments": [], "comment": "does physics" },
