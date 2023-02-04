@@ -7,7 +7,7 @@
 #include "../table/table.h"
 
 typedef struct Player {
-    uint16_t player_id;
+    uint16_t salt;
     uint16_t local_id;
     char16_t name[12];
     uint8_t field_0x1c[4];
