@@ -129,6 +129,7 @@ add_library(strings MODULE
     src/impl/console/console.c
     src/impl/engine_loop/tick.c
     src/impl/exception/exception.c
+    src/impl/init/init.c
     src/impl/input/controller.c
     src/impl/keystone/keystone.c
     src/impl/map/list.c
