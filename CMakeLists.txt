@@ -130,6 +130,7 @@ add_library(strings MODULE
     src/impl/engine_loop/tick.c
     src/impl/exception/exception.c
     src/impl/input/controller.c
+    src/impl/keystone/keystone.c
     src/impl/map/list.c
     src/impl/memory/memory.c
     src/impl/multiplayer/item_collection.c

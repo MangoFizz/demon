@@ -67,5 +67,8 @@
 
     "make_actor_tables": {"address": "0x426710", "replace": true},
 
+    "load_keystone": {"address": "0x53DA80", "replace": true},
+    "unload_keystone": {"address": "0x53DCA0", "replace": true},
+
     "exception_handler": {"address": "0x622DAC", "replace": true}
 }
