@@ -7,6 +7,7 @@
 #include <windows.h>
 
 #include "../misc_types.h"
+#include "../init/init.h"
 
 static char *console_text = (char *)(0x6AE378);
 static const ColorARGB *default_prompt_colors = (ColorARGB *)(0x68E274);
@@ -15,6 +16,8 @@ static uint16_t *command_history_length = (uint16_t *)(0x6AEC7C);
 static uint16_t *command_history_selected_index = (uint16_t *)(0x6AEC80);
 static uint8_t *console_enabled = (uint8_t *)(0x6AE2C1);
 static ColorARGB *console_prompt_color = (ColorARGB *)(0x6AE348);
+
+static bool devmode = false;
 
 void set_console_prompt_display_params(void) {
     // set prompt to these colors
@@ -30,13 +33,9 @@ void set_console_prompt_display_params(void) {
     *command_history_length = 0;
     *command_history_selected_index = 0xFFFF;
 
-    // if we have enhancements on, turn on the console
-    #ifdef DEMON_ENABLE_ENHANCEMENTS
-    *console_enabled = 1;
-    #else
-    // disable console by default
-    *console_enabled = 0;
-    #endif
+    // check if we should enable the console or have devmode (basically backported from Halo Custom Edition)
+    *console_enabled = get_exe_argument_value("-console", NULL);
+    devmode = get_exe_argument_value("-devmode", NULL);
 }
 
 extern void (*console_printf_in)(const ColorARGB *color, const char *fmt, ...);
@@ -50,13 +49,16 @@ void console_printf(const ColorARGB *color, const char *fmt, ...) {
     console_printf_in(color, "%s", passed_text);
 }
 
-#ifndef DEMON_ENABLE_ENHANCEMENTS
-
 // TODO: The exact meanings of these is not known. This should be figured out later.
 extern uint8_t (*unknown_function_00481b70)(uint32_t a, uint32_t b);
 uint32_t *unknown_006a8854 = (uint32_t *)(0x6A8854);
 
 bool command_is_allowed(uint8_t a) {
+    // Enable all commands if devmode
+    if(devmode) {
+        return true;
+    }
+
     uint32_t flags = *unknown_006a8854;
 
     if((uint16_t)(flags) == 0) {
@@ -78,12 +80,3 @@ bool command_is_allowed(uint8_t a) {
         && unknown_function_00481b70(a, 6)
         && unknown_function_00481b70(a, 5);
 }
-
-#else
-
-// Allow all commands!
-bool command_is_allowed(uint8_t a) {
-    return true;
-}
-
-#endif

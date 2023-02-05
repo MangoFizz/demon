@@ -1,12 +1,22 @@
 # Demon
 
-Demon is a project with the goal of reverse engineering and reimplementing the functionality of the Halo PC demo, AKA Halo Trial.
+Demon is a project with the goal of reverse engineering and reimplementing the functionality of the Halo PC demo, AKA
+Halo Trial.
 
 Please see the [Frequently Asked Questions](https://github.com/Aerocatia/demon/wiki/FAQ) for more information.
 
+## Features
+
+These are features added that are not originally present in the original Halo PC demo. These are done to help with
+improving the functionality of the game as well as making it easier to test.
+
+- New debugging messages to assist with modding (more will be added as the project continues).
+- Backported `-console` and `-devmode` from Halo Custom Edition, allowing you to enable a fully-featured console.
+
 ## Compiling Demon
 
-The current progress of demon can be compiled into a replacement `strings.dll`, where core game functions will be redirected at runtime into our re-implemented versions.
+The current progress of demon can be compiled into a replacement `strings.dll`, where core game functions will be
+redirected at runtime into our re-implemented versions.
 
 ### Dependencies
 
@@ -36,16 +46,15 @@ cmake --build build
 
 Demon has some build time options that change functionality.
 
-Option                      | Default
-----------------------------|---------
-DEMON_ENABLE_ENHANCEMENTS   | OFF
+Option                    | Default
+--------------------------|---------
+DEMON_ENABLE_ENHANCEMENTS | OFF
 
 #### DEMON_ENABLE_ENHANCEMENTS
-This option enables some enhancements to re-implemented functions, adding extra features to assist in debugging and running the game.
-Some examples of of these are enabling the in-game console and enabling "devmode" (unlocked console command access).
-In the future it may also enable some core features and fixes seen in the mod [Chimera](https://github.com/SnowyMouse/chimera).
+This option enables some enhancements to re-implemented functions, adding extra features to assist in debugging and
+running the game. In the future it may also enable some core features and fixes seen in the mod [Chimera](https://github.com/SnowyMouse/chimera).
 
-By default this setting is off and only direct re-implementations of functions will be compiled by the project.
+By default this setting is off.
 
 ## Testing Demon
 
@@ -53,9 +62,10 @@ Once `strings.dll` has been compiled, it can be run using an original install of
 
 ### Creating a testing environment
 
-First, download a copy of the original Halo Trial Installer. This can be obtained [here](http://vaporeon.io/hosted/halo/original_files/HaloTrialSetup.exe)
+First, download a copy of the original Halo Trial Installer. This can be obtained [here](http://vaporeon.io/hosted/halo/original_files/HaloTrialSetup.exe).
 
-Next, extract the contents of this installer using `7-zip` to a desired location. Installing Halo Trial the usual way is not recommended as this Windows XP-era game assumes you are likely to have direct write access to `Program Files`.
+Next, extract the contents of this installer using `7-zip` to a desired location. Installing Halo Trial the usual way
+is not recommended as this Windows XP-era game assumes you are likely to have direct write access to `Program Files`.
 
 Finally, back up the original `strings.dll` and replace it with the one created by compiling this project.
 
@@ -63,6 +73,7 @@ You can now start the game by running `halo.exe`
 
 ### Tips
 
-- Use the argument `-window` to start the game in a window
-- Use the argument `-vidmode <width>,<height>,<refresh rate>` to set the game resolution.
+- Use the argument `-window` to start the game in a window.
+- Use the argument `-vidmode <width>,<height>[,<refresh rate>]` to set the game resolution.
 - Use the argument `-novideo` to skip the promo video on exit or level completion.
+- Use the argument `-console` to enable the console and `-devmode` to enable all commands.
