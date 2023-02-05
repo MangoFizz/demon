@@ -122,6 +122,7 @@ endforeach()
 
 add_library(strings MODULE
     src/main.cpp
+    src/impl/ai/ai.c
     src/impl/bsp/collision.c
     src/impl/bsp/loading.c
     src/impl/bsp/rendering.c
@@ -130,6 +131,7 @@ add_library(strings MODULE
     src/impl/exception/exception.c
     src/impl/input/controller.c
     src/impl/map/list.c
+    src/impl/memory/memory.c
     src/impl/multiplayer/item_collection.c
     src/impl/multiplayer/mode.c
     src/impl/object/object.c
@@ -138,7 +140,6 @@ add_library(strings MODULE
     src/impl/table/table.c
     src/impl/3d.c
     src/impl/math.c
-    src/impl/memory.c
     src/impl/rng.c
     src/impl/tag.c
     "${CMAKE_CURRENT_BINARY_DIR}/hook.cpp"
@@ -155,11 +156,6 @@ target_compile_definitions(strings PRIVATE STRINGS_CUSTOM_VERSION_RC)
 option(DEMON_ENABLE_ENHANCEMENTS "Enable enhancements to improve debugging" OFF)
 if(DEMON_ENABLE_ENHANCEMENTS)
     target_compile_definitions(strings PRIVATE DEMON_ENABLE_ENHANCEMENTS)
-endif()
-
-option(DEMON_ENABLE_DEBUG_MESSAGES "Enable debug messages to improve debugging" OFF)
-if(DEMON_ENABLE_DEBUG_MESSAGES)
-    target_compile_definitions(strings PRIVATE DEMON_ENABLE_DEBUG_MESSAGES)
 endif()
 
 add_custom_command(

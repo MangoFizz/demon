@@ -1,4 +1,6 @@
+#include <string.h>
 #include "table.h"
+#include "../memory/memory.h"
 
 #define ITER_FOURCC 0x69746572
 
@@ -29,4 +31,23 @@ void *iterate_table(TableIterator *iterator) {
     }
 
     return NULL;
+}
+
+void *create_table(const char *name, uint16_t maximum_count, uint16_t element_size) {
+    GenericTable *table;
+
+    uint32_t allocation_amount = sizeof(*table) + (size_t)(maximum_count) * (size_t)(element_size);
+    table = (GenericTable *)(allocate_heap(allocation_amount));
+    memset(table, 0, allocation_amount);
+
+    strncpy(table->name, name, sizeof(table->name) - 1);
+    table->max_elements = maximum_count;
+    table->element_size = element_size;
+    table->data_fourcc = 0x64407440;
+    table->first_element = (void *)(table) + sizeof(*table);
+
+    // TODO: The game makes some call to 0x004cdf80, but this seems to corrupt the stack?? More investigation needs done here.
+    // It isn't necessary to allocate this structure, but I don't like it.
+
+    return table;
 }

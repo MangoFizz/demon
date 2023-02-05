@@ -1,8 +1,10 @@
 #include <windows.h>
 #include <stdint.h>
+#include <stdio.h>
 
 #include "memory.h"
-#include "table/table.h"
+#include "../table/table.h"
+#include "../exception/exception.h"
 
 #define BASE_HEAP_AMOUNT (size_t)(4352 * 1024) // 4.25 MiB
 #define TAG_DATA_LENGTH (size_t)(23 * 1024 * 1024) // 23 MiB
@@ -33,21 +35,13 @@ void allocate_heaps(void) {
 static void **alloc_base_address = (void **)(0x6DA068);
 static uint32_t *alloc_size = (uint32_t *)(0x6DA06C);
 
-void *create_table(const char *name, uint16_t maximum_count, uint16_t element_size) {
-    GenericTable *table = *alloc_base_address + *alloc_size;
-    uint32_t allocation_amount = sizeof(*table) + (size_t)(maximum_count) * (size_t)(element_size);
+void *allocate_heap(size_t size) {
+    size_t remaining_bytes = BASE_HEAP_AMOUNT - *alloc_size;
+    if(remaining_bytes < size) {
+        crashf("allocate_heap(): Can't allocate 0x%08zX bytes (only 0x%08zX bytes remaining)", size, remaining_bytes);
+    }
 
-    memset(table, 0, allocation_amount);
-    *alloc_size += allocation_amount;
-
-    strncpy(table->name, name, sizeof(table->name) - 1);
-    table->max_elements = maximum_count;
-    table->element_size = element_size;
-    table->data_fourcc = 0x64407440;
-    table->first_element = (void *)(table) + sizeof(*table);
-
-    // TODO: The game makes some call to 0x004cdf80, but this seems to corrupt the stack?? More investigation needs done here.
-    // It isn't necessary to allocate this structure, but I don't like it.
-
-    return table;
+    void *allocated = *alloc_base_address + *alloc_size;
+    *alloc_size += size;
+    return allocated;
 }
