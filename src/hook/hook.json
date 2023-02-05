@@ -70,6 +70,7 @@
     "load_keystone": {"address": "0x53DA80", "replace": true},
     "unload_keystone": {"address": "0x53DCA0", "replace": true},
     "get_exe_argument_value": {"address": "0x53D710", "replace": true, "use_return_value": true, "arguments": ["0", "edi"]},
+    "check_for_updates": {"address": "0x4A2D50", "replace": true, "arguments": ["0"]},
 
     "exception_handler": {"address": "0x622DAC", "replace": true}
 }

@@ -140,6 +140,7 @@ add_library(strings MODULE
     src/impl/player/player.c
     src/impl/string/string.c
     src/impl/table/table.c
+    src/impl/ui/ui.c
     src/impl/3d.c
     src/impl/math.c
     src/impl/rng.c
