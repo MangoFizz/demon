@@ -66,6 +66,14 @@ namespace Demon {
             }
 
             /**
+             * Specify that the return value is 64 bits.
+             */
+            Hook &return_64_bit_value() {
+                this->returns_64_bit_value = true;
+                return *this;
+            }
+
+            /**
              * Write the hook.
              *
              * @return hook address
@@ -76,6 +84,7 @@ namespace Demon {
             std::uintptr_t function_address;
             std::uintptr_t destination_address;
             HookType hook_type;
+            bool returns_64_bit_value = false;
             bool uses_return_value = false;
             std::vector<std::pair<ParameterStorageType, std::size_t>> parameters;
     };

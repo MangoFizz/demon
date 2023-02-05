@@ -35,6 +35,9 @@ for hook in hooks:
     if "use_return_value" in hook_info and hook_info["use_return_value"]:
         hook_fn += "\n            .has_return_value()"
 
+    if "return_64_bit_value" in hook_info and hook_info["return_64_bit_value"]:
+        hook_fn += "\n            .return_64_bit_value()"
+
     hook_fn += "\n            .write_hook();\n"
 
     if "flag" in hook_info:

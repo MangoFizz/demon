@@ -10,4 +10,9 @@
  */
 void process_tick(int32_t p);
 
+/**
+ * Get the time in milliseconds
+ */
+uint64_t get_time_milliseconds(void);
+
 #endif

@@ -72,5 +72,7 @@
     "get_exe_argument_value": {"address": "0x53D710", "replace": true, "use_return_value": true, "arguments": ["0", "edi"]},
     "check_for_updates": {"address": "0x4A2D50", "replace": true, "arguments": ["0"]},
 
+    "get_time_milliseconds": {"address": "0x449300", "replace": true, "use_return_value": true, "return_64_bit_value": true},
+
     "exception_handler": {"address": "0x622DAC", "replace": true}
 }

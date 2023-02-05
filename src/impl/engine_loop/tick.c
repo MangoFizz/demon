@@ -1,3 +1,4 @@
+#include <windows.h>
 #include "tick.h"
 #include "../multiplayer/mode.h"
 
@@ -103,4 +104,12 @@ static void do_tick(int32_t p) {
         unknown_function_475A70();
         unknown_function_475990();
     }
+}
+
+static LARGE_INTEGER *qpc_frequency = (LARGE_INTEGER *)(0x6A3CA0);
+
+uint64_t get_time_milliseconds(void) {
+    LARGE_INTEGER time;
+    QueryPerformanceCounter(&time);
+    return (time.QuadPart * 1000) / qpc_frequency->QuadPart;
 }

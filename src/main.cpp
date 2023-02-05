@@ -265,6 +265,16 @@ void *Hook::write_hook() {
         HOOK_PUSH_BYTE(0x44);
         HOOK_PUSH_BYTE(0x24);
         HOOK_PUSH_BYTE(0x1C);
+
+        // If we return a 64-bit value, set EDX as well
+        //
+        // mov dword ptr [esp+0x14], edx
+        if(this->returns_64_bit_value) {
+            HOOK_PUSH_BYTE(0x89);
+            HOOK_PUSH_BYTE(0x54);
+            HOOK_PUSH_BYTE(0x24);
+            HOOK_PUSH_BYTE(0x14);
+        }
     }
 
     // Pop flags and registers
