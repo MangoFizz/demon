@@ -143,6 +143,7 @@ add_library(strings MODULE
     src/impl/ui/ui.c
     src/impl/3d.c
     src/impl/math.c
+    src/impl/misc_types.c
     src/impl/rng.c
     src/impl/tag.c
     "${CMAKE_CURRENT_BINARY_DIR}/hook.cpp"

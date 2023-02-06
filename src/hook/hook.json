@@ -74,5 +74,8 @@
 
     "get_time_milliseconds": {"address": "0x449300", "replace": true, "use_return_value": true, "return_64_bit_value": true},
 
+    "decode_r8g8b8": {"address": "0x43F640", "replace": true, "arguments": ["ecx", "eax"]},
+    "decode_a8r8g8b8": {"address": "0x43F5B0", "replace": true, "arguments": ["ecx", "eax"]},
+
     "exception_handler": {"address": "0x622DAC", "replace": true}
 }

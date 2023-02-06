@@ -3,20 +3,6 @@
 
 #include <stdint.h>
 
-struct VectorXYZ;
-
-/**
- * Calculate the distance squared between two points.
- *
- * Doing distance squared is preferred for speed for doing distance comparisons.
- *
- * @param a first vector
- * @param b second vector
- *
- * @return distance squared
- */
-double vectorxyz_distance_squared(struct VectorXYZ *a, struct VectorXYZ *b);
-
 typedef struct VectorXYZ {
     float x;
     float y;
@@ -80,5 +66,17 @@ typedef struct Plane3D {
     float w;
 } Plane3D;
 _Static_assert(sizeof(Plane3D) == 0x10);
+
+/**
+ * Calculate the distance squared between two points.
+ *
+ * Doing distance squared is preferred for speed for doing distance comparisons.
+ *
+ * @param a first vector
+ * @param b second vector
+ *
+ * @return distance squared
+ */
+double vectorxyz_distance_squared(VectorXYZ *a, VectorXYZ *b);
 
 #endif

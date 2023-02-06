@@ -45,4 +45,14 @@ typedef struct Data {
 } Data;
 _Static_assert(sizeof(Data) == 0x14);
 
+/**
+ * Decode an integer (X8)R8G8B8 value to floating point RGB.
+ */
+void decode_r8g8b8(uint32_t rgb, ColorRGB *output);
+
+/**
+ * Decode an integer A8R8G8B8 value to floating point ARGB.
+ */
+void decode_a8r8g8b8(uint32_t argb, ColorARGB *output);
+
 #endif
