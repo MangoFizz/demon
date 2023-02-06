@@ -77,5 +77,7 @@
     "decode_r8g8b8": {"address": "0x43F640", "replace": true, "arguments": ["ecx", "eax"]},
     "decode_a8r8g8b8": {"address": "0x43F5B0", "replace": true, "arguments": ["ecx", "eax"]},
 
+    "scale_mouse_input": {"address": "0x48B250", "replace": true, "arguments": ["0", "4"]},
+
     "exception_handler": {"address": "0x622DAC", "replace": true}
 }

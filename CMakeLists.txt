@@ -131,6 +131,7 @@ add_library(strings MODULE
     src/impl/exception/exception.c
     src/impl/init/init.c
     src/impl/input/controller.c
+    src/impl/input/mouse.c
     src/impl/keystone/keystone.c
     src/impl/map/list.c
     src/impl/math/math.c
