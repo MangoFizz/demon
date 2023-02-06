@@ -1,7 +1,7 @@
 #ifndef DEMON__IMPL_MULTIPLAYER_ITEM_COLLECTION_H
 #define DEMON__IMPL_MULTIPLAYER_ITEM_COLLECTION_H
 
-#include "../tag.h"
+#include "../tag/tag.h"
 
 #include "ringhopper/item_collection.h"
 

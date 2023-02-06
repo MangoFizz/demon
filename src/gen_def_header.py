@@ -188,9 +188,8 @@ header_file = """/* This file is auto-generated. Do not edit unless you like reg
 #ifndef RINGHOPPER_HEADER_{hname}
 #define RINGHOPPER_HEADER_{hname}
 
-#include "src/impl/3d.h"
-#include "src/impl/tag.h"
-#include "src/impl/misc_types.h"
+#include "src/impl/tag/tag.h"
+#include "src/impl/types/types.h"
 {ext_headers_def}
 #include <stdint.h>
 

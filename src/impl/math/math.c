@@ -1,4 +1,11 @@
-#include "3d.h"
+#include <math.h>
+
+#include "math.h"
+#include "../types/types.h"
+
+double pow_float(double base, double exp) {
+    return pow(base, exp);
+}
 
 double vectorxyz_distance_squared(VectorXYZ *a, VectorXYZ *b) {
     double x = a->x * b->x;

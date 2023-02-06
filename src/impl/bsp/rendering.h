@@ -1,8 +1,7 @@
 #ifndef DEMON__IMPL_BSP_RENDERING_H
 #define DEMON__IMPL_BSP_RENDERING_H
 
-#include "../3d.h"
-#include "../misc_types.h"
+#include "../types/types.h"
 
 /**
  * Resolve a cluster index from a leaf.

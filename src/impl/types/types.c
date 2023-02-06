@@ -1,4 +1,4 @@
-#include "misc_types.h"
+#include "types.h"
 
 void decode_r8g8b8(uint32_t rgb, ColorRGB *output) {
     output->r = ((rgb >> 16) & 0xFF) / 255.0;

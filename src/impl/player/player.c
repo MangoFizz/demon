@@ -1,6 +1,8 @@
+#include <stdbool.h>
+
 #include "player.h"
 #include "../object/object.h"
-#include <stdbool.h>
+#include "../math/math.h"
 
 MAKE_TABLE_STRUCT(PlayerTable, Player);
 

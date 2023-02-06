@@ -1,8 +1,8 @@
 #include <string.h>
 #include "tag.h"
 
-#include "misc_types.h"
-#include "console/console.h"
+#include "../types/types.h"
+#include "../console/console.h"
 
 uint8_t *map_loaded = (uint8_t *)(0x69F4F8);
 struct Scenario **scenario_tag_data = (struct Scenario **)(0x7367AC);

@@ -3,8 +3,8 @@
 
 #include <uchar.h>
 
-#include "../3d.h"
-#include "../table/table.h"
+#include "../types/types.h"
+#include "../memory/table.h"
 
 typedef struct Player {
     uint16_t salt;

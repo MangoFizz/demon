@@ -1,9 +1,8 @@
 #ifndef DEMON__IMPL_OBJECT_OBJECT_H
 #define DEMON__IMPL_OBJECT_OBJECT_H
 
-#include "../table/table.h"
-#include "../3d.h"
-#include "../misc_types.h"
+#include "../memory/table.h"
+#include "../types/types.h"
 
 typedef struct DynamicObjectBase {
     TableID tag;

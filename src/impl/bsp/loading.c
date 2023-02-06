@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 
-#include "../tag.h"
+#include "../tag/tag.h"
 #include "ringhopper/model_collision_geometry.h"
 #include "ringhopper/scenario.h"
 #include "ringhopper/scenario_structure_bsp.h"

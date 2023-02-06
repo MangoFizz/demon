@@ -6,7 +6,7 @@
 
 #include <windows.h>
 
-#include "../misc_types.h"
+#include "../types/types.h"
 #include "../init/init.h"
 
 static char *console_text = (char *)(0x6AE378);

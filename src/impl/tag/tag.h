@@ -1,5 +1,5 @@
-#ifndef DEMON__IMPL_TAG_H
-#define DEMON__IMPL_TAG_H
+#ifndef DEMON__IMPL_TAG_TAG_H
+#define DEMON__IMPL_TAG_TAG_H
 
 #include <stdint.h>
 
@@ -7,7 +7,7 @@ struct Scenario;
 
 typedef uint32_t FourCC;
 
-#include "table/table.h"
+#include "../memory/table.h"
 
 typedef struct TagReference {
     FourCC group_fourcc;

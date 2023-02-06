@@ -2,7 +2,7 @@
 
 #include "item_collection.h"
 
-#include "../rng.h"
+#include "../rng/rng.h"
 #include "../console/console.h"
 
 uint32_t calculate_total_item_collection_weight(const ItemCollection *item_collection) {

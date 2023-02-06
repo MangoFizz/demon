@@ -133,19 +133,18 @@ add_library(strings MODULE
     src/impl/input/controller.c
     src/impl/keystone/keystone.c
     src/impl/map/list.c
+    src/impl/math/math.c
     src/impl/memory/memory.c
+    src/impl/memory/table.c
     src/impl/multiplayer/item_collection.c
     src/impl/multiplayer/mode.c
     src/impl/object/object.c
     src/impl/player/player.c
     src/impl/string/string.c
-    src/impl/table/table.c
+    src/impl/rng/rng.c
+    src/impl/tag/tag.c
+    src/impl/types/types.c
     src/impl/ui/ui.c
-    src/impl/3d.c
-    src/impl/math.c
-    src/impl/misc_types.c
-    src/impl/rng.c
-    src/impl/tag.c
     "${CMAKE_CURRENT_BINARY_DIR}/hook.cpp"
     "${RINGHOPPER_DEF_HEADERS}"
 

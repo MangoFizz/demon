@@ -3,7 +3,7 @@
 
 #include <uchar.h>
 
-#include "../table/table.h"
+#include "../memory/table.h"
 
 /**
  * Load a unicode string

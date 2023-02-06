@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "list.h"
-#include "../tag.h"
+#include "../tag/tag.h"
 #include "../string/string.h"
 
 #define MAX_SCENARIO_NAME_LENGTH 259

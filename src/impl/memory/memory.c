@@ -3,7 +3,8 @@
 #include <stdio.h>
 
 #include "memory.h"
-#include "../table/table.h"
+#include "table.h"
+
 #include "../exception/exception.h"
 
 #define BASE_HEAP_AMOUNT (size_t)(4352 * 1024) // 4.25 MiB

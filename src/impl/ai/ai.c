@@ -1,4 +1,4 @@
-#include "../table/table.h"
+#include "../memory/table.h"
 
 static GenericTable **actor_table = (GenericTable **)(0x86F360);
 static GenericTable **swarm_table = (GenericTable **)(0x86F35C);

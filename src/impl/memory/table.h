@@ -121,7 +121,7 @@ void init_iterator(TableIterator *iterator, const void *table);
 void *iterate_table(TableIterator *iterator);
 
 /**
- * Allocate a table of objects. See table/table.h for the table structure.
+ * Allocate a table of objects. See memory/table.h for the table structure.
  *
  * @param name          name of table
  * @param maximum_count maximum element count

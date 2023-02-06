@@ -1,6 +1,7 @@
 #include <string.h>
+
 #include "table.h"
-#include "../memory/memory.h"
+#include "memory.h"
 
 #define ITER_FOURCC 0x69746572
 
