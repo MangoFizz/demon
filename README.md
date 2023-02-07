@@ -75,5 +75,5 @@ You can now start the game by running `halo.exe`
 
 - Use the argument `-window` to start the game in a window.
 - Use the argument `-vidmode <width>,<height>[,<refresh rate>]` to set the game resolution.
-- Use the argument `-novideo` to skip the promo video on exit or level completion.
+- Use the argument `-novideo` to skip the promo video when exiting the game.
 - Use the argument `-console` to enable the console and `-devmode` to enable all commands.
