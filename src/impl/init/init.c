@@ -51,5 +51,11 @@ const char *read_config_stub(void) {
     *(uint32_t *)(0x6E7278) = 1; // D3D version
     *(uint32_t *)(0x6E7280) = 1; // CPU speed
     *(uint32_t *)(0x712384) = 1; // disable buffering - the only setting worth turning on
+
+    *(float *)(0x7123A8) = -0.000055; // DecalZBiasValue
+    *(float *)(0x7123AC) = -0.000005; // TransparentDecalZBiasValue
+    *(float *)(0x7123B0) = 0.0; // DecalSlopeZBiasValue
+    *(float *)(0x7123B4) = 0.0; // TransparentDecalSlopeZBiasValue
+
     return NULL; // do not show a message dialog
 }
