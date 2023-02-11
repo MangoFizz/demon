@@ -81,6 +81,7 @@
 
     "query_system_specs_stub": {"address": "0x5782E0", "replace": true},
     "read_config_stub": {"address": "0x577E70", "replace": true, "use_return_value": true},
+    "create_window": {"address": "0x510DC0", "replace": true, "use_return_value": true, "arguments": ["ebx", "eax"]},
 
     "exception_handler": {"address": "0x622DAC", "replace": true}
 }

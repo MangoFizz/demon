@@ -130,6 +130,7 @@ add_library(strings MODULE
     src/impl/engine_loop/tick.c
     src/impl/exception/exception.c
     src/impl/init/init.c
+    src/impl/init/window.c
     src/impl/input/controller.c
     src/impl/input/mouse.c
     src/impl/keystone/keystone.c
@@ -171,5 +172,5 @@ add_custom_command(
 
 # Static link EVERYTHING
 set_target_properties(strings PROPERTIES LINK_FLAGS "-m32 -static-libgcc -static-libstdc++ -static -lwinpthread")
-
+target_link_libraries(strings dwmapi)
 target_include_directories(strings PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})

@@ -1,7 +1,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
-#include <stdio.h>
 
 static const char ***parameters = (const char ***)(0x7116C0);
 static const uint32_t *parameter_count = (uint32_t *)(0x7116C4);
