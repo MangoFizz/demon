@@ -3,13 +3,13 @@
 #include "table.h"
 #include "memory.h"
 
-#define ITER_FOURCC 0x69746572
+#define ITERATOR_FOURCC 0x69746572 // 'iter'
 
 void init_table_iterator(TableIterator *iterator, const void *table) {
     iterator->table = (GenericTable *)(table);
     iterator->id = NULL_ID;
     iterator->index = 0;
-    iterator->salt = (uint32_t)(table) ^ ITER_FOURCC;
+    iterator->salt = (uint32_t)(table) ^ ITERATOR_FOURCC;
 }
 
 void *iterate_table(TableIterator *iterator) {
@@ -47,8 +47,19 @@ void *create_table(const char *name, uint16_t maximum_count, uint16_t element_si
     table->data_fourcc = 0x64407440;
     table->first_element = (void *)(table) + sizeof(*table);
 
-    // TODO: The game makes some call to 0x004cdf80, but this seems to corrupt the stack?? More investigation needs done here.
+    // TODO: The game makes some call to 0x004CDF80, but this seems to corrupt the stack?? More investigation needs done here.
     // It isn't necessary to allocate this structure, but I don't like it.
 
     return table;
+}
+
+void iterate_table_simple(void *table, table_iterator_callback callback, void *user_data) {
+    TableIterator iterator;
+    init_table_iterator(&iterator, table);
+
+    for(void *value = iterate_table(&iterator); value != NULL; value = iterate_table(&iterator)) {
+        if(!callback(&iterator, value, user_data)) {
+            return;
+        }
+    }
 }

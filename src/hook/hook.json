@@ -79,5 +79,8 @@
 
     "scale_mouse_input": {"address": "0x48B250", "replace": true, "arguments": ["0", "4"]},
 
+    "query_system_specs_stub": {"address": "0x5782E0", "replace": true},
+    "read_config_stub": {"address": "0x577E70", "replace": true, "use_return_value": true},
+
     "exception_handler": {"address": "0x622DAC", "replace": true}
 }

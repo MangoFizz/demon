@@ -32,3 +32,24 @@ bool get_exe_argument_value(const char *argument, const char **value) {
     }
     return false;
 }
+
+// Stubbed because it's slow and buggy (Halo does not like specs that overflow 32-bit int like 4+ GB VRAM)
+void query_system_specs_stub(void) {
+    // Current specs
+    *(uint32_t *)(0x6E7090) = 1024 * 1024 * 1024; // VRAM
+    *(uint32_t *)(0x7123D8) = 1024 * 1024 * 1024; // VRAM (again)
+    *(uint32_t *)(0x7123D0) = 1024; // RAM (MB)
+    *(uint32_t *)(0x7123D4) = 1000; // CPU speed (MHz)
+}
+
+// Stubbed because we do not want to support config.txt - you should not need it on a PC made after 2005.
+const char *read_config_stub(void) {
+    // Minimum requirements
+    *(uint32_t *)(0x6E7268) = 1; // VRAM
+    *(uint32_t *)(0x6E726C) = 16; // RAM
+    *(uint32_t *)(0x6E7274) = 1; // Disk space
+    *(uint32_t *)(0x6E7278) = 1; // D3D version
+    *(uint32_t *)(0x6E7280) = 1; // CPU speed
+    *(uint32_t *)(0x712384) = 1; // disable buffering - the only setting worth turning on
+    return NULL; // do not show a message dialog
+}

@@ -2,6 +2,7 @@
 #define DEMON__IMPL_TABLE_TABLE_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef uint32_t TableID;
 
@@ -116,9 +117,31 @@ void init_iterator(TableIterator *iterator, const void *table);
 /**
  * Iterate through a table to get the next valid instance.
  *
+ * @param iterator to use (must be initialized with init_iterator)
+ *
  * @return next valid instance, or NULL if none
  */
 void *iterate_table(TableIterator *iterator);
+
+/**
+ * Iterator callback for the iterate_table_simple function.
+ *
+ * @param iterator  current iterator value
+ * @param item      pointer to item in table
+ * @param user_data user data passed in iterate function
+ *
+ * @return true if the iterator should continue, false if not
+ */
+typedef bool (*table_iterator_callback)(const TableIterator *iterator, void *item, void *user_data);
+
+/**
+ * Iterate a table from start to the end.
+ *
+ * @param table     table to iterate
+ * @param callback  callback to call
+ * @param user_data user data to pass into the callback
+ */
+void iterate_table_simple(void *table, table_iterator_callback callback, void *user_data);
 
 /**
  * Allocate a table of objects. See memory/table.h for the table structure.
