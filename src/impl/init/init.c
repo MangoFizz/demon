@@ -54,8 +54,8 @@ const char *read_config_stub(void) {
 
     *(float *)(0x7123A8) = -0.000055; // DecalZBiasValue
     *(float *)(0x7123AC) = -0.000005; // TransparentDecalZBiasValue
-    *(float *)(0x7123B0) = 0.0; // DecalSlopeZBiasValue
-    *(float *)(0x7123B4) = 0.0; // TransparentDecalSlopeZBiasValue
+    *(float *)(0x7123B0) = -2.0; // DecalSlopeZBiasValue
+    *(float *)(0x7123B4) = -2.0; // TransparentDecalSlopeZBiasValue
 
     return NULL; // do not show a message dialog
 }
