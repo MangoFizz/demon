@@ -7,13 +7,12 @@
 #include "../exception/exception.h"
 
 static HMODULE *exe_module = (HMODULE *)(0x7359E0);
-static HWND *halo_window = (HWND *)(0x7359E4);
 
 bool create_window(int32_t width, int32_t height) {
     // Set up the window class
     WNDCLASSEXA wndclass;
     memset(&wndclass, 0, sizeof(wndclass));
-    wndclass.lpfnWndProc = *(WNDPROC *)(0x7359F0);
+    wndclass.lpfnWndProc = (WNDPROC)(0x53CAE0);
     wndclass.cbSize = sizeof(wndclass);
     wndclass.style = CS_CLASSDC;
     wndclass.hInstance = *exe_module;
@@ -74,7 +73,15 @@ bool create_window(int32_t width, int32_t height) {
 
     // We did it
     *(uint32_t *)(0x693E5C) = window_style;
-    *halo_window = window;
+    set_game_window_handle(window);
 
     return true;
+}
+
+static HWND *game_window = (HWND *)(0x7359E4);
+void set_game_window_handle(HWND window) {
+    *game_window = window;
+}
+HWND get_game_window_handle(void) {
+    return *game_window;
 }

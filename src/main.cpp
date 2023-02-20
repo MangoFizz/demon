@@ -13,20 +13,17 @@ static std::byte *hook_heap;
 static const std::size_t hook_heap_size = 512 * 1024;
 static std::size_t hook_heap_usage;
 
-extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) {
-    static WSADATA fun = {};
+extern "C" {
+    void attack_mode();
+}
 
+extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) {
     switch(reason) {
         case DLL_PROCESS_ATTACH: {
             // Enable DEP (if doable) because executing code not marked as executable is bad
             SetProcessDEPPolicy(PROCESS_DEP_ENABLE);
 
-            // Required because Halo Trial is hardcoded to write garbage to 0x00000000 to try to crash the game if the DLL is different.
-            auto *crash_if_dll_is_different = reinterpret_cast<void *>(0x53C746);
             DWORD old_protection;
-            VirtualProtect(crash_if_dll_is_different, 6, PAGE_EXECUTE_READWRITE, &old_protection);
-            std::memset(crash_if_dll_is_different, 0x90, 6);
-            VirtualProtect(crash_if_dll_is_different, 6, old_protection, &old_protection);
 
             // Allocate the heap
             hook_heap = reinterpret_cast<std::byte *>(VirtualAlloc(nullptr, hook_heap_size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE));
@@ -42,6 +39,14 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved
 
             // Once done, set the protection to execute/read only so we don't get pwned.
             VirtualProtect(hook_heap, hook_heap_size, PAGE_EXECUTE_READ, &old_protection);
+
+            // My Giant Soldier of Stone will now attack the moon.
+            void *the_moon = (void *)(0x53C1A7);
+            std::uint8_t giant_soldier_of_stone[] = { 0xE9, 0xFF, 0xFF, 0xFF, 0xFF };
+            *reinterpret_cast<std::uintptr_t *>(giant_soldier_of_stone + 1) = reinterpret_cast<std::uintptr_t>(attack_mode) - (reinterpret_cast<std::uintptr_t>(the_moon) + 5);
+            VirtualProtect(the_moon, sizeof(giant_soldier_of_stone), PAGE_EXECUTE_READWRITE, &old_protection);
+            std::memcpy(the_moon, giant_soldier_of_stone, sizeof(giant_soldier_of_stone));
+            VirtualProtect(the_moon, sizeof(giant_soldier_of_stone), old_protection, &old_protection);
 
             break;
         }
@@ -76,8 +81,10 @@ void *Hook::write_hook() {
 
     // Push parameters
     if(!this->parameters.empty()) {
-        for(auto start = this->parameters.rbegin(); start != this->parameters.rend(); start++) {
-            auto &p = *start;
+        std::size_t parameter_count = this->parameters.size();
+        for(std::size_t pi = 0; pi < parameter_count; pi++) {
+            std::size_t pi_rev = parameter_count - (pi + 1);
+            auto &p = this->parameters[pi_rev];
             switch(p.first) {
                 case Stack: {
                     std::size_t offset = p.second + stack_offset;
@@ -171,7 +178,6 @@ void *Hook::write_hook() {
                             break;
                         }
                         case LibToGame: {
-                            std::size_t offset = stack_offset;
                             HOOK_PUSH_BYTE(0x8B);
 
                             std::uint8_t operand;
@@ -204,6 +210,8 @@ void *Hook::write_hook() {
                                 default:
                                     throw std::logic_error("Unknown register!");
                             }
+
+                            std::size_t offset = stack_offset + sizeof(std::uint32_t) * pi_rev;
 
                             if(offset <= 0x7F) {
                                 HOOK_PUSH_BYTE(operand);

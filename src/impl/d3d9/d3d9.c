@@ -1,0 +1,23 @@
+#include <d3d9.h>
+#include "d3d9.h"
+#include "../exception/exception.h"
+#include <windows.h>
+
+typedef IDirect3D9 *(__stdcall *Direct3DCreate9Ptr)(UINT SDKVersion);
+
+static HMODULE *d3d9_handle = (HMODULE *)(0x735A84);
+static Direct3DCreate9Ptr *Direct3DCreate9_addr = (Direct3DCreate9Ptr *)(0x735A94);
+static IDirect3D9 **d3d9_interface = (IDirect3D9 **)(0x7116CC);
+static IDirect3D9 **d3d9_interface2 = (IDirect3D9 **)(0x70C9A4);
+
+void load_d3d9(void) {
+    *d3d9_handle = LoadLibraryA("d3d9.dll");
+    *Direct3DCreate9_addr = (Direct3DCreate9Ptr)(GetProcAddress(*d3d9_handle,"Direct3DCreate9"));
+    if(*d3d9_handle == NULL || *Direct3DCreate9_addr == NULL) {
+        CRASHF_DEBUG("Can't load d3d9.dll");
+    }
+    *d3d9_interface = (*Direct3DCreate9_addr)(0x1F);
+    if(*d3d9_interface == NULL) {
+        CRASHF_DEBUG("Direct3DCreate9 failed");
+    }
+}

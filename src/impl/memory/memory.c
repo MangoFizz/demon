@@ -26,6 +26,8 @@ static uint16_t *sound_cache_mib = (uint16_t *)(0x67E9B4);
  * Allocate buffers for holding tag data and sounds.
  */
 void allocate_heaps(void) {
+    *sound_cache_mib = 64;
+
     *tag_data = TAG_DATA_LOAD_ADDRESS;
     *managed_heap = VirtualAlloc(MANAGED_HEAP_ADDRESS_START, BASE_HEAP_AMOUNT + TAG_DATA_LENGTH, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     *unk1 = VirtualAlloc(0, UNK1_SIZE, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE); // unknown; does not appear to be used?

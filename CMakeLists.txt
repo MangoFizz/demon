@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 
 project("Demon"
     VERSION 0.1
-    LANGUAGES C CXX
+    LANGUAGES C CXX ASM
 )
 
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
@@ -122,11 +122,15 @@ endforeach()
 
 add_library(strings MODULE
     src/main.cpp
+    src/impl/main.S
     src/impl/ai/ai.c
     src/impl/bsp/collision.c
     src/impl/bsp/loading.c
     src/impl/bsp/rendering.c
     src/impl/console/console.c
+    src/impl/d3d9/d3d9.c
+    src/impl/dinput/dinput.c
+    src/impl/dsound/dsound.c
     src/impl/engine_loop/tick.c
     src/impl/exception/exception.c
     src/impl/init/init.c
@@ -172,5 +176,5 @@ add_custom_command(
 
 # Static link EVERYTHING
 set_target_properties(strings PROPERTIES LINK_FLAGS "-m32 -static-libgcc -static-libstdc++ -static -lwinpthread")
-target_link_libraries(strings dwmapi)
+target_link_libraries(strings dwmapi ws2_32)
 target_include_directories(strings PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
