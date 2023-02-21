@@ -153,8 +153,8 @@ static void check_args(const char *args) {
     *parameter_count = generate_arg_list(command_line_str, false);
 
     *(uint32_t *)(0x70C9D8) = get_exe_argument_value("-window", NULL);
-    *(uint32_t *)(0x709028) = get_exe_argument_value("-connect", NULL);
     *(uint32_t *)(0x709038) = get_exe_argument_value("-nowinkey", NULL);
+    *(uint32_t *)(0x709028) = get_exe_argument_value("-novideo", NULL) || get_exe_argument_value("-connect", NULL);
 
     *(uint32_t *)(0x709020) = 0; // -screenshot
     *(uint32_t *)(0x709024) = 0; // -nosound
