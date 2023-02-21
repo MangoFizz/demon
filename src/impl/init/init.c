@@ -76,28 +76,71 @@ const char *read_config_stub(void) {
     return NULL; // do not show a message dialog
 }
 
-static size_t generate_arg_list(const char *cmd_line, bool no_op) {
-    char last_char = ' ';
+static size_t generate_arg_list(char *cmd_line, bool no_op) {
     size_t arg_count = 0;
-    for(char *c = command_line_str; *c != 0; c++) {
-        char this_char = *c;
-        bool is_arg = this_char != last_char && last_char == ' ';
-        if(!no_op) {
-            if(this_char == ' ') {
-                *c = 0; // replace whitespace with null terminator
+
+    bool in_quote = false;
+    bool escaped = false;
+
+    char *start_of_string = NULL;
+    bool next_character_is_null = false;
+
+    for(char *c = cmd_line; !next_character_is_null; c++) {
+        bool ending_string = false;
+        if(c[1] == 0) {
+            next_character_is_null = true;
+            ending_string = true;
+        }
+
+        // Ignore this character.
+        if(escaped) {
+            escaped = !escaped;
+            continue;
+        }
+
+        // Escape the next character.
+        if(*c == '\\') {
+            escaped = true;
+            continue;
+        }
+
+        // Move to this character
+        bool beginning = false;
+        if(start_of_string == NULL) {
+            if(*c == ' ') {
+                continue; // skip whitespace
             }
-            else if(is_arg) {
-                (*parameters)[arg_count] = c;
+            start_of_string = c;
+            beginning = true;
+        }
+
+        if(*c == '\"') {
+            if(in_quote) {
+                ending_string = true;
+            }
+            else if(beginning) {
+                in_quote = true;
+                start_of_string++; // move to after the quote
             }
         }
-        if(is_arg) {
+        else if(*c == ' ' && !in_quote) {
+            ending_string = true;
+        }
+
+        if(ending_string && start_of_string != NULL) {
+            if(!no_op) {
+                if(in_quote || !next_character_is_null) {
+                    *c = 0;
+                }
+                (*parameters)[arg_count] = start_of_string;
+            }
             arg_count++;
+            start_of_string = NULL;
+            in_quote = false;
         }
-        last_char = this_char;
     }
-    if(!no_op) {
-        *parameter_count = arg_count;
-    }
+
+    return arg_count;
 }
 
 static void check_args(const char *args) {
@@ -107,7 +150,7 @@ static void check_args(const char *args) {
     memcpy(command_line_str, args, l);
     size_t arg_count = generate_arg_list(command_line_str, true);
     *parameters = malloc(arg_count * sizeof(**parameters));
-    generate_arg_list(command_line_str, false);
+    *parameter_count = generate_arg_list(command_line_str, false);
 
     *(uint32_t *)(0x70C9D8) = get_exe_argument_value("-window", NULL);
     *(uint32_t *)(0x709028) = get_exe_argument_value("-connect", NULL);
