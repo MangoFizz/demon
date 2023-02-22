@@ -33,7 +33,7 @@ void set_console_prompt_display_params(void) {
     *command_history_length = 0;
     *command_history_selected_index = 0xFFFF;
 
-    // check if we should enable the console or have devmode (basically backported from Halo Custom Edition)
+    // -console and -devmode - backported from Halo Custom Edition
     *console_enabled = get_exe_argument_value("-console", NULL);
     devmode = get_exe_argument_value("-devmode", NULL);
 }

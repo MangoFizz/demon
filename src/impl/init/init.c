@@ -19,6 +19,7 @@ static uint32_t *parameter_count = (uint32_t *)(0x7116C4);
 
 extern bool (*init_d3d9)(void);
 extern void (*game_loop)(void);
+extern void (*cleanup_loop)(void);
 
 extern void (*init_gamespy)(const char *game, const uint8_t *bytes, const char *ip, uint16_t port);
 
@@ -66,12 +67,6 @@ const char *read_config_stub(void) {
     *(uint32_t *)(0x6E7274) = 1; // Disk space
     *(uint32_t *)(0x6E7278) = 1; // D3D version
     *(uint32_t *)(0x6E7280) = 1; // CPU speed
-    *(uint32_t *)(0x712384) = 1; // disable buffering - the only setting worth turning on
-
-    *(float *)(0x7123A8) = -0.000055; // DecalZBiasValue
-    *(float *)(0x7123AC) = -0.000005; // TransparentDecalZBiasValue
-    *(float *)(0x7123B0) = -2.0; // DecalSlopeZBiasValue
-    *(float *)(0x7123B4) = -2.0; // TransparentDecalSlopeZBiasValue
 
     return NULL; // do not show a message dialog
 }
@@ -209,14 +204,16 @@ void game_main(HMODULE module_handle, uint32_t zero, const char *args, uint32_t 
     SetLastError(0);
 
     // Unknown what these do
+    *(uint8_t *)(0x735A38) = 0;
+    *(uint8_t *)(0x7359F8) = 0;
     *(uint8_t *)(0x7123F8) = 0;
     *(uint32_t *)(0x7359C8) = 0x64F0BC;
     *(const char **)(0x6DA860) = args;
     *(uint32_t *)(0x7359EC) = one;
     *(uint32_t *)(0x7359E8) = 0;
     *(uint8_t *)(0x735A74) = 0;
-    *(uint32_t *)(0x709018) = 0;
     *(uint8_t *)(0x735A75) = 0;
+    *(uint32_t *)(0x709018) = 0;
     set_game_window_handle(NULL);
     *(HCURSOR *)(0x6DA85C) = LoadCursorA(NULL, (LPCSTR)(0x7F00));
     *(uint16_t *)(0x67E9B8) = 0x30;
@@ -241,6 +238,7 @@ void game_main(HMODULE module_handle, uint32_t zero, const char *args, uint32_t 
 
     setup_network();
     game_loop();
+    cleanup_loop();
     unload_keystone();
 }
 

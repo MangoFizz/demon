@@ -79,13 +79,11 @@
 
     "scale_mouse_input": {"address": "0x48B250", "replace": true, "arguments": ["0", "4"]},
 
-    "query_system_specs_stub": {"address": "0x5782E0", "replace": true},
-    "read_config_stub": {"address": "0x577E70", "replace": true, "use_return_value": true},
     "create_window": {"address": "0x510DC0", "replace": true, "use_return_value": true, "arguments": ["ebx", "eax"]},
-
     "init_d3d9": {"address": "0x53BCC0", "replace": false, "use_return_value": true},
     "game_loop": {"address": "0x4C5420", "replace": false},
     "init_gamespy": {"address": "0x570E90", "replace": false, "arguments": ["eax", "esi", "edi", "12"]},
+    "cleanup_loop": {"address": "0x53BDF0"},
 
     "exception_handler": {"address": "0x622DAC", "replace": true}
 }

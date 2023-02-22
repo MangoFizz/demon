@@ -20,4 +20,5 @@ _attack_mode:
     add esp, 0xC
     pop ebp
 
+    xor eax, eax
     ret
