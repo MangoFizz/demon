@@ -188,6 +188,23 @@ static void setup_network(void) {
 static char asdf[32768];
 
 void game_main(HMODULE module_handle, uint32_t zero, const char *args, uint32_t one) {
+    check_args(args);
+    if(get_exe_argument_value("-help", NULL)) {
+        MessageBox(NULL, "Arguments:\n\n"
+                         "-console - enable the console (activate with tilde [i.e. `/~] key)\n"
+                         "-devmode - enable all commands in the console (incl. cheats)\n"
+                         "-connect <ip:port> - connect to a server at a given ip\n"
+                         "-password <password> - password to use with -connect\n"
+                         "-nowinkey - disable the Windows key\n"
+                         "-novideo - disable intro/exit videos\n"
+                         "-window - play in windowed mode\n"
+                         "-vidmode <width,height[,refreshrate]> - play in windowed mode\n"
+                         "-ip <ip> - sets the client IP\n"
+                         "-cport <port> - sets the client UDP port\n"
+                         "-port <port> - sets the server UDP port\n", "Help", 0);
+        return;
+    }
+
     *(char **)(0x711738) = asdf;
     memset(asdf, 0xEE, sizeof(asdf));
 
@@ -196,7 +213,7 @@ void game_main(HMODULE module_handle, uint32_t zero, const char *args, uint32_t 
     *(uint32_t *)(0x6976A8) = 0x409;
 
     if(!*(HMODULE *)(0x7123E0)) {
-        CRASHF_DEBUG("oh no");
+        CRASHF_DEBUG("Failed to get strings.dll???");
     }
 
     query_system_specs_stub();
@@ -218,7 +235,6 @@ void game_main(HMODULE module_handle, uint32_t zero, const char *args, uint32_t 
     *(HCURSOR *)(0x6DA85C) = LoadCursorA(NULL, (LPCSTR)(0x7F00));
     *(uint16_t *)(0x67E9B8) = 0x30;
     *(HMODULE *)(0x7359E0) = module_handle;
-    check_args(args);
     allocate_heaps();
     load_d3d9();
     load_dsound();
