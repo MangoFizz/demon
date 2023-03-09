@@ -87,5 +87,6 @@
 
     "exception_handler": {"address": "0x622DAC", "replace": true},
 
-    "get_global_index": {"address": "0x481A40", "replace": true, "use_return_value": true, "arguments": ["ebx"]}
+    "get_global_id": {"address": "0x481A40", "replace": true, "use_return_value": true, "arguments": ["ebx"]},
+    "get_global_type": {"address": "0x4819E0", "replace": true, "use_return_value": true, "arguments": ["eax"]}
 }
