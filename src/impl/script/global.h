@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+typedef uint16_t GlobalID;
+
 /**
  * Get the index of the scripting global if it exists.
  *
@@ -10,7 +12,25 @@
  *
  * @return 0xFFFF if not found, index if found
  */
-uint16_t get_global_id(const char *global);
+GlobalID get_global_id(const char *global);
+
+/**
+ * Get the value type of the global.
+ *
+ * @param global_id id of the global
+ *
+ * @return value type (see ScenarioScriptValueType enum in scenario.json)
+ */
+uint16_t get_global_type(GlobalID global_id);
+
+/**
+ * Get the name of the global.
+ *
+ * @param global_id id of the global
+ *
+ * @return global name
+ */
+const char *get_global_name(GlobalID global_id);
 
 /**
  * Check if the global index is internal to the engine.

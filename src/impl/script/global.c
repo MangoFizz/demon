@@ -16,7 +16,7 @@ _Static_assert(sizeof(EngineGlobal) == 16);
 static size_t global_count = 0x1E7;
 static EngineGlobal **engine_globals = (EngineGlobal **)(0x683280);
 
-uint16_t get_global_id(const char *global) {
+GlobalID get_global_id(const char *global) {
     // First check internal globals.
     for(size_t i = 0; i < global_count; i++) {
         if(strcmp(global, engine_globals[i]->name) == 0) {
@@ -38,11 +38,20 @@ uint16_t get_global_id(const char *global) {
     return 0xFFFF;
 }
 
-uint16_t get_global_type(uint16_t global_id) {
+uint16_t get_global_type(GlobalID global_id) {
     if(IS_INTERNAL_GLOBAL(global_id)) {
         return engine_globals[global_id & 0x7FFF]->type;
     }
     else {
         return get_scenario_tag_data()->globals.elements[global_id].type;
+    }
+}
+
+const char *get_global_name(GlobalID global_id) {
+    if(IS_INTERNAL_GLOBAL(global_id)) {
+        return engine_globals[global_id & 0x7FFF]->name;
+    }
+    else {
+        return get_scenario_tag_data()->globals.elements[global_id].name.string;
     }
 }
