@@ -16,9 +16,9 @@ const char16_t *get_unicode_string(TableID unicode_string_list_id, uint16_t inde
     }
 
     UnicodeStringListString *string = &string_list->strings.elements[index];
-    size_t string_length = string->string.size;
-    size_t string_chars = string_length / sizeof(char16_t);
     const char16_t *string_data = (const char16_t *)(string->string.pointer);
+    size_t string_length = string->string.size;
+    size_t string_chars = string_length / sizeof(*string_data);
 
     // If the string has an invalid length or it's not null terminated, the string cannot be trusted and is invalid, so we return this.
     //
@@ -27,7 +27,7 @@ const char16_t *get_unicode_string(TableID unicode_string_list_id, uint16_t inde
     //
     // Allowing this means maps can essentially write memory to any arbitrary address in RAM. This is not desirable and can likely be
     // exploited, so we handle this properly instead.
-    if(string_data == NULL || string_length == 0 || string_length != string_chars * sizeof(char16_t) || string_data[string_chars - 1] != 0) {
+    if(string_data == NULL || string_length == 0 || string_length != string_chars * sizeof(*string_data) || string_data[string_chars - 1] != 0) {
         return invalid_string_utf16;
     }
 

@@ -85,5 +85,7 @@
     "init_gamespy": {"address": "0x570E90", "replace": false, "arguments": ["eax", "esi", "edi", "12"]},
     "cleanup_loop": {"address": "0x53BDF0"},
 
-    "exception_handler": {"address": "0x622DAC", "replace": true}
+    "exception_handler": {"address": "0x622DAC", "replace": true},
+
+    "get_global_index": {"address": "0x481A40", "replace": true, "use_return_value": true, "arguments": ["ebx"]}
 }

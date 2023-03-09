@@ -10,7 +10,6 @@
 #include "../init/init.h"
 
 static char *console_text = (char *)(0x6AE378);
-static const ColorARGB *default_prompt_colors = (ColorARGB *)(0x68E274);
 static uint16_t *command_history_next_index = (uint16_t *)(0x6AEC7E);
 static uint16_t *command_history_length = (uint16_t *)(0x6AEC7C);
 static uint16_t *command_history_selected_index = (uint16_t *)(0x6AEC80);
@@ -21,7 +20,10 @@ static bool devmode = false;
 
 void set_console_prompt_display_params(void) {
     // set prompt to these colors
-    *console_prompt_color = *default_prompt_colors;
+    console_prompt_color->a = 1.0;
+    console_prompt_color->r = 1.0;
+    console_prompt_color->g = 0.3;
+    console_prompt_color->b = 1.0;
 
     // room for 32 characters
     char *prompt_text = (char *)(0x6AE358);
@@ -51,7 +53,7 @@ void console_printf(const ColorARGB *color, const char *fmt, ...) {
 
 // TODO: The exact meanings of these is not known. This should be figured out later.
 extern uint8_t (*unknown_function_00481b70)(uint32_t a, uint32_t b);
-uint32_t *unknown_006a8854 = (uint32_t *)(0x6A8854);
+static uint32_t *unknown_006a8854 = (uint32_t *)(0x6A8854);
 
 bool command_is_allowed(uint8_t a) {
     // Enable all commands if devmode
