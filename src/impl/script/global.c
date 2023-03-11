@@ -4,6 +4,8 @@
 #include <ringhopper/scenario.h>
 #include "../tag/tag.h"
 #include "global.h"
+#include "../console/console.h"
+#include "../exception/exception.h"
 
 typedef struct EngineGlobal {
     const char *name;
@@ -54,4 +56,43 @@ const char *get_global_name(GlobalID global_id) {
     else {
         return get_scenario_tag_data()->globals.elements[global_id].name.string;
     }
+}
+
+extern bool (*value_types_can_be_converted)(enum ScenarioScriptValueType actual, enum ScenarioScriptValueType expected);
+
+bool compile_global(TableID node_id) {
+    ScriptNodeTable *nodes = *(ScriptNodeTable **)(0x869454);
+    const char *string_data = *(const char **)(0x6A8868);
+
+    uint16_t node_index = ID_INDEX_PART(node_id);
+    ScenarioScriptNode *node = nodes->first_element + node_index;
+
+    // Does the global exist?
+    const char *node_name = string_data + node->string_offset;
+    GlobalID id = get_global_id(node_name);
+    node->data.l = (int16_t)id;
+    if(id == 0xFFFF) {
+        if(*(uint8_t *)(0x6A8988) != 0) {
+            *(const char **)(0x6A887C) = "Invalid variable name!";
+            *(const char **)(0x6A8880) = node_name;
+            CRASHF_DEBUG("Broken or incompatible scripts! global '%s' not found!", node_name);
+        }
+        return false;
+    }
+
+    // Make sure the type is valid?
+    enum ScenarioScriptValueType type = get_global_type(id);
+    enum ScenarioScriptValueType expected = node->type;
+    if(expected != ScenarioScriptValueType_passthrough) {
+        if(!value_types_can_be_converted(type, expected)) {
+            *(const char **)(0x6A887C) = "Invalid variable type!";
+            *(const char **)(0x6A8880) = node_name;
+            CRASHF_DEBUG("Broken or incompatible scripts! global '%s' isn't the right type!", node_name);
+            return false;
+        }
+    }
+
+    node->type = type;
+    node->flags |= 4;
+    return true;
 }

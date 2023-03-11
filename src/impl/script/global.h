@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 
+#include "ringhopper/scenario.h"
+#include "../memory/table.h"
+
+MAKE_TABLE_STRUCT(ScriptNodeTable, ScenarioScriptNode);
+
 typedef uint16_t GlobalID;
 
 /**
