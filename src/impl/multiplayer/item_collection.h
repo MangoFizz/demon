@@ -6,15 +6,6 @@
 #include "ringhopper/item_collection.h"
 
 /**
- * Sums up the item collection weight into an integer value.
- *
- * @param pointer to the item collection
- *
- * @return total sum
- */
-uint32_t calculate_total_item_collection_weight(const ItemCollection *item_collection);
-
-/**
  * Pick a random object in the item collection.
  *
  * Note: Items with fractional weights will be rounded down. Also, collections with a total weight above 32768 may randomly fail!

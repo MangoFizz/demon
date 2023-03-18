@@ -8,6 +8,14 @@
  */
 void crashf(const char *fmt, ...);
 
+/**
+ * Terminate the process due to a function being improperly called.
+ *
+ * @param function_name function name
+ * @param from          caller address
+ */
+void crash_forbidden_function(const char *function_name, void *from);
+
 #define STR2(s) # s
 #define STR(s) STR2(s)
 

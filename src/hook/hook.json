@@ -1,7 +1,7 @@
 {
     "convert_8bit_string_to_16bit": {"address": "0x5528c0", "replace": true, "arguments": ["0", "eax", "edi"]},
     "get_unicode_string": {"address": "0x5527F0", "replace": true, "use_return_value": true, "arguments": ["ecx", "edx", "eax"]},
-    "calculate_total_item_collection_weight": {"address": "0x45F6C0", "replace": true, "use_return_value": true, "arguments": ["eax"]},
+    "calculate_total_item_collection_weight": {"address": "0x45F6C0", "replace": "forbid", "use_return_value": true, "arguments": ["eax"]},
     "pick_item_collection_object": {"address": "0x45F700", "replace": true, "use_return_value": true, "arguments": ["eax"]},
     "lookup_tag": {"address": "0x442550", "replace": true, "use_return_value": true, "arguments": [ "0", "edi" ]},
     "axis_analog_to_digital": {"address": "0x470020", "replace": true, "arguments": ["0"]},
@@ -13,7 +13,7 @@
     "get_center_and_render_bounding_radius_of_object": {"address": "0x509E00", "replace": true, "arguments": ["0", "4", "8"]},
     "transition_skybox_fog_value": {"address": "0x46FCF0", "replace": true, "arguments": ["ecx", "0", "4"]},
     "transition_skybox_fog_color": {"address": "0x53A300", "replace": true, "arguments": ["ecx", "edx", "0"]},
-    "console_printf_in": {"address": "0x495120", "arguments": ["eax", "4", "8"], "comment": "takes variable args but the bridge doesn't support varargs so two are passed for now plus color"},
+    "console_printf_in": {"address": "0x495120", "replace": false, "arguments": ["eax", "4", "8"], "comment": "takes variable args but the bridge doesn't support varargs so two are passed for now plus color"},
 
     "resolve_object_id_to_data": {"address": "0x4F23D0", "replace": true, "use_return_value": true, "arguments": ["0", "ecx"]},
     "resolve_parent_object_id": {"address": "0x4F24C0", "replace": true, "use_return_value": true, "arguments": ["ecx"]},
@@ -35,7 +35,7 @@
     "create_table": {"address": "0x5331D0", "replace": true, "use_return_value": true, "arguments": ["0", "4", "ebx"]},
 
     "command_is_allowed": {"address": "0x481BC0", "replace": true, "use_return_value": true, "arguments": ["ebx"]},
-    "unknown_function_00481b70": {"address": "0x481B70", "use_return_value": true, "arguments": ["eax", "0"], "comment": "called by command_is_allowed"},
+    "command_is_allowed_check_flag": {"address": "0x481B70", "replace": "forbid", "use_return_value": true, "arguments": ["eax", "0"] },
 
     "unknown_function_5092f0": {"address": "0x5092F0", "replace": true, "arguments": ["ecx", "eax"], "comment": "appears to do something with portals/render culling"},
 
@@ -67,8 +67,8 @@
 
     "make_actor_tables": {"address": "0x426710", "replace": true},
 
-    "load_keystone": {"address": "0x53DA80", "replace": true},
-    "unload_keystone": {"address": "0x53DCA0", "replace": true},
+    "load_keystone": {"address": "0x53DA80", "replace": "forbid"},
+    "unload_keystone": {"address": "0x53DCA0", "replace": "forbid"},
     "get_exe_argument_value": {"address": "0x53D710", "replace": true, "use_return_value": true, "arguments": ["0", "edi"]},
     "check_for_updates": {"address": "0x4A2D50", "replace": true, "arguments": ["0"]},
 
@@ -92,5 +92,8 @@
     "get_global_name": {"address": "0x481A10", "replace": true, "use_return_value": true, "arguments": ["eax"], "comments": "only appears to be called by the script compiler"},
 
     "compile_global": {"address": "0x484B20", "replace": true, "use_return_value": true, "arguments": ["eax"]},
-    "value_types_can_be_converted": {"address": "0x489250", "replace": false, "use_return_value": true, "arguments": ["eax", "ecx"]}
+    "value_types_can_be_converted": {"address": "0x489250", "replace": false, "use_return_value": true, "arguments": ["eax", "ecx"]},
+
+    "load_config": {"address": "0x577E70", "replace": true, "use_return_value": true, "comments": "loads config.txt"},
+    "query_system_specs": {"address": "0x5782E0", "replace": "forbid", "use_return_value": true, "comments": "queries system specs"}
 }

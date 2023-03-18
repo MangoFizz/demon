@@ -5,6 +5,11 @@
 #include <cstdio>
 #include <vector>
 #include <stdexcept>
+
+extern "C" {
+    #include "impl/exception/exception.h"
+}
+
 #include "hook/hook.hpp"
 
 using namespace Demon;
@@ -66,235 +71,256 @@ void *Hook::write_hook() {
     std::byte *starting_hook_offset = hook_offset;
 
     #define HOOK_PUSH_BYTE(value) *(hook_offset++) = static_cast<std::byte>(value)
-    #define HOOK_PUSH_DWORD(value) *reinterpret_cast<std::uint32_t *>(hook_offset) = static_cast<std::uint32_t>(value); hook_offset += sizeof(std::uint32_t) \
+    #define HOOK_PUSH_DWORD(value) *reinterpret_cast<std::uint32_t *>(hook_offset) = static_cast<std::uint32_t>(value); hook_offset += sizeof(std::uint32_t)
 
-    // Push flags and registers
-    //
-    // pushad, pushfd
-    HOOK_PUSH_BYTE(0x9C);
-    HOOK_PUSH_BYTE(0x60);
+    if(this->forbidden) {
+        // Push dword ptr [esp] (our caller address)
+        HOOK_PUSH_BYTE(0xFF);
+        HOOK_PUSH_BYTE(0x34);
+        HOOK_PUSH_BYTE(0x24);
 
-    // Current stack offset (0x20 bytes from pushad, 0x4 bytes from pushfd, 0x4 bytes from call)
-    std::size_t starting_stack_offset = 0x28;
-    std::size_t stack_offset = starting_stack_offset;
-    std::size_t fp_stack_offset = 0;
+        // Push the name
+        HOOK_PUSH_BYTE(0x68);
+        HOOK_PUSH_DWORD(reinterpret_cast<std::uintptr_t>(this->name));
 
-    // Push parameters
-    if(!this->parameters.empty()) {
-        std::size_t parameter_count = this->parameters.size();
-        for(std::size_t pi = 0; pi < parameter_count; pi++) {
-            std::size_t pi_rev = parameter_count - (pi + 1);
-            auto &p = this->parameters[pi_rev];
-            switch(p.first) {
-                case Stack: {
-                    std::size_t offset = p.second + stack_offset;
-                    // push dword ptr [esp + <offset>]
-                    if(offset <= 0x7F) {
-                        HOOK_PUSH_BYTE(0xFF);
-                        HOOK_PUSH_BYTE(0x74);
-                        HOOK_PUSH_BYTE(0x24);
-                        HOOK_PUSH_BYTE(offset);
+        // Now let's call this error handler
+        std::uintptr_t call_instruction_end = reinterpret_cast<std::byte *>(crash_forbidden_function) - (hook_offset + 5);
+        HOOK_PUSH_BYTE(0xE8);
+        HOOK_PUSH_DWORD(call_instruction_end);
+
+        // Debug trap
+        HOOK_PUSH_BYTE(0xCC);
+    }
+
+    else {
+        // Push flags and registers
+        //
+        // pushad, pushfd
+        HOOK_PUSH_BYTE(0x9C);
+        HOOK_PUSH_BYTE(0x60);
+
+        // Current stack offset (0x20 bytes from pushad, 0x4 bytes from pushfd, 0x4 bytes from call)
+        std::size_t starting_stack_offset = 0x28;
+        std::size_t stack_offset = starting_stack_offset;
+        std::size_t fp_stack_offset = 0;
+
+        // Push parameters
+        if(!this->parameters.empty()) {
+            std::size_t parameter_count = this->parameters.size();
+            for(std::size_t pi = 0; pi < parameter_count; pi++) {
+                std::size_t pi_rev = parameter_count - (pi + 1);
+                auto &p = this->parameters[pi_rev];
+                switch(p.first) {
+                    case Stack: {
+                        std::size_t offset = p.second + stack_offset;
+                        // push dword ptr [esp + <offset>]
+                        if(offset <= 0x7F) {
+                            HOOK_PUSH_BYTE(0xFF);
+                            HOOK_PUSH_BYTE(0x74);
+                            HOOK_PUSH_BYTE(0x24);
+                            HOOK_PUSH_BYTE(offset);
+                        }
+                        else {
+                            HOOK_PUSH_BYTE(0xFF);
+                            HOOK_PUSH_BYTE(0xB4);
+                            HOOK_PUSH_BYTE(0x24);
+                            HOOK_PUSH_DWORD(offset);
+                        }
+                        stack_offset += sizeof(std::uint32_t);
+                        break;
                     }
-                    else {
-                        HOOK_PUSH_BYTE(0xFF);
-                        HOOK_PUSH_BYTE(0xB4);
-                        HOOK_PUSH_BYTE(0x24);
-                        HOOK_PUSH_DWORD(offset);
-                    }
-                    stack_offset += sizeof(std::uint32_t);
-                    break;
-                }
-                case Register: {
-                    switch (this->hook_type) {
-                        case GameToLib: {
-                            switch(p.second) {
-                                case EAX:
-                                    HOOK_PUSH_BYTE(0x50);
-                                    stack_offset += sizeof(std::uint32_t);
-                                    break;
-                                case EBX:
-                                    HOOK_PUSH_BYTE(0x53);
-                                    stack_offset += sizeof(std::uint32_t);
-                                    break;
-                                case ECX:
-                                    HOOK_PUSH_BYTE(0x51);
-                                    stack_offset += sizeof(std::uint32_t);
-                                    break;
-                                case EDX:
-                                    HOOK_PUSH_BYTE(0x52);
-                                    stack_offset += sizeof(std::uint32_t);
-                                    break;
-                                case ESI:
-                                    HOOK_PUSH_BYTE(0x56);
-                                    stack_offset += sizeof(std::uint32_t);
-                                    break;
-                                case EDI:
-                                    HOOK_PUSH_BYTE(0x57);
-                                    stack_offset += sizeof(std::uint32_t);
-                                    break;
-                                case EBP:
-                                    HOOK_PUSH_BYTE(0x55);
-                                    stack_offset += sizeof(std::uint32_t);
-                                    break;
-                                case ESP:
-                                    throw std::logic_error("ESP register is not supported");
-                                case ST0:
-                                case ST1:
-                                case ST2:
-                                case ST3:
-                                case ST4:
-                                case ST5:
-                                case ST6:
-                                case ST7: {
-                                    std::size_t fp_offset = p.second - ST0;
-                                    if(fp_stack_offset > fp_offset) {
-                                        char error_message[1024];
-                                        std::snprintf(error_message, sizeof(error_message) - 1, "Can't use FP register ST%zu because we already popped %zu float(s)."
-                                                                                                "For example, ST0 is now what ST%zu was.\n\n"
-                                                                                                "Try re-arranging the registers!", fp_offset, fp_stack_offset, fp_stack_offset);
-                                        throw std::logic_error(error_message);
+                    case Register: {
+                        switch (this->hook_type) {
+                            case GameToLib: {
+                                switch(p.second) {
+                                    case EAX:
+                                        HOOK_PUSH_BYTE(0x50);
+                                        stack_offset += sizeof(std::uint32_t);
+                                        break;
+                                    case EBX:
+                                        HOOK_PUSH_BYTE(0x53);
+                                        stack_offset += sizeof(std::uint32_t);
+                                        break;
+                                    case ECX:
+                                        HOOK_PUSH_BYTE(0x51);
+                                        stack_offset += sizeof(std::uint32_t);
+                                        break;
+                                    case EDX:
+                                        HOOK_PUSH_BYTE(0x52);
+                                        stack_offset += sizeof(std::uint32_t);
+                                        break;
+                                    case ESI:
+                                        HOOK_PUSH_BYTE(0x56);
+                                        stack_offset += sizeof(std::uint32_t);
+                                        break;
+                                    case EDI:
+                                        HOOK_PUSH_BYTE(0x57);
+                                        stack_offset += sizeof(std::uint32_t);
+                                        break;
+                                    case EBP:
+                                        HOOK_PUSH_BYTE(0x55);
+                                        stack_offset += sizeof(std::uint32_t);
+                                        break;
+                                    case ESP:
+                                        throw std::logic_error("ESP register is not supported");
+                                    case ST0:
+                                    case ST1:
+                                    case ST2:
+                                    case ST3:
+                                    case ST4:
+                                    case ST5:
+                                    case ST6:
+                                    case ST7: {
+                                        std::size_t fp_offset = p.second - ST0;
+                                        if(fp_stack_offset > fp_offset) {
+                                            char error_message[1024];
+                                            std::snprintf(error_message, sizeof(error_message) - 1, "Can't use FP register ST%zu because we already popped %zu float(s)."
+                                                                                                    "For example, ST0 is now what ST%zu was.\n\n"
+                                                                                                    "Try re-arranging the registers!", fp_offset, fp_stack_offset, fp_stack_offset);
+                                            throw std::logic_error(error_message);
+                                        }
+
+                                        // sub esp, 0x8 (makes room in the stack)
+                                        HOOK_PUSH_BYTE(0x83);
+                                        HOOK_PUSH_BYTE(0xEC);
+                                        HOOK_PUSH_BYTE(0x08);
+                                        stack_offset += sizeof(double);
+
+                                        // pop the float stack until we get what we want
+                                        for(; fp_stack_offset <= fp_offset; fp_stack_offset++) {
+                                            // fstp qword ptr [esp]
+                                            HOOK_PUSH_BYTE(0xDD);
+                                            HOOK_PUSH_BYTE(0x1C);
+                                            HOOK_PUSH_BYTE(0x24);
+                                        }
+
+                                        break;
                                     }
 
-                                    // sub esp, 0x8 (makes room in the stack)
-                                    HOOK_PUSH_BYTE(0x83);
-                                    HOOK_PUSH_BYTE(0xEC);
-                                    HOOK_PUSH_BYTE(0x08);
-                                    stack_offset += sizeof(double);
+                                    default:
+                                        throw std::logic_error("Unknown register!");
+                                }
+                                break;
+                            }
+                            case LibToGame: {
+                                HOOK_PUSH_BYTE(0x8B);
 
-                                    // pop the float stack until we get what we want
-                                    for(; fp_stack_offset <= fp_offset; fp_stack_offset++) {
-                                        // fstp qword ptr [esp]
-                                        HOOK_PUSH_BYTE(0xDD);
-                                        HOOK_PUSH_BYTE(0x1C);
-                                        HOOK_PUSH_BYTE(0x24);
-                                    }
+                                std::uint8_t operand;
 
-                                    break;
+                                // mov <register>, <offset>
+                                switch(p.second) {
+                                    case EAX:
+                                        operand = 0x44;
+                                        break;
+                                    case EBX:
+                                        operand = 0x5C;
+                                        break;
+                                    case ECX:
+                                        operand = 0x4C;
+                                        break;
+                                    case EDX:
+                                        operand = 0x54;
+                                        break;
+                                    case ESI:
+                                        operand = 0x74;
+                                        break;
+                                    case EDI:
+                                        operand = 0x7C;
+                                        break;
+                                    case EBP:
+                                        operand = 0x6C;
+                                        break;
+                                    case ESP:
+                                        throw std::logic_error("ESP register is not supported");
+                                    default:
+                                        throw std::logic_error("Unknown register!");
                                 }
 
-                                default:
-                                    throw std::logic_error("Unknown register!");
+                                std::size_t offset = stack_offset + sizeof(std::uint32_t) * pi_rev;
+
+                                if(offset <= 0x7F) {
+                                    HOOK_PUSH_BYTE(operand);
+                                    HOOK_PUSH_BYTE(0x24);
+                                    HOOK_PUSH_BYTE(offset);
+                                }
+                                else {
+                                    HOOK_PUSH_BYTE(operand + 0x40);
+                                    HOOK_PUSH_BYTE(0x24);
+                                    HOOK_PUSH_DWORD(offset);
+                                }
+                                break;
                             }
-                            break;
                         }
-                        case LibToGame: {
-                            HOOK_PUSH_BYTE(0x8B);
-
-                            std::uint8_t operand;
-
-                            // mov <register>, <offset>
-                            switch(p.second) {
-                                case EAX:
-                                    operand = 0x44;
-                                    break;
-                                case EBX:
-                                    operand = 0x5C;
-                                    break;
-                                case ECX:
-                                    operand = 0x4C;
-                                    break;
-                                case EDX:
-                                    operand = 0x54;
-                                    break;
-                                case ESI:
-                                    operand = 0x74;
-                                    break;
-                                case EDI:
-                                    operand = 0x7C;
-                                    break;
-                                case EBP:
-                                    operand = 0x6C;
-                                    break;
-                                case ESP:
-                                    throw std::logic_error("ESP register is not supported");
-                                default:
-                                    throw std::logic_error("Unknown register!");
-                            }
-
-                            std::size_t offset = stack_offset + sizeof(std::uint32_t) * pi_rev;
-
-                            if(offset <= 0x7F) {
-                                HOOK_PUSH_BYTE(operand);
-                                HOOK_PUSH_BYTE(0x24);
-                                HOOK_PUSH_BYTE(offset);
-                            }
-                            else {
-                                HOOK_PUSH_BYTE(operand + 0x40);
-                                HOOK_PUSH_BYTE(0x24);
-                                HOOK_PUSH_DWORD(offset);
-                            }
-                            break;
-                        }
+                        break;
                     }
-                    break;
                 }
             }
         }
-    }
 
-    // Put a call function here
-    //
-    // call <function_address>
-    auto *call_instruction_end = (hook_offset + 1 + sizeof(std::uintptr_t));
-    std::uintptr_t call_offset;
-    switch(this->hook_type) {
-        case GameToLib:
-            call_offset = reinterpret_cast<std::byte *>(this->destination_address) - call_instruction_end;
-            break;
-        case LibToGame:
-            call_offset = reinterpret_cast<std::byte *>(this->function_address) - call_instruction_end;
-            break;
-    }
-    HOOK_PUSH_BYTE(0xE8);
-    HOOK_PUSH_DWORD(call_offset);
-
-    // Cleanup stack
-    //
-    // add esp, <stack_to_cleanup>
-    std::size_t stack_to_cleanup = stack_offset - starting_stack_offset;
-    if(stack_to_cleanup != 0) {
-        if(stack_to_cleanup < 0x80) {
-            HOOK_PUSH_BYTE(0x83);
-            HOOK_PUSH_BYTE(0xC4);
-            HOOK_PUSH_BYTE(stack_to_cleanup & 0xFF);
-        }
-        else {
-            HOOK_PUSH_BYTE(0x81);
-            HOOK_PUSH_BYTE(0xC4);
-            HOOK_PUSH_DWORD(stack_to_cleanup);
-        }
-    }
-
-    // Return value? If so, set EAX in our stack to our current EAX value
-    //
-    // mov dword ptr [esp+0x1C], eax
-    if(this->uses_return_value) {
-        HOOK_PUSH_BYTE(0x89);
-        HOOK_PUSH_BYTE(0x44);
-        HOOK_PUSH_BYTE(0x24);
-        HOOK_PUSH_BYTE(0x1C);
-
-        // If we return a 64-bit value, set EDX as well
+        // Put a call function here
         //
-        // mov dword ptr [esp+0x14], edx
-        if(this->returns_64_bit_value) {
-            HOOK_PUSH_BYTE(0x89);
-            HOOK_PUSH_BYTE(0x54);
-            HOOK_PUSH_BYTE(0x24);
-            HOOK_PUSH_BYTE(0x14);
+        // call <function_address>
+        auto *call_instruction_end = (hook_offset + 1 + sizeof(std::uintptr_t));
+        std::uintptr_t call_offset;
+        switch(this->hook_type) {
+            case GameToLib:
+                call_offset = reinterpret_cast<std::byte *>(this->destination_address) - call_instruction_end;
+                break;
+            case LibToGame:
+                call_offset = reinterpret_cast<std::byte *>(this->function_address) - call_instruction_end;
+                break;
         }
+        HOOK_PUSH_BYTE(0xE8);
+        HOOK_PUSH_DWORD(call_offset);
+
+        // Cleanup stack
+        //
+        // add esp, <stack_to_cleanup>
+        std::size_t stack_to_cleanup = stack_offset - starting_stack_offset;
+        if(stack_to_cleanup != 0) {
+            if(stack_to_cleanup < 0x80) {
+                HOOK_PUSH_BYTE(0x83);
+                HOOK_PUSH_BYTE(0xC4);
+                HOOK_PUSH_BYTE(stack_to_cleanup & 0xFF);
+            }
+            else {
+                HOOK_PUSH_BYTE(0x81);
+                HOOK_PUSH_BYTE(0xC4);
+                HOOK_PUSH_DWORD(stack_to_cleanup);
+            }
+        }
+
+        // Return value? If so, set EAX in our stack to our current EAX value
+        //
+        // mov dword ptr [esp+0x1C], eax
+        if(this->uses_return_value) {
+            HOOK_PUSH_BYTE(0x89);
+            HOOK_PUSH_BYTE(0x44);
+            HOOK_PUSH_BYTE(0x24);
+            HOOK_PUSH_BYTE(0x1C);
+
+            // If we return a 64-bit value, set EDX as well
+            //
+            // mov dword ptr [esp+0x14], edx
+            if(this->returns_64_bit_value) {
+                HOOK_PUSH_BYTE(0x89);
+                HOOK_PUSH_BYTE(0x54);
+                HOOK_PUSH_BYTE(0x24);
+                HOOK_PUSH_BYTE(0x14);
+            }
+        }
+
+        // Pop flags and registers
+        //
+        // popad, popfd
+        HOOK_PUSH_BYTE(0x61);
+        HOOK_PUSH_BYTE(0x9D);
+
+        // Return
+        //
+        // ret
+        HOOK_PUSH_BYTE(0xC3);
     }
-
-    // Pop flags and registers
-    //
-    // popad, popfd
-    HOOK_PUSH_BYTE(0x61);
-    HOOK_PUSH_BYTE(0x9D);
-
-    // Return
-    //
-    // ret
-    HOOK_PUSH_BYTE(0xC3);
 
     #undef HOOK_PUSH_BYTE
 

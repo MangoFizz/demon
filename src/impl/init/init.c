@@ -51,7 +51,7 @@ bool get_exe_argument_value(const char *argument, const char **value) {
 }
 
 // Stubbed because it's slow and buggy (Halo does not like specs that overflow 32-bit int like 4+ GB VRAM)
-void query_system_specs_stub(void) {
+static void query_system_specs_stub(void) {
     // Current specs
     *(uint32_t *)(0x6E7090) = 1024 * 1024 * 1024; // VRAM
     *(uint32_t *)(0x7123D8) = 1024 * 1024 * 1024; // VRAM (again)
@@ -59,8 +59,8 @@ void query_system_specs_stub(void) {
     *(uint32_t *)(0x7123D4) = 1000; // CPU speed (MHz)
 }
 
-// Stubbed because we do not want to support config.txt - you should not need it on a PC made after 2005.
-const char *read_config_stub(void) {
+// Stubbed because we do not want to support config.txt as it contains workarounds that are irrelevant for PCs made after 2005.
+const char *load_config(void) {
     // Minimum requirements
     *(uint32_t *)(0x6E7268) = 1; // VRAM
     *(uint32_t *)(0x6E726C) = 16; // RAM
@@ -217,7 +217,7 @@ void game_main(HMODULE module_handle, uint32_t zero, const char *args, uint32_t 
     }
 
     query_system_specs_stub();
-    read_config_stub();
+    load_config();
     SetLastError(0);
 
     // Unknown what these do

@@ -52,8 +52,7 @@ void console_printf(const ColorARGB *color, const char *fmt, ...) {
 }
 
 // TODO: The exact meanings of these is not known. This should be figured out later.
-extern uint8_t (*unknown_function_00481b70)(uint32_t a, uint32_t b);
-static uint32_t *unknown_006a8854 = (uint32_t *)(0x6A8854);
+static uint16_t *command_restrictions = (uint16_t *)(0x6A8854);
 
 bool command_is_allowed(uint8_t a) {
     // Enable all commands if devmode
@@ -61,24 +60,35 @@ bool command_is_allowed(uint8_t a) {
         return true;
     }
 
-    uint32_t flags = *unknown_006a8854;
+    uint16_t restrictions = *command_restrictions;
 
-    if((uint16_t)(flags) == 0) {
+    if(restrictions == 0) {
         return true;
     }
 
-    if((flags & 1) && !(a & 1)) {
+    if((restrictions & 1) && !(a & 1)) {
         return false;
     }
 
-    if(((flags & 0x100) != 0) && !(a & 1)) {
+    if(((restrictions & 0x100) != 0) && !(a & 1)) {
         return false;
     }
 
-    return unknown_function_00481b70(a, 1)
-        && unknown_function_00481b70(a, 2)
-        && unknown_function_00481b70(a, 3)
-        && unknown_function_00481b70(a, 4)
-        && unknown_function_00481b70(a, 6)
-        && unknown_function_00481b70(a, 5);
+    for(int i = 0; i <= 6; i++) {
+        uint32_t flag = 1 << i;
+        uint32_t antiflag = flag << 8;
+
+        bool flag_set = a & flag;
+
+        if((restrictions & flag) && !flag_set) {
+            return false;
+        }
+
+        if((restrictions & antiflag) && flag_set) {
+            return false;
+        }
+    }
+
+    return true;
 }
+

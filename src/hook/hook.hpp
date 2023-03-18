@@ -33,11 +33,13 @@ namespace Demon {
 
     class Hook {
         public:
-            Hook(std::uintptr_t function_address) :
+            Hook(const char *name, std::uintptr_t function_address) :
+                name(name),
                 function_address(function_address),
                 hook_type(LibToGame) {
             }
-            Hook(std::uintptr_t function_address, std::uintptr_t destination_address) :
+            Hook(const char *name, std::uintptr_t function_address, std::uintptr_t destination_address) :
+                name(name),
                 function_address(function_address),
                 destination_address(destination_address),
                 hook_type(GameToLib) {
@@ -80,12 +82,23 @@ namespace Demon {
              */
             void *write_hook();
 
+            /**
+             * Specify that this may not be used. The game will crash if this is called.
+             */
+            Hook &forbid() {
+                this->forbidden = true;
+                this->hook_type = GameToLib;
+                return *this;
+            }
+
         private:
             std::uintptr_t function_address;
             std::uintptr_t destination_address;
             HookType hook_type;
             bool returns_64_bit_value = false;
             bool uses_return_value = false;
+            bool forbidden = false;
+            const char *name;
             std::vector<std::pair<ParameterStorageType, std::size_t>> parameters;
     };
 

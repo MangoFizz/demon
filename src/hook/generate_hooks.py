@@ -18,12 +18,18 @@ for hook in hooks:
     if "flag" in hook_info:
         hook_fn += "        #ifdef {flag}\n".format(flag=hook_info["flag"])
 
-    if "replace" in hook_info and hook_info["replace"]:
-        lib_fns += "    extern int {};\n".format(hook)
-        hook_fn += "        Hook({address}, reinterpret_cast<std::uintptr_t>(&{output}))".format(address=hook_info["address"], output=hook)
+    if "replace" in hook_info and hook_info["replace"] != False:
+        if hook_info["replace"] == "forbid":
+            hook_fn += "        Hook(\"{hook}\", {address}).forbid()".format(hook=hook, address=hook_info["address"])
+        elif hook_info["replace"] == True:
+            lib_fns += "    extern int {};\n".format(hook)
+            hook_fn += "        Hook(\"{hook}\", {address}, reinterpret_cast<std::uintptr_t>(&{output}))".format(hook=hook, address=hook_info["address"], output=hook)
+        else:
+            print("Unknown replace value: ", hook_info["replace"])
+            sys.exit(1)
     else:
         lib_fns += "    void *{} = nullptr;\n".format(hook)
-        hook_fn += "        {hook} = Hook({address})".format(hook=hook, address=hook_info["address"])
+        hook_fn += "        {hook} = Hook(\"{hook}\", {address})".format(hook=hook, address=hook_info["address"])
 
     if "arguments" in hook_info:
         for arg in hook_info["arguments"]:

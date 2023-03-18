@@ -11,7 +11,7 @@ typedef struct EngineGlobal {
     const char *name;
     uint32_t type;
     void *data;
-    uint8_t unknown[4];
+    uint32_t permission;
 } EngineGlobal;
 _Static_assert(sizeof(EngineGlobal) == 16);
 

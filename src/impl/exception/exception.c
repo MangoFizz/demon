@@ -26,3 +26,8 @@ void crashf(const char *fmt, ...) {
     }
     ExitProcess(197);
 }
+
+
+void crash_forbidden_function(const char *function_name, void *from) {
+    CRASHF_DEBUG("Forbidden function called! %s was called from 0x%08zX", function_name, from);
+}
