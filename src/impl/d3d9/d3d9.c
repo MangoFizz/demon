@@ -40,3 +40,15 @@ static void init_z_bias_values(void) {
 static void set_buffering_disabled(bool disabled) {
     *(uint32_t *)(0x712384) = disabled;
 }
+
+static IDirect3DDevice9 ***d3d9_device = (IDirect3DDevice9 ***)(0x70C9A0);
+
+IDirect3DDevice9 **get_d3d9_device(void) {
+    return *d3d9_device;
+}
+
+static uint8_t *should_minimize_when_focus_is_lost = (uint8_t *)(0x70C99C);
+uint32_t on_mouse_hover_unfocused(void) {
+    // called whenever mousing over the window when it is not in focus. unknown what it does
+    return *should_minimize_when_focus_is_lost && get_d3d9_device();
+}
