@@ -4,6 +4,10 @@
 #include "../memory/table.h"
 #include "../types/types.h"
 
+typedef enum DynamicObjectFlags1 {
+    DynamicObjectFlags1_render_at_full_lod = 0x400000
+} DynamicObjectFlags1;
+
 typedef struct DynamicObjectBase {
     TableID tag;
     uint8_t field_0x4[0x4];
@@ -17,7 +21,7 @@ typedef struct DynamicObjectBase {
     VectorPYR rotation_velocity;
     uint8_t field_0x98[0x8];
     VectorXYZ center;
-    uint8_t field_0xac[0x4];
+    float height;
     float scale;
     uint16_t object_type; // ObjectType
     uint8_t field_0xb6[0x16];

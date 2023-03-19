@@ -1,4 +1,6 @@
 #include <windows.h>
+#include <float.h>
+#include <math.h>
 #include "object.h"
 
 #include <stdio.h>
@@ -99,4 +101,40 @@ void get_center_and_render_bounding_radius_of_object(TableID object_id, VectorXY
     DynamicObjectBase *object = resolve_object_index_to_data_unchecked(ID_INDEX_PART(object_id));
     *center = object->center;
     *render_bounding_radius = ((Object *)(get_tag_data(object->tag)))->render_bounding_radius;
+}
+
+static uint16_t *model_detail_setting = (uint16_t *)(0x681378);
+typedef enum ModelDetailSetting {
+    ModelDetailSetting_low = 0,
+    ModelDetailSetting_medium = 1,
+    ModelDetailSetting_high = 2
+} ModelDetailSetting;
+
+float calculate_lod_pixels(TableID object_id) {
+    DynamicObjectBase *object = resolve_object_index_to_data_unchecked(ID_INDEX_PART(object_id));
+
+    if(object->flags_1 & DynamicObjectFlags1_render_at_full_lod) {
+        return FLT_MAX;
+    }
+
+    float height = object->height;
+    switch ((ModelDetailSetting)(*model_detail_setting)) {
+        case ModelDetailSetting_low: height *= 0.25; break;
+        case ModelDetailSetting_medium: height *= 0.50; break;
+        default: break;
+    }
+
+    // appears to be part of a larger structure at 0x7B2608
+    float *camx = (float *)(0x7B2608 + 0x1C);
+    float *camy = (float *)(0x7B2608 + 0x28);
+    float *camz = (float *)(0x7B2608 + 0x34);
+    float *camq = (float *)(0x7B2608 + 0x40);
+    float *camr = (float *)(0x7B2608 + 0x188);
+
+    float d = *camx * object->center.x
+            + *camy * object->center.y
+            + *camz * object->center.z
+            + *camq;
+    float denominator = fmax(fabs(d), 0.1);
+    return *camr / denominator * height;
 }

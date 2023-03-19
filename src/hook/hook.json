@@ -97,5 +97,6 @@
     "load_config": {"address": "0x577E70", "replace": true, "use_return_value": true, "comments": "loads config.txt"},
     "query_system_specs": {"address": "0x5782E0", "replace": "forbid", "use_return_value": true, "comments": "queries system specs"},
 
-    "on_mouse_hover_unfocused": { "address": "0x50D210", "replace": true, "use_return_value": true, "comments": "called whenever the mouse hovers over the game window when it is not in focus" }
+    "on_mouse_hover_unfocused": { "address": "0x50D210", "replace": true, "use_return_value": true, "comments": "called whenever the mouse hovers over the game window when it is not in focus" },
+    "calculate_lod_pixels": {"address": "0x50ABD0", "replace": true, "use_return_value": true, "arguments": ["eax"]}
 }
