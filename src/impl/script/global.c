@@ -83,7 +83,7 @@ bool compile_global(TableID node_id) {
     // Make sure the type is valid?
     enum ScenarioScriptValueType type = get_global_type(id);
     enum ScenarioScriptValueType expected = node->type;
-    if(expected != ScenarioScriptValueType_passthrough) {
+    if(expected != ScenarioScriptValueType_unparsed) {
         if(!value_types_can_be_converted(type, expected)) {
             *(const char **)(0x6A887C) = "Invalid variable type!";
             *(const char **)(0x6A8880) = node_name;
