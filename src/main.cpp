@@ -92,6 +92,11 @@ void *Hook::write_hook() {
         HOOK_PUSH_BYTE(0xCC);
     }
 
+    else if(this->stubbed) {
+        // Return
+        HOOK_PUSH_BYTE(0xC3);
+    }
+
     else {
         // Push flags and registers
         //

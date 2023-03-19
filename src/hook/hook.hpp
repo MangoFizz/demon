@@ -91,6 +91,15 @@ namespace Demon {
                 return *this;
             }
 
+            /**
+             * Specify that this function instantly returns when called.
+             */
+            Hook &stub() {
+                this->stubbed = true;
+                this->hook_type = GameToLib;
+                return *this;
+            }
+
         private:
             std::uintptr_t function_address;
             std::uintptr_t destination_address;
@@ -98,6 +107,7 @@ namespace Demon {
             bool returns_64_bit_value = false;
             bool uses_return_value = false;
             bool forbidden = false;
+            bool stubbed = false;
             const char *name;
             std::vector<std::pair<ParameterStorageType, std::size_t>> parameters;
     };

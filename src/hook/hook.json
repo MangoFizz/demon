@@ -68,7 +68,7 @@
     "make_actor_tables": {"address": "0x426710", "replace": true},
 
     "load_keystone": {"address": "0x53DA80", "replace": "forbid"},
-    "unload_keystone": {"address": "0x53DCA0", "replace": "forbid"},
+    "unload_keystone": {"address": "0x53DCA0", "replace": true},
     "get_exe_argument_value": {"address": "0x53D710", "replace": true, "use_return_value": true, "arguments": ["0", "edi"]},
     "check_for_updates": {"address": "0x4A2D50", "replace": true, "arguments": ["0"]},
 
@@ -98,5 +98,10 @@
     "query_system_specs": {"address": "0x5782E0", "replace": "forbid", "use_return_value": true, "comments": "queries system specs"},
 
     "on_mouse_hover_unfocused": { "address": "0x50D210", "replace": true, "use_return_value": true, "comments": "called whenever the mouse hovers over the game window when it is not in focus" },
-    "calculate_lod_pixels": {"address": "0x50ABD0", "replace": true, "use_return_value": true, "arguments": ["eax"]}
+    "calculate_lod_pixels": {"address": "0x50ABD0", "replace": true, "use_return_value": true, "arguments": ["eax"]},
+
+    "set_clean_flag": {"address": "0x579490", "replace": "stub", "comments": "stubbed; we do NOT want the actual registry to be touched"},
+    "check_nogamma": {"address": "0x51D640", "replace": "stub", "comments": "stubbed; we do NOT want the registry to be touched, and setting device gamma is unsafe"},
+    "set_gamma": {"address": "0x51D7E0", "replace": "stub", "comments": "stubbed; we do NOT want the registry to be touched, and setting device gamma is unsafe"},
+    "set_gamma_setting": {"address": "0x51D8C0", "replace": "stub", "comments": "stubbed; we do NOT want the registry to be touched, and setting device gamma is unsafe"}
 }

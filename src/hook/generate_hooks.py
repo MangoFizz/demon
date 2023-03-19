@@ -21,6 +21,8 @@ for hook in hooks:
     if "replace" in hook_info and hook_info["replace"] != False:
         if hook_info["replace"] == "forbid":
             hook_fn += "        Hook(\"{hook}\", {address}).forbid()".format(hook=hook, address=hook_info["address"])
+        elif hook_info["replace"] == "stub":
+            hook_fn += "        Hook(\"{hook}\", {address}).stub()".format(hook=hook, address=hook_info["address"])
         elif hook_info["replace"] == True:
             lib_fns += "    extern int {};\n".format(hook)
             hook_fn += "        Hook(\"{hook}\", {address}, reinterpret_cast<std::uintptr_t>(&{output}))".format(hook=hook, address=hook_info["address"], output=hook)
