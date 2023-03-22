@@ -103,5 +103,7 @@
     "set_clean_flag": {"address": "0x579490", "replace": "stub", "comments": "stubbed; we do NOT want the actual registry to be touched"},
     "check_nogamma": {"address": "0x51D640", "replace": "stub", "comments": "stubbed; we do NOT want the registry to be touched, and setting device gamma is unsafe"},
     "set_gamma": {"address": "0x51D7E0", "replace": "stub", "comments": "stubbed; we do NOT want the registry to be touched, and setting device gamma is unsafe"},
-    "set_gamma_setting": {"address": "0x51D8C0", "replace": "stub", "comments": "stubbed; we do NOT want the registry to be touched, and setting device gamma is unsafe"}
+    "set_gamma_setting": {"address": "0x51D8C0", "replace": "stub", "comments": "stubbed; we do NOT want the registry to be touched, and setting device gamma is unsafe"},
+
+    "set_menu_cursor_coords": {"address": "0x4957E0", "replace": true, "arguments": ["eax", "ecx"]}
 }
