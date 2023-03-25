@@ -114,5 +114,6 @@
     "list_globals": {"address": "0x481F20", "replace": true, "comments": "gets a list of all globals to be displayed in the console"},
     "load_names_from_reflexive": {"address": "0x481D30", "replace": true, "arguments": ["0", "4", "8"], "comments": "loads names of stuff into an array?"},
 
-    "store_engine_global_in_hs_global": {"address": "0x489480", "replace": true, "arguments": ["eax"]}
+    "store_engine_global_in_hs_global": {"address": "0x489480", "replace": true, "arguments": ["eax"]},
+    "retrieve_engine_global_from_hs_global": {"address": "0x4895F0", "replace": true, "arguments": ["eax"]}
 }
