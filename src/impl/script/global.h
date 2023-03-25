@@ -43,6 +43,15 @@ GlobalID get_global_id(const char *global);
 uint16_t get_global_type(GlobalID global_id);
 
 /**
+ * Get the value of the global.
+ *
+ * @param global_id id of the global
+ *
+ * @return value (see ScenarioScriptValueType enum in scenario.json)
+ */
+ScenarioScriptNodeValue get_global_value(GlobalID global_id);
+
+/**
  * Get the name of the global.
  *
  * @param global_id id of the global

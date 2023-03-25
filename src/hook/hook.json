@@ -90,6 +90,7 @@
     "get_global_id": {"address": "0x481A40", "replace": true, "use_return_value": true, "arguments": ["ebx"]},
     "get_global_type": {"address": "0x4819E0", "replace": true, "use_return_value": true, "arguments": ["eax"]},
     "get_global_name": {"address": "0x481A10", "replace": true, "use_return_value": true, "arguments": ["eax"], "comments": "only appears to be called by the script compiler"},
+    "get_global_value": {"address": "0x488CE0", "replace": true, "use_return_value": true, "arguments": ["eax"]},
 
     "compile_global": {"address": "0x484B20", "replace": true, "use_return_value": true, "arguments": ["eax"]},
     "value_types_can_be_converted": {"address": "0x489250", "replace": false, "use_return_value": true, "arguments": ["eax", "ecx"]},

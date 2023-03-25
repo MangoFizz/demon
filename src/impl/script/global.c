@@ -248,3 +248,14 @@ void retrieve_engine_global_from_hs_global(GlobalID global_id) {
     }
     copy_hsc_value(hs_global->value, data, internal_global->type);
 }
+
+ScenarioScriptNodeValue get_global_value(GlobalID global_id) {
+    store_engine_global_in_hs_global(global_id);
+
+    size_t index = GLOBAL_ID_TO_INDEX(global_id);
+    if(!IS_INTERNAL_GLOBAL(global_id)) {
+        index += get_internal_global_count();
+    }
+
+    return (*hs_global_table)->first_element[index].value;
+}
