@@ -11,6 +11,7 @@ typedef union ScenarioScriptNodeValue {
     int8_t b;
     int16_t s;
     int32_t l;
+    const char *string;
 } ScenarioScriptNodeValue;
 _Static_assert(sizeof(ScenarioScriptNodeValue) == 0x4);
 

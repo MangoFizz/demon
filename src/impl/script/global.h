@@ -8,10 +8,16 @@
 
 MAKE_TABLE_STRUCT(ScriptNodeTable, ScenarioScriptNode);
 
+typedef struct HSGlobal {
+    uint32_t unknown;
+    ScenarioScriptNodeValue value;
+} HSGlobal;
+MAKE_TABLE_STRUCT(HSGlobalTable, HSGlobal);
+
 typedef struct EngineGlobal {
     const char *name;
     uint32_t type;
-    void *data;
+    ScenarioScriptNodeValue *data;
     uint32_t permission;
 } EngineGlobal;
 _Static_assert(sizeof(EngineGlobal) == 16);
@@ -52,7 +58,16 @@ const char *get_global_name(GlobalID global_id);
  *
  * @return true if the global is internal to the engine, false if it belongs to the scenario
  */
-#define IS_INTERNAL_GLOBAL(global_id) ((global_id & 0x8000) != 0)
+#define IS_INTERNAL_GLOBAL(global_id) (((global_id) & 0x8000) != 0)
+
+/**
+ * Convert the global ID to an index.
+ *
+ * @param global_id ID of the global returned by get_global_id
+ *
+ * @return index
+ */
+#define GLOBAL_ID_TO_INDEX(global_id) ((global_id) & 0x7FFF)
 
 /**
  * Get the number of globals internal to the engine.

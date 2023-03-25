@@ -43,7 +43,7 @@ GlobalID get_global_id(const char *global) {
 
 uint16_t get_global_type(GlobalID global_id) {
     if(IS_INTERNAL_GLOBAL(global_id)) {
-        return get_internal_globals()[global_id & 0x7FFF]->type;
+        return get_internal_globals()[GLOBAL_ID_TO_INDEX(global_id)]->type;
     }
     else {
         return get_scenario_tag_data()->globals.elements[global_id].type;
@@ -52,7 +52,7 @@ uint16_t get_global_type(GlobalID global_id) {
 
 const char *get_global_name(GlobalID global_id) {
     if(IS_INTERNAL_GLOBAL(global_id)) {
-        return get_internal_globals()[global_id & 0x7FFF]->name;
+        return get_internal_globals()[GLOBAL_ID_TO_INDEX(global_id)]->name;
     }
     else {
         return get_scenario_tag_data()->globals.elements[global_id].name.string;
@@ -96,4 +96,133 @@ bool compile_global(TableID node_id) {
     node->type = type;
     node->flags |= 4;
     return true;
+}
+
+
+static HSGlobalTable **hs_global_table = (HSGlobalTable **)(0x86944C);
+
+void store_engine_global_in_hs_global(GlobalID global_id) {
+    if(!IS_INTERNAL_GLOBAL(global_id)) {
+        return;
+    }
+
+    size_t index = GLOBAL_ID_TO_INDEX(global_id);
+    EngineGlobal *internal_global = get_internal_globals()[index];
+    HSGlobal *hs_global = (*hs_global_table)->first_element + index;
+
+    ScenarioScriptNodeValue *data = internal_global->data;
+    if(data == NULL) {
+        switch(internal_global->type) {
+            case ScenarioScriptValueType_boolean:
+                hs_global->value.b = 0;
+                break;
+            case ScenarioScriptValueType_short:
+                hs_global->value.s = 0;
+                break;
+            case ScenarioScriptValueType_long:
+                hs_global->value.l = 0;
+                break;
+            case ScenarioScriptValueType_real:
+                hs_global->value.f = 0;
+                break;
+            case ScenarioScriptValueType_string:
+                hs_global->value.string = "";
+                break;
+            case ScenarioScriptValueType_ai:
+            case ScenarioScriptValueType_object_list:
+            case ScenarioScriptValueType_sound:
+            case ScenarioScriptValueType_effect:
+            case ScenarioScriptValueType_damage:
+            case ScenarioScriptValueType_looping_sound:
+            case ScenarioScriptValueType_animation_graph:
+            case ScenarioScriptValueType_actor_variant:
+            case ScenarioScriptValueType_damage_effect:
+            case ScenarioScriptValueType_object_definition:
+            case ScenarioScriptValueType_object:
+            case ScenarioScriptValueType_unit:
+            case ScenarioScriptValueType_vehicle:
+            case ScenarioScriptValueType_weapon:
+            case ScenarioScriptValueType_device:
+            case ScenarioScriptValueType_scenery:
+                hs_global->value.id = NULL_ID;
+                break;
+            case ScenarioScriptValueType_script:
+            case ScenarioScriptValueType_trigger_volume:
+            case ScenarioScriptValueType_cutscene_flag:
+            case ScenarioScriptValueType_cutscene_camera_point:
+            case ScenarioScriptValueType_cutscene_title:
+            case ScenarioScriptValueType_cutscene_recording:
+            case ScenarioScriptValueType_device_group:
+            case ScenarioScriptValueType_ai_command_list:
+            case ScenarioScriptValueType_starting_profile:
+            case ScenarioScriptValueType_conversation:
+            case ScenarioScriptValueType_navpoint:
+            case ScenarioScriptValueType_hud_message:
+            case ScenarioScriptValueType_game_difficulty:
+            case ScenarioScriptValueType_team:
+            case ScenarioScriptValueType_ai_default_state:
+            case ScenarioScriptValueType_actor_type:
+            case ScenarioScriptValueType_hud_corner:
+            case ScenarioScriptValueType_object_name:
+                hs_global->value.s = -1;
+                break;
+        }
+    }
+    else {
+        switch(internal_global->type) {
+            case ScenarioScriptValueType_boolean:
+                hs_global->value.b = data->b;
+                break;
+            case ScenarioScriptValueType_short:
+                hs_global->value.s = data->s;
+                break;
+            case ScenarioScriptValueType_long:
+                hs_global->value.l = data->l;
+                break;
+            case ScenarioScriptValueType_real:
+                hs_global->value.f = data->f;
+                break;
+            case ScenarioScriptValueType_string:
+                hs_global->value.string = data->string;
+                break;
+            case ScenarioScriptValueType_ai:
+            case ScenarioScriptValueType_object_list:
+            case ScenarioScriptValueType_sound:
+            case ScenarioScriptValueType_effect:
+            case ScenarioScriptValueType_damage:
+            case ScenarioScriptValueType_looping_sound:
+            case ScenarioScriptValueType_animation_graph:
+            case ScenarioScriptValueType_actor_variant:
+            case ScenarioScriptValueType_damage_effect:
+            case ScenarioScriptValueType_object_definition:
+            case ScenarioScriptValueType_object:
+            case ScenarioScriptValueType_unit:
+            case ScenarioScriptValueType_vehicle:
+            case ScenarioScriptValueType_weapon:
+            case ScenarioScriptValueType_device:
+            case ScenarioScriptValueType_scenery:
+                hs_global->value.id = data->id;
+                break;
+            case ScenarioScriptValueType_script:
+            case ScenarioScriptValueType_trigger_volume:
+            case ScenarioScriptValueType_cutscene_flag:
+            case ScenarioScriptValueType_cutscene_camera_point:
+            case ScenarioScriptValueType_cutscene_title:
+            case ScenarioScriptValueType_cutscene_recording:
+            case ScenarioScriptValueType_device_group:
+            case ScenarioScriptValueType_ai_command_list:
+            case ScenarioScriptValueType_starting_profile:
+            case ScenarioScriptValueType_conversation:
+            case ScenarioScriptValueType_navpoint:
+            case ScenarioScriptValueType_hud_message:
+            case ScenarioScriptValueType_game_difficulty:
+            case ScenarioScriptValueType_team:
+            case ScenarioScriptValueType_ai_default_state:
+            case ScenarioScriptValueType_actor_type:
+            case ScenarioScriptValueType_hud_corner:
+            case ScenarioScriptValueType_object_name:
+                hs_global->value.s = data->s;
+                break;
+        }
+    }
 }
