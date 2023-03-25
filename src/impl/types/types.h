@@ -107,6 +107,13 @@ typedef struct Plane3D {
 } Plane3D;
 _Static_assert(sizeof(Plane3D) == 0x10);
 
+typedef struct GenericReflexive {
+    uint32_t count;
+    void *pointer;
+    uint8_t padding[4];
+} GenericReflexive;
+_Static_assert(sizeof(GenericReflexive) == 0xC);
+
 /**
  * Decode an integer (X8)R8G8B8 value to floating point RGB.
  */

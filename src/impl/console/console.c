@@ -92,3 +92,23 @@ bool command_is_allowed(uint8_t a) {
     return true;
 }
 
+void load_names_from_reflexive(const GenericReflexive *reflexive, uint32_t name_offset, uint32_t element_size) {
+    uint16_t *capacity = (uint16_t *)(0x6A8848);
+    uint16_t *count = (uint16_t *)(0x6A8858);
+    const char ***names = (const char ***)(0x6A885C);
+
+    const void *current_name = reflexive->pointer + name_offset;
+    const char *filter = *(const char **)(0x6A884C);
+    size_t filter_len = strlen(filter);
+
+    size_t index = 0;
+    while(index < reflexive->count && *count < *capacity) {
+        // Check if the item starts with this
+        if(strncmp(filter, current_name, filter_len) == 0) {
+            (*names)[*count] = current_name;
+            (*count)++;
+        }
+        index++;
+        current_name += element_size;
+    }
+}

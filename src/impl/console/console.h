@@ -39,4 +39,15 @@ void console_printf(const struct ColorARGB *color, const char *fmt, ...);
  */
 bool command_is_allowed(uint8_t a);
 
+struct GenericReflexive;
+
+/**
+ * Load names from the reflexive.
+ *
+ * @param reflexive    reflexive to search
+ * @param name_offset  offset to the name in an entry
+ * @param element_size size of each entry
+ */
+void load_names_from_reflexive(const struct GenericReflexive *reflexive, uint32_t name_offset, uint32_t element_size);
+
 #endif

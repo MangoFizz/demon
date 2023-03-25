@@ -105,6 +105,11 @@
     "set_gamma": {"address": "0x51D7E0", "replace": "stub", "comments": "stubbed; we do NOT want the registry to be touched, and setting device gamma is unsafe"},
     "set_gamma_setting": {"address": "0x51D8C0", "replace": "stub", "comments": "stubbed; we do NOT want the registry to be touched, and setting device gamma is unsafe"},
 
-    "set_menu_cursor_coords": {"address": "0x4957E0", "replace": "forbid", "arguments": ["eax", "ecx"]},
-    "update_menu_cursor_coords": {"address": "0x495850", "replace": true}
+    "set_menu_cursor_coords": {"address": "0x4957E0", "replace": "forbid", "arguments": ["eax", "ecx"], "comments": "refactored away - bye bye"},
+    "update_menu_cursor_coords": {"address": "0x495850", "replace": true},
+
+
+    "unknown_function_481EF0": {"address": "0x481EF0", "replace": "forbid", "comments": "suspected dead function, has to do with HSC stuff"},
+
+    "load_names_from_reflexive": {"address": "0x481D30", "replace": true, "arguments": ["0", "4", "8"], "comments": "loads names of stuff into an array?"}
 }
