@@ -3,11 +3,16 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stddef.h>
 
 #include <windows.h>
 
 #include "../types/types.h"
 #include "../init/init.h"
+#include "../script/global.h"
+#include "../tag/tag.h"
+
+#include "ringhopper/scenario.h"
 
 static char *console_text = (char *)(0x6AE378);
 static uint16_t *command_history_next_index = (uint16_t *)(0x6AEC7E);
@@ -92,23 +97,60 @@ bool command_is_allowed(uint8_t a) {
     return true;
 }
 
-void load_names_from_reflexive(const GenericReflexive *reflexive, uint32_t name_offset, uint32_t element_size) {
-    uint16_t *capacity = (uint16_t *)(0x6A8848);
-    uint16_t *count = (uint16_t *)(0x6A8858);
-    const char ***names = (const char ***)(0x6A885C);
+static const char ***load_name_names = (const char ***)(0x6A885C);
+static uint16_t *load_names_capacity = (uint16_t *)(0x6A8848);
+static uint16_t *load_names_count = (uint16_t *)(0x6A8858);
+static const char **load_names_filter = (const char **)(0x6A884C);
 
+void load_names_from_reflexive(const GenericReflexive *reflexive, uint32_t name_offset, uint32_t element_size) {
     const void *current_name = reflexive->pointer + name_offset;
-    const char *filter = *(const char **)(0x6A884C);
+    const char *filter = *load_names_filter;
     size_t filter_len = strlen(filter);
 
     size_t index = 0;
-    while(index < reflexive->count && *count < *capacity) {
+    while(index < reflexive->count && *load_names_count < *load_names_capacity) {
         // Check if the item starts with this
         if(strncmp(filter, current_name, filter_len) == 0) {
-            (*names)[*count] = current_name;
-            (*count)++;
+            (*load_name_names)[*load_names_count] = current_name;
+            (*load_names_count)++;
         }
         index++;
         current_name += element_size;
+    }
+}
+
+void list_globals(void) {
+    const char *filter = *load_names_filter;
+    size_t filter_len = strlen(filter);
+
+    size_t internal_global_count = get_internal_global_count();
+    EngineGlobal **internal_globals = get_internal_globals();
+
+    size_t index = 0;
+    while(index < internal_global_count && *load_names_count < *load_names_capacity) {
+        // Skip compiled-out globals
+        if(internal_globals[index]->data == NULL) {
+            goto skip_global;
+        }
+
+        // DevmodeDevmodeDevmodeDevmodeDevmodeDevmodeDevmodeDevmodeDevmodeDevmodeDevmodeDevmodeDevmodeDevmodeDevmodeDevmode
+        if(!command_is_allowed(internal_globals[index]->permission)) {
+            goto skip_global;
+        }
+
+        // Check if the item starts with this
+        const char *name = internal_globals[index]->name;
+        if(strncmp(filter, name, filter_len) == 0) {
+            (*load_name_names)[*load_names_count] = name;
+            (*load_names_count)++;
+        }
+
+        skip_global:
+        index++;
+    }
+
+    Scenario *scenario = get_scenario_tag_data();
+    if(scenario != NULL && devmode) {
+        load_names_from_reflexive((const GenericReflexive *)(&scenario->globals), offsetof(ScenarioGlobal, name), sizeof(ScenarioGlobal));
     }
 }
