@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 /**
- * Scale the mouse input by an amount
+ * Scale the mouse input by an amount for aiming
  *
  * @param sensitivity sensitivity scaler
  * @param raw_input   raw integer input
