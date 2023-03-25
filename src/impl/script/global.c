@@ -205,6 +205,17 @@ bool compile_global(TableID node_id) {
 }
 
 
+size_t get_global_hs_table_index(GlobalID global_id) {
+    size_t index = GLOBAL_ID_TO_INDEX(global_id);
+
+    if(!IS_INTERNAL_GLOBAL(global_id)) {
+        index += get_internal_global_count();
+    }
+
+    return index;
+}
+
+
 static HSGlobalTable **hs_global_table = (HSGlobalTable **)(0x86944C);
 
 static void copy_hsc_value(ScenarioScriptNodeValue data_from, ScenarioScriptNodeValue *data_to, enum ScenarioScriptValueType value_type) {
@@ -355,15 +366,13 @@ void retrieve_engine_global_from_hs_global(GlobalID global_id) {
     copy_hsc_value(hs_global->value, data, internal_global->type);
 }
 
+static ScenarioScriptNodeValue *get_global_value_ptr(GlobalID global_id) {
+    return &(*hs_global_table)->first_element[get_global_hs_table_index(global_id)].value;
+}
+
 ScenarioScriptNodeValue get_global_value(GlobalID global_id) {
     store_engine_global_in_hs_global(global_id);
-
-    size_t index = GLOBAL_ID_TO_INDEX(global_id);
-    if(!IS_INTERNAL_GLOBAL(global_id)) {
-        index += get_internal_global_count();
-    }
-
-    return (*hs_global_table)->first_element[index].value;
+    return *get_global_value_ptr(global_id);
 }
 
 typedef struct HSStackThing {
@@ -376,6 +385,7 @@ typedef struct HSStackThing {
 _Static_assert(sizeof(HSStackThing) == 0x10);
 
 extern ScenarioScriptNodeValue (*convert_hsc_value)(uint32_t from_type, uint32_t to_type, ScenarioScriptNodeValue value);
+static GenericTable **hs_thread_table = (GenericTable **)(0x869450);
 
 void load_node_value(TableID node_id, TableID thread_id, ScenarioScriptNodeValue *output) {
     ScriptNodeTable *nodes = *script_node_table;
@@ -387,10 +397,9 @@ void load_node_value(TableID node_id, TableID thread_id, ScenarioScriptNodeValue
     if(!(node->flags & ScenarioScriptNodeFlags_is_primitive)) {
         // thread stuff
         size_t thread_index = ID_INDEX_PART(thread_id);
-        GenericTable *hs_thread_table = *(GenericTable **)(0x869450);
 
         // TODODILE: FIGURE OUT THREAD STRUCTURE
-        void *thread = hs_thread_table->first_element + thread_index * 0x218;
+        void *thread = (*hs_thread_table)->first_element + thread_index * 0x218;
 
         // Get the stack pointer
         HSStackThing **current_stack_pointer = (HSStackThing **)(thread + 0x10);
@@ -410,11 +419,56 @@ void load_node_value(TableID node_id, TableID thread_id, ScenarioScriptNodeValue
         *(uint8_t *)(thread + 0x3) |= 1;
     }
     else if(node->flags & ScenarioScriptNodeFlags_is_global) {
-        GlobalID global_id = (uint16_t)(node->data.l);
+        GlobalID global_id = node->data.l;
         ScenarioScriptNodeValue value = get_global_value(global_id);
         *output = convert_hsc_value(node->type, get_global_type(global_id), value);
     }
     else {
         *output = convert_hsc_value(node->type, node->index_union, node->data);
     }
+}
+
+typedef struct ObjectListHeader {
+    uint16_t counter;
+    uint8_t unknown[0xA];
+} ObjectListHeader;
+
+MAKE_TABLE_STRUCT(ObjectListHeaderTable, ObjectListHeader);
+
+static ObjectListHeaderTable **object_list_header_table = (ObjectListHeaderTable **)(0x869444);
+
+extern void (*conversion_node_thingy)(ScenarioScriptNodeValue value, TableID thread_id);
+
+void set_global(void *unused, TableID thread_id, bool something) {
+    size_t thread_index = ID_INDEX_PART(thread_id);
+    void *thread = (*hs_thread_table)->first_element + thread_index * 0x218;
+    HSStackThing *current_stack_thing = *(HSStackThing **)(thread + 0x10);
+
+    ScenarioScriptNode *nodes = (*script_node_table)->first_element;
+    size_t node_index = ID_INDEX_PART(current_stack_thing->node_id);
+    size_t global_node_index = ID_INDEX_PART(nodes[ID_INDEX_PART(nodes[node_index].data.id)].next_node);
+
+    ScenarioScriptNode *global_node = nodes + global_node_index;
+    GlobalID global_id = (GlobalID)(global_node->data.l);
+
+    ScenarioScriptNodeValue *value = get_global_value_ptr(global_id);
+    enum ScenarioScriptValueType value_type = get_global_type(global_id);
+
+    if(something) {
+        if(value_type == ScenarioScriptValueType_object_list) {
+            if(!ID_IS_NULL(value->id)) {
+                ((*object_list_header_table)->first_element[ID_INDEX_PART(value->id)]).counter--;
+            }
+        }
+        load_node_value(global_node->next_node, thread_id, value);
+        return;
+    }
+
+    retrieve_engine_global_from_hs_global(global_id);
+    if(value_type == ScenarioScriptValueType_object_list) {
+        if(!ID_IS_NULL(value->id)) {
+            ((*object_list_header_table)->first_element[ID_INDEX_PART(value->id)]).counter++;
+        }
+    }
+    conversion_node_thingy(*value, thread_id);
 }

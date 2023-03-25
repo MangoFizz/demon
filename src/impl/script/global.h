@@ -70,13 +70,22 @@ const char *get_global_name(GlobalID global_id);
 #define IS_INTERNAL_GLOBAL(global_id) (((global_id) & 0x8000) != 0)
 
 /**
- * Convert the global ID to an index.
+ * Convert the global ID to an index. This is not the same index for the HS global table (use get_global_hs_table_index for this)
  *
  * @param global_id ID of the global returned by get_global_id
  *
  * @return index
  */
 #define GLOBAL_ID_TO_INDEX(global_id) ((global_id) & 0x7FFF)
+
+/**
+ * Convert the global ID to an index in the HS global table.
+ *
+ * @param global_id ID of the global returned by get_global_id
+ *
+ * @return index
+ */
+size_t get_global_hs_table_index(GlobalID global_id);
 
 /**
  * Get the number of globals internal to the engine.
