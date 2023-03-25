@@ -163,11 +163,6 @@ set_property(TARGET strings PROPERTY C_STANDARD 17)
 set_property(TARGET strings PROPERTY PREFIX "") # don't prepend with "lib"
 target_compile_definitions(strings PRIVATE STRINGS_CUSTOM_VERSION_RC)
 
-option(DEMON_ENABLE_ENHANCEMENTS "Enable enhancements to improve debugging" OFF)
-if(DEMON_ENABLE_ENHANCEMENTS)
-    target_compile_definitions(strings PRIVATE DEMON_ENABLE_ENHANCEMENTS)
-endif()
-
 add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/hook.cpp"
     DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/hook/hook.json"

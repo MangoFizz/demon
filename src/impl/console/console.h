@@ -25,11 +25,6 @@ void console_printf(const struct ColorARGB *color, const char *fmt, ...);
  */
 #define console_printf_debug_err(...) { ColorARGB dbg_err_color_print = { 1.0, 1.0, 0.1, 0.1 }; console_printf(&dbg_err_color_print, __VA_ARGS__); }
 
-#ifndef DEMON_ENABLE_ENHANCEMENTS
-#undef console_printf_debug_err
-#define console_printf_debug_err(...) {}
-#endif
-
 /**
  * Check if a command is allowed.
  *

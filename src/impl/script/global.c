@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 
 #include <ringhopper/scenario.h>
 #include "../tag/tag.h"
@@ -7,11 +8,10 @@
 #include "../console/console.h"
 #include "../exception/exception.h"
 
-static size_t global_count = 0x1E7;
 static EngineGlobal **engine_globals = (EngineGlobal **)(0x683280);
 
 size_t get_internal_global_count(void) {
-    return global_count;
+    return 0x1E7;
 }
 
 EngineGlobal **get_internal_globals(void) {

@@ -9,11 +9,7 @@
 #define MAX_SCENARIO_NAME_LENGTH 259
 
 // This is the first index before the game says "Unknown Map"
-#ifndef DEMON_ENABLE_ENHANCEMENTS
-#define STOCK_MP_FIRST_UNKNOWN_MAP_INDEX 1
-#else
 #define STOCK_MP_FIRST_UNKNOWN_MAP_INDEX MapUIIndex_UnknownMap
-#endif
 
 static size_t mp_map_allocated_size = 0;
 static uint32_t *mp_map_count = (uint32_t *)(0x702870); // used for the menu list
@@ -63,18 +59,10 @@ static void add_mp_map_with_index(const char *scenario, uint32_t name_index);
 static void add_all_stock_mp_maps(void);
 
 void add_mp_map(const char *scenario, uint32_t ui_index_offset) {
-    #ifndef DEMON_ENABLE_ENHANCEMENTS
-
-    add_mp_map_with_index(scenario, mp_map_name_indices[ui_index_offset]);
-
-    #else
-
     // Hijack this function to add all stock maps since it's only called once on the demo because there's only one MP map.
     //
     // TODO: When the caller of this is reverse engineered, we won't need to hijack this poor function anymore.
     add_all_stock_mp_maps();
-
-    #endif
 }
 
 void add_custom_mp_map(const char *scenario) {

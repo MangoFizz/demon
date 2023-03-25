@@ -42,20 +42,6 @@ The project can now be built using `cmake`.
 cmake --build build
 ```
 
-### Build options
-
-Demon has some build time options that change functionality.
-
-Option                    | Default
---------------------------|---------
-DEMON_ENABLE_ENHANCEMENTS | OFF
-
-#### DEMON_ENABLE_ENHANCEMENTS
-This option enables some enhancements to re-implemented functions, adding extra features to assist in debugging and
-running the game. In the future it may also enable some core features and fixes seen in the mod [Chimera](https://github.com/SnowyMouse/chimera).
-
-By default this setting is off.
-
 ## Testing Demon
 
 Once `strings.dll` has been compiled, it can be run using an original install of Halo Trial
