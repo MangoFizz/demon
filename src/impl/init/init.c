@@ -185,8 +185,6 @@ static void setup_network(void) {
     init_gamespy("halod", "yG3d9w", ip, *cport_value);
 }
 
-static char asdf[32768];
-
 void game_main(HMODULE module_handle, uint32_t zero, const char *args, uint32_t one) {
     check_args(args);
     if(get_exe_argument_value("-help", NULL)) {
@@ -199,14 +197,16 @@ void game_main(HMODULE module_handle, uint32_t zero, const char *args, uint32_t 
                          "-novideo - disable intro/exit videos\n"
                          "-window - play in windowed mode\n"
                          "-vidmode <width,height[,refreshrate]> - play in windowed mode\n"
+                         "-debugbox - show a debug messagebox on the start (for testing)\n"
                          "-ip <ip> - sets the client IP\n"
                          "-cport <port> - sets the client UDP port\n"
                          "-port <port> - sets the server UDP port\n", "Help", 0);
         return;
     }
 
-    *(char **)(0x711738) = asdf;
-    memset(asdf, 0xEE, sizeof(asdf));
+    if(get_exe_argument_value("-debugbox", NULL)) {
+        MessageBox(NULL, "[]", "Box", 0);
+    }
 
     *(uint32_t *)(0x6E7688) = GetTickCount();
     *(HMODULE *)(0x7123E0) = GetModuleHandleA("strings.dll");
