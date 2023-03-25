@@ -116,5 +116,8 @@
     "load_names_from_reflexive": {"address": "0x481D30", "replace": true, "arguments": ["0", "4", "8"], "comments": "loads names of stuff into an array?"},
 
     "store_engine_global_in_hs_global": {"address": "0x489480", "replace": true, "arguments": ["eax"]},
-    "retrieve_engine_global_from_hs_global": {"address": "0x4895F0", "replace": true, "arguments": ["eax"]}
+    "retrieve_engine_global_from_hs_global": {"address": "0x4895F0", "replace": true, "arguments": ["eax"]},
+
+    "convert_hsc_value": {"address": "0x4892D0", "replace": false, "use_return_value": true, "arguments": ["ecx", "edx", "eax"]},
+    "load_node_value": {"address": "0x488B20", "replace": true, "arguments": ["eax", "edx", "ebx"]}
 }
