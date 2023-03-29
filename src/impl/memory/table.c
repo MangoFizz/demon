@@ -1,3 +1,4 @@
+#include <windows.h>
 #include <string.h>
 
 #include "table.h"
@@ -35,22 +36,37 @@ void *iterate_table(TableIterator *iterator) {
     return NULL;
 }
 
-void *create_table(const char *name, uint16_t maximum_count, uint16_t element_size) {
-    GenericTable *table;
+#define CALCULATE_ALLOCATION_SIZE(maximum_count, element_size) (sizeof(GenericTable) + (size_t)(maximum_count) * (size_t)(element_size))
+#define INIT_TABLE_NEXT_ID(table) table->next_id = *(uint16_t *)(table->name) | 0x8000
 
-    uint32_t allocation_amount = sizeof(*table) + (size_t)(maximum_count) * (size_t)(element_size);
-    table = (GenericTable *)(allocate_heap(allocation_amount));
-    memset(table, 0, allocation_amount);
-
+static void init_table(GenericTable *table, const char *name, uint16_t maximum_count, uint16_t element_size) {
+    memset(table, 0, CALCULATE_ALLOCATION_SIZE(maximum_count, element_size));
     strncpy(table->name, name, sizeof(table->name) - 1);
     table->max_elements = maximum_count;
     table->element_size = element_size;
     table->data_fourcc = 0x64407440;
     table->first_element = (void *)(table) + sizeof(*table);
-    table->next_id = *(uint16_t *)(table->name) | 0x8000;
+    INIT_TABLE_NEXT_ID(table);
+}
+
+void *create_table(const char *name, uint16_t maximum_count, uint16_t element_size) {
+    size_t allocation_amount = CALCULATE_ALLOCATION_SIZE(maximum_count, element_size);
+    GenericTable *table = (GenericTable *)(allocate_heap(allocation_amount));
+    init_table(table, name, maximum_count, element_size);
 
     // TODO: The game makes some call to 0x004CDF80, but this seems to corrupt the stack?? More investigation needs done here.
     // It isn't necessary to allocate this structure, but I don't like it.
+
+    return table;
+}
+
+void *create_table_global_heap(const char *name, uint16_t maximum_count, uint16_t element_size) {
+    size_t allocation_amount = CALCULATE_ALLOCATION_SIZE(maximum_count, element_size);
+    GenericTable *table = (GenericTable *)(GlobalAlloc(0, allocation_amount));
+    if(table == NULL) {
+        CRASHF_DEBUG("create_table_global_heap(): Failed to allocate %zu bytes for table '%s'", allocation_amount, name);
+    }
+    init_table(table, name, maximum_count, element_size);
 
     return table;
 }
@@ -76,7 +92,7 @@ void clear_table(GenericTable *table) {
     table->unknown_2c = 0;
     table->current_size = 0;
     table->count = 0;
-    table->next_id = *(uint16_t *)(table->name) | 0x8000;
+    INIT_TABLE_NEXT_ID(table);
 }
 
 void *get_table_element(GenericTable *table, TableID id) {

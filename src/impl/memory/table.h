@@ -149,7 +149,18 @@ typedef bool (*table_iterator_callback)(const TableIterator *iterator, void *ite
 void iterate_table_simple(void *table, table_iterator_callback callback, void *user_data);
 
 /**
- * Allocate a table of objects. See memory/table.h for the table structure.
+ * Allocate a table of objects using the global heap (must be freed with GlobalFree).
+ *
+ * @param name          name of table
+ * @param maximum_count maximum element count
+ * @param element_size  size of each element
+ *
+ * @return table
+ */
+void *create_table_global_heap(const char *name, uint16_t maximum_count, uint16_t element_size);
+
+/**
+ * Allocate a table of objects.
  *
  * @param name          name of table
  * @param maximum_count maximum element count

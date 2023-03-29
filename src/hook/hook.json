@@ -37,6 +37,7 @@
 
     "unknown_function_5092f0": {"address": "0x5092F0", "replace": true, "arguments": ["ecx", "eax"], "comment": "appears to do something with portals/render culling"},
 
+    "create_table_global_heap": {"address": "0x4CE020", "replace": true, "use_return_value": true, "arguments": ["0", "4", "ebx"]},
     "create_table": {"address": "0x5331D0", "replace": true, "use_return_value": true, "arguments": ["0", "4", "ebx"]},
     "iterate_table": {"address": "0x4CE280", "replace": true, "use_return_value": true, "arguments": ["edi"]},
     "get_table_element": {"address": "0x4CE330", "replace": true, "use_return_value": true, "arguments": ["esi", "edx"]},
