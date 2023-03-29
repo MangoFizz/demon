@@ -48,3 +48,8 @@ void *allocate_heap(size_t size) {
     *alloc_size += size;
     return allocated;
 }
+
+void set_to_ffffffff(uint32_t *thing_to_set_to_ffffffff) {
+    // Yep. This is what this function does. It probably had more functionality, but it was ifdef'd away.
+    *thing_to_set_to_ffffffff = 0xFFFFFFFF;
+}

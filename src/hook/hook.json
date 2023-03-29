@@ -44,6 +44,8 @@
     "clear_table": {"address": "0x4CE230", "replace": true, "arguments": ["esi"]},
     "init_table_element": {"address": "0x4CE370", "replace": true, "arguments": ["edx", "esi"]},
 
+    "set_to_ffffffff": {"address": "0x4CDF70", "replace": true, "arguments": ["0"]},
+
     "process_tick": {"address": "0x45B810", "replace": true, "arguments": ["0"]},
 
     "unknown_function_4E3680" : { "address": "0x4E3680", "replace": false, "arguments": ["0"] },
