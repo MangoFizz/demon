@@ -122,5 +122,7 @@
     "load_node_value": {"address": "0x488B20", "replace": true, "arguments": ["eax", "edx", "ebx"]},
 
     "conversion_node_thingy": {"address": "0x488C00", "replace": false, "arguments": ["eax", "ecx"]},
-    "set_global": {"address": "0x487590", "replace": true, "arguments": ["0", "4", "8"]}
+    "set_global": {"address": "0x487590", "replace": true, "arguments": ["0", "4", "8"]},
+
+    "clear_table": {"address": "0x4CE230", "replace": true, "arguments": ["esi"]}
 }

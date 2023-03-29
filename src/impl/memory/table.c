@@ -46,6 +46,7 @@ void *create_table(const char *name, uint16_t maximum_count, uint16_t element_si
     table->element_size = element_size;
     table->data_fourcc = 0x64407440;
     table->first_element = (void *)(table) + sizeof(*table);
+    table->next_id = *(uint16_t *)(table->name) | 0x8000;
 
     // TODO: The game makes some call to 0x004CDF80, but this seems to corrupt the stack?? More investigation needs done here.
     // It isn't necessary to allocate this structure, but I don't like it.
@@ -62,4 +63,17 @@ void iterate_table_simple(void *table, table_iterator_callback callback, void *u
             return;
         }
     }
+}
+
+void clear_table(GenericTable *table) {
+    size_t count = table->max_elements;
+
+    for(size_t i = 0; i < count; i++) {
+        *(uint16_t *)(table->first_element + i * table->element_size) = 0;
+    }
+
+    table->unknown_2c = 0;
+    table->current_size = 0;
+    table->count = 0;
+    table->next_id = *(uint16_t *)(table->name) | 0x8000;
 }

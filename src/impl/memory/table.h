@@ -62,12 +62,17 @@ typedef uint32_t TableID;
     /** Size of each element in the table */ \
     uint16_t element_size; \
     \
-    uint8_t unknown1[4]; \
+    /** Unknown */ \
+    uint8_t unknown_24; \
+    \
+    /** Unknown? */ \
+    uint8_t unknown1[3]; \
     \
     /** d@t@ fourcc - unused */ \
     uint32_t data_fourcc; \
     \
-    uint8_t unknown2[2]; \
+    /** Unknown what this does */ \
+    uint16_t unknown_2c; \
     \
     /** Current size of the table, even including elements not active */ \
     uint16_t current_size; \
@@ -75,7 +80,7 @@ typedef uint32_t TableID;
     /** Number of elements that are active */ \
     uint16_t count; \
     \
-    /** ID of the next element to be occupied (probably) */ \
+    /** Salt of the next element to be occupied (probably) */ \
     uint16_t next_id; \
     \
     /** Pointer to first element in the table */ \
@@ -153,5 +158,12 @@ void iterate_table_simple(void *table, table_iterator_callback callback, void *u
  * @return table
  */
 void *create_table(const char *name, uint16_t maximum_count, uint16_t element_size);
+
+/**
+ * Clear the contents of a table.
+ *
+ * @param table table pointer
+ */
+void clear_table(GenericTable *table);
 
 #endif
