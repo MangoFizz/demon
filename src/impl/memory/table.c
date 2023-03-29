@@ -105,3 +105,11 @@ void *get_table_element(GenericTable *table, TableID id) {
     // Done!
     return element;
 }
+
+void init_table_element(GenericTable *table, void *new_element_location) {
+    memset(new_element_location, 0, table->element_size);
+    *(uint16_t *)(new_element_location) = (table->next_id)++;
+    if(table->next_id == 0) {
+        table->next_id = 0x8000;
+    }
+}

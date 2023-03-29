@@ -32,15 +32,16 @@
     "switch_bsp_004424B0": {"address": "0x4424B0", "use_return_value": true, "arguments": ["edi"], "comment": "subroutine used in switching bsps"},
     "switch_bsp_00539370": {"address": "0x539370", "comment": "subroutine used in switching bsps"},
 
-    "create_table": {"address": "0x5331D0", "replace": true, "use_return_value": true, "arguments": ["0", "4", "ebx"]},
-
     "command_is_allowed": {"address": "0x481BC0", "replace": true, "use_return_value": true, "arguments": ["ebx"]},
     "command_is_allowed_check_flag": {"address": "0x481B70", "replace": "forbid", "use_return_value": true, "arguments": ["eax", "0"] },
 
     "unknown_function_5092f0": {"address": "0x5092F0", "replace": true, "arguments": ["ecx", "eax"], "comment": "appears to do something with portals/render culling"},
 
+    "create_table": {"address": "0x5331D0", "replace": true, "use_return_value": true, "arguments": ["0", "4", "ebx"]},
     "iterate_table": {"address": "0x4CE280", "replace": true, "use_return_value": true, "arguments": ["edi"]},
     "get_table_element": {"address": "0x4CE330", "replace": true, "use_return_value": true, "arguments": ["esi", "edx"]},
+    "clear_table": {"address": "0x4CE230", "replace": true, "arguments": ["esi"]},
+    "init_table_element": {"address": "0x4CE370", "replace": true, "arguments": ["edx", "esi"]},
 
     "process_tick": {"address": "0x45B810", "replace": true, "arguments": ["0"]},
 
@@ -123,7 +124,5 @@
     "load_node_value": {"address": "0x488B20", "replace": true, "arguments": ["eax", "edx", "ebx"]},
 
     "conversion_node_thingy": {"address": "0x488C00", "replace": false, "arguments": ["eax", "ecx"]},
-    "set_global": {"address": "0x487590", "replace": true, "arguments": ["0", "4", "8"]},
-
-    "clear_table": {"address": "0x4CE230", "replace": true, "arguments": ["esi"]}
+    "set_global": {"address": "0x487590", "replace": true, "arguments": ["0", "4", "8"]}
 }

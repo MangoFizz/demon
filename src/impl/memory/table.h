@@ -169,11 +169,21 @@ void clear_table(GenericTable *table);
 /**
  * Get the element of a table by its ID.
  *
+ * If the input ID has a salt of 0x0000, then the salt will not be checked.
+ *
  * @param table table pointer
- * @param id    id union
+ * @param id    id
  *
  * @return pointer if ID corresponds to a valid table index, NULL if not
  */
 void *get_table_element(GenericTable *table, TableID id);
+
+/**
+ * Initialize a table element.
+ *
+ * @param table                table pointer
+ * @param new_element_location pointer to the new element
+ */
+void init_table_element(GenericTable *table, void *new_element_location);
 
 #endif
