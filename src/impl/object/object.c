@@ -3,9 +3,6 @@
 #include <math.h>
 #include "object.h"
 
-#include <stdio.h>
-
-#include "../console/console.h"
 #include "ringhopper/object.h"
 
 typedef struct ObjectTableEntry {
@@ -25,34 +22,9 @@ static ObjectTable **object_table = (ObjectTable **)(0x84F850);
 DynamicObjectBase *resolve_object_id_to_data(uint32_t flag_check, TableID object_id) {
     ObjectTable *halo_object_table = *object_table;
 
-    // Split it
-    uint16_t input_index = ID_INDEX_PART(object_id);
-    uint16_t input_salt = ID_SALT_PART(object_id);
-
-    // Is it null?
-    if(ID_IS_NULL(object_id)) {
-        return NULL;
-    }
-
-    // Check if out of bounds.
-    //
-    // NOTE: The original code does a signed check which isn't necessary here.
-    if(input_index >= halo_object_table->max_elements) {
-        console_printf_debug_err("Tried to access dynamic object #%u when there are #%u max element(s)", input_index, halo_object_table->max_elements);
-        return NULL;
-    }
-
-    // Get the offset
-    size_t offset = (uint32_t)(input_index) * halo_object_table->element_size;
-    ObjectTableEntry *table_entry = (ObjectTableEntry *)((uintptr_t)(halo_object_table->first_element) + offset);
-
-    // Is the salt set in the table? If not, then this entry is unused right now.
-    if(table_entry->salt == 0) {
-        return NULL;
-    }
-
-    // Does the salt match?
-    if(input_salt != 0 && table_entry->salt != input_salt) {
+    // Get the object entry
+    ObjectTableEntry *table_entry = (ObjectTableEntry *)(get_table_element((GenericTable *)(halo_object_table), object_id));
+    if(table_entry == NULL) {
         return NULL;
     }
 

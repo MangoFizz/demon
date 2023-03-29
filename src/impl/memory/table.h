@@ -166,4 +166,14 @@ void *create_table(const char *name, uint16_t maximum_count, uint16_t element_si
  */
 void clear_table(GenericTable *table);
 
+/**
+ * Get the element of a table by its ID.
+ *
+ * @param table table pointer
+ * @param id    id union
+ *
+ * @return pointer if ID corresponds to a valid table index, NULL if not
+ */
+void *get_table_element(GenericTable *table, TableID id);
+
 #endif

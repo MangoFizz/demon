@@ -40,6 +40,7 @@
     "unknown_function_5092f0": {"address": "0x5092F0", "replace": true, "arguments": ["ecx", "eax"], "comment": "appears to do something with portals/render culling"},
 
     "iterate_table": {"address": "0x4CE280", "replace": true, "use_return_value": true, "arguments": ["edi"]},
+    "get_table_element": {"address": "0x4CE330", "replace": true, "use_return_value": true, "arguments": ["esi", "edx"]},
 
     "process_tick": {"address": "0x45B810", "replace": true, "arguments": ["0"]},
 

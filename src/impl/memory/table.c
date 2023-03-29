@@ -2,6 +2,7 @@
 
 #include "table.h"
 #include "memory.h"
+#include "../exception/exception.h"
 
 #define ITERATOR_FOURCC 0x69746572 // 'iter'
 
@@ -76,4 +77,31 @@ void clear_table(GenericTable *table) {
     table->current_size = 0;
     table->count = 0;
     table->next_id = *(uint16_t *)(table->name) | 0x8000;
+}
+
+void *get_table_element(GenericTable *table, TableID id) {
+    // ID is null?
+    if(ID_IS_NULL(id)) {
+        return NULL;
+    }
+
+    size_t index = ID_INDEX_PART(id);
+    size_t max_elements = table->max_elements;
+
+    // Out of bounds? (If so then something really needs fixed!)
+    if(index >= max_elements) {
+        CRASHF_DEBUG("Out-of-bounds access of element %zu / %zu for table 0x%08X (%s) with ID 0x%08X", index, max_elements, (uintptr_t)(table), table->name, id);
+        return NULL;
+    }
+
+    // Match the salt
+    uint16_t salt = ID_SALT_PART(id);
+    void *element = table->first_element + index * table->element_size;
+    uint16_t element_salt = *(uint16_t *)(element);
+    if(element_salt == 0 || (salt != 0 && element_salt != salt)) {
+        return NULL;
+    }
+
+    // Done!
+    return element;
 }
