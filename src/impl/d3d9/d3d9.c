@@ -52,3 +52,9 @@ uint32_t on_mouse_hover_unfocused(void) {
     // called whenever mousing over the window when it is not in focus. unknown what it does
     return *should_minimize_when_focus_is_lost && get_d3d9_device();
 }
+
+void assign_d3d_vertex_functions(void) {
+    *(void **)(0x7AFCA4) = (void *)(0x51DA50);
+    *(void **)(0x7AFCA8) = (void *)(0x51DD80);
+    *(void **)(0x7AFCA0) = (void *)(0x51E7B0);
+}
