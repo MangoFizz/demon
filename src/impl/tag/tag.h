@@ -27,13 +27,22 @@ _Static_assert(sizeof(TagReference) == 0x10);
 void *get_tag_data(TableID tag_id);
 
 /**
- * Get the path for the tag
+ * Get the path for the tag.
  *
  * @param tag_id tag id
  *
  * @return pointer to tag path
  */
 const char *get_tag_path(TableID tag_id);
+
+/**
+ * Get the group FourCC for the tag.
+ *
+ * @param tag_id tag id
+ *
+ * @return group fourcc
+ */
+FourCC get_tag_group_fourcc(TableID tag_id);
 
 /**
  * Lookup the tag.

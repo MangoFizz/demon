@@ -42,6 +42,10 @@ const char *get_tag_path(TableID tag_id) {
     return (*tag_data_header_loaded)->tags[ID_INDEX_PART(tag_id)].path;
 }
 
+FourCC get_tag_group_fourcc(TableID tag_id) {
+    return (*tag_data_header_loaded)->tags[ID_INDEX_PART(tag_id)].primary_group;
+}
+
 TableID lookup_tag(const char *path, FourCC group) {
     if(!*map_loaded) {
         return NULL_ID;

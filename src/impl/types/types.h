@@ -57,6 +57,12 @@ typedef struct VectorXY {
 } VectorXY;
 _Static_assert(sizeof(VectorXY) == 0x8);
 
+typedef struct VectorXYInt {
+    int16_t x;
+    int16_t y;
+} VectorXYInt;
+_Static_assert(sizeof(VectorXYInt) == 0x4);
+
 typedef struct VectorIJK {
     float i;
     float j;

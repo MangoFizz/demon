@@ -42,7 +42,7 @@ def make_field(s):
 
         return [a[0] + b[0], a[1] + b[1]]
 
-    name = s["name"].replace(" ", "_").replace("'","")
+    name = s["name"].replace(" ", "_").replace("'","").replace("-","_")
     if name[0].isnumeric():
         name = "_" + name
 
@@ -162,7 +162,7 @@ for s in j:
                 name = f
             else:
                 name = f["name"]
-            struct_data = struct_data + "    {}_{} = {},\n".format(s["name"], name.replace(" ", "_").replace("'", ""), i)
+            struct_data = struct_data + "    {}_{} = {},\n".format(s["name"], name.replace(" ", "_").replace("'", "").replace("-", "_"), i)
         struct_data = struct_data + "};\n\n"
         header_code = header_code + struct_data
     elif s["type"] == "bitfield":
@@ -173,7 +173,7 @@ for s in j:
                 name = f
             else:
                 name = f["name"]
-            struct_data = struct_data + "    {}_{} = 0x{:X},\n".format(s["name"], name.replace(" ", "_").replace("'", ""), 2**i)
+            struct_data = struct_data + "    {}_{} = 0x{:X},\n".format(s["name"], name.replace(" ", "_").replace("'", "").replace("-", "_"), 2**i)
         struct_data = struct_data + "};\n\n"
         header_code = header_code + struct_data
 

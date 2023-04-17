@@ -124,6 +124,7 @@ add_library(strings MODULE
     src/main.cpp
     src/impl/main.S
     src/impl/ai/ai.c
+    src/impl/bitmap/bitmap.c
     src/impl/bsp/collision.c
     src/impl/bsp/loading.c
     src/impl/bsp/rendering.c
