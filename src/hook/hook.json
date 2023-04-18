@@ -136,5 +136,7 @@
     "d3d_vertex_fn_fallback_fn_51EE30": {"address": "0x51EE30", "replace": "forbid", "comment": "fallback function, no longer used"},
 
     "get_bitmap_data_for_sequence": {"address": "0x43F2A0", "replace": true, "use_return_value": true, "arguments": ["eax", "0", "edi"]},
-    "get_bitmap_data": {"address": "0x43F260", "replace": true, "use_return_value": true, "arguments": ["eax", "edx"]}
+    "get_bitmap_data": {"address": "0x43F260", "replace": true, "use_return_value": true, "arguments": ["eax", "edx"]},
+
+    "call_actor_shooting_function": {"address": "0x409E70", "replace": true, "arguments": ["ecx"]}
 }
