@@ -175,13 +175,15 @@ bool compile_global(TableID node_id) {
     ScenarioScriptNode *node = nodes->first_element + node_index;
 
     // Does the global exist?
-    const char *node_name = string_data + node->string_offset;
+    size_t string_offset = node->string_offset;
+    const char *node_name = string_data + string_offset;
+
     GlobalID id = get_global_id(node_name);
     node->data.l = (int16_t)id;
     if(id == 0xFFFF) {
         if(*(uint8_t *)(0x6A8988) != 0) {
             *(const char **)(0x6A887C) = "Invalid variable name!";
-            *(const char **)(0x6A8880) = node_name;
+            *(uint32_t *)(0x6A8880) = string_offset;
             CRASHF_DEBUG("Global '%s' wasn't found!", node_name);
         }
         return false;
@@ -190,16 +192,16 @@ bool compile_global(TableID node_id) {
     // Make sure the type is valid?
     enum ScenarioScriptValueType type = get_global_type(id);
     enum ScenarioScriptValueType expected = node->type;
-    if(expected != ScenarioScriptValueType_unparsed) {
-        if(!value_types_can_be_converted(type, expected)) {
-            *(const char **)(0x6A887C) = "Invalid variable type!";
-            *(const char **)(0x6A8880) = node_name;
-            console_printf_debug_err("Error: Global '%s' cannot be converted from %s to %s", node_name, get_name_of_value_type(type), get_name_of_value_type(expected));
-            return false;
-        }
+    if(expected == ScenarioScriptValueType_unparsed) {
+        node->type = type;
+    }
+    else if(!value_types_can_be_converted(type, expected)) {
+        *(const char **)(0x6A887C) = "Invalid variable type!";
+        *(uint32_t *)(0x6A8880) = string_offset;
+        console_printf_debug_err("Error: Global '%s' cannot be converted from %s to %s", node_name, get_name_of_value_type(type), get_name_of_value_type(expected));
+        return false;
     }
 
-    node->type = type;
     node->flags |= 4;
     return true;
 }
