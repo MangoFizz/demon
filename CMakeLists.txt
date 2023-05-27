@@ -145,6 +145,7 @@ add_library(strings MODULE
     src/impl/memory/table.c
     src/impl/multiplayer/item_collection.c
     src/impl/multiplayer/mode.c
+    src/impl/multiplayer/netcode.c
     src/impl/object/object.c
     src/impl/player/player.c
     src/impl/script/global.c
