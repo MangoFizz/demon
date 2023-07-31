@@ -42,7 +42,7 @@ def make_field(s):
 
         return [a[0] + b[0], a[1] + b[1]]
 
-    name = s["name"].replace(" ", "_").replace("'","").replace("-","_")
+    name = s["name"].replace(" ", "_").replace("'","").replace("-","_").replace("(","").replace(")","")
     if name[0].isnumeric():
         name = "_" + name
 
