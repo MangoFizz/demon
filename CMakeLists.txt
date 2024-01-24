@@ -129,7 +129,10 @@ add_library(strings MODULE
     src/impl/bsp/loading.c
     src/impl/bsp/rendering.c
     src/impl/console/console.c
+    src/impl/crypto/md5.c
+    src/impl/crypto/xtea.c
     src/impl/d3d9/d3d9.c
+    src/impl/d3d9/d3dx9.c
     src/impl/dinput/dinput.c
     src/impl/dsound/dsound.c
     src/impl/engine_loop/tick.c
@@ -148,6 +151,7 @@ add_library(strings MODULE
     src/impl/multiplayer/netcode.c
     src/impl/object/object.c
     src/impl/player/player.c
+    src/impl/rasterizer/effect.c
     src/impl/script/global.c
     src/impl/string/string.c
     src/impl/rng/rng.c

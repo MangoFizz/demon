@@ -281,17 +281,19 @@ void *Hook::write_hook() {
         // Cleanup stack
         //
         // add esp, <stack_to_cleanup>
-        std::size_t stack_to_cleanup = stack_offset - starting_stack_offset;
-        if(stack_to_cleanup != 0) {
-            if(stack_to_cleanup < 0x80) {
-                HOOK_PUSH_BYTE(0x83);
-                HOOK_PUSH_BYTE(0xC4);
-                HOOK_PUSH_BYTE(stack_to_cleanup & 0xFF);
-            }
-            else {
-                HOOK_PUSH_BYTE(0x81);
-                HOOK_PUSH_BYTE(0xC4);
-                HOOK_PUSH_DWORD(stack_to_cleanup);
+        if(!this->cleans_stack) {
+            std::size_t stack_to_cleanup = stack_offset - starting_stack_offset;
+            if(stack_to_cleanup != 0) {
+                if(stack_to_cleanup < 0x80) {
+                    HOOK_PUSH_BYTE(0x83);
+                    HOOK_PUSH_BYTE(0xC4);
+                    HOOK_PUSH_BYTE(stack_to_cleanup & 0xFF);
+                }
+                else {
+                    HOOK_PUSH_BYTE(0x81);
+                    HOOK_PUSH_BYTE(0xC4);
+                    HOOK_PUSH_DWORD(stack_to_cleanup);
+                }
             }
         }
 

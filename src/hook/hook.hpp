@@ -76,6 +76,14 @@ namespace Demon {
             }
 
             /**
+             * Specify that the callee cleans the stack.
+             */
+            Hook &callee_cleans_stack() {
+                this->cleans_stack = true;
+                return *this;
+            }
+
+            /**
              * Write the hook.
              *
              * @return hook address
@@ -106,6 +114,7 @@ namespace Demon {
             HookType hook_type;
             bool returns_64_bit_value = false;
             bool uses_return_value = false;
+            bool cleans_stack = false;
             bool forbidden = false;
             bool stubbed = false;
             const char *name;

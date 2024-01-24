@@ -46,6 +46,9 @@ for hook in hooks:
     if "return_64_bit_value" in hook_info and hook_info["return_64_bit_value"]:
         hook_fn += "\n            .return_64_bit_value()"
 
+    if "callee_cleans_stack" in hook_info and hook_info["callee_cleans_stack"]:
+        hook_fn += "\n            .callee_cleans_stack()"
+
     hook_fn += "\n            .write_hook();\n"
 
     if "flag" in hook_info:
