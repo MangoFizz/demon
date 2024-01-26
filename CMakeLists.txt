@@ -152,6 +152,7 @@ add_library(strings MODULE
     src/impl/object/object.c
     src/impl/player/player.c
     src/impl/rasterizer/effect.c
+    src/impl/rasterizer/shader.c
     src/impl/script/global.c
     src/impl/string/string.c
     src/impl/rng/rng.c
