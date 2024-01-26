@@ -108,7 +108,7 @@ bool rasterizer_load_effects(void) {
     bool success = read_shader_file("shaders/fx.bin", &buffer, &buffer_size);
     if(!success) {
         return false;
-    }    
+    }
 
     int i = 0;
     char *buffer_pointer = buffer;
@@ -154,11 +154,13 @@ bool rasterizer_init_effects(void) {
     HRESULT res = D3DXCreateEffectPool(rasterizer_effect_pool);
     if(res != D3D_OK) {
         CRASHF_DEBUG("D3DXCreateEffectPool failed with error code %08X", res);
+        return false;
     }
 
     bool success = rasterizer_load_effects();
     if(!success) {
         CRASHF_DEBUG("Failed to load shaders/fx.bin");
+        return false;
     }
 
     SetThreadLocale(previous_locale);
@@ -262,4 +264,11 @@ bool rasterizer_init_effects(void) {
     }
 
     return true;
+}
+
+RasterizerEffect *get_rasterizer_effect(size_t index) {
+    if(index >= RASTERIZER_EFFECTS_COUNT) {
+        return NULL;
+    }
+    return rasterizer_effects + index;
 }
