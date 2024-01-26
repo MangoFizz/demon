@@ -154,5 +154,6 @@
     "rasterizer_create_effect": { "address": "0x52AAA0", "replace": true, "arguments": ["eax", "0", "4"], "use_return_value": true },
     "rasterizer_load_effect_texture_parameters": { "address": "0x52A8A0", "replace": true, "arguments": ["eax"], "use_return_value": true },
     "rasterizer_init_effects": { "address": "0x52ABD0", "replace": true, "use_return_value": true },
-    "rasterizer_load_vertex_shaders": { "address": "0x52B800", "replace": true, "use_return_value": true }
+    "rasterizer_load_vertex_shaders": { "address": "0x52B800", "replace": true, "use_return_value": true },
+    "rasterizer_init_vertex_shaders": { "address": "0x52B920", "replace": true, "use_return_value": true }
 }

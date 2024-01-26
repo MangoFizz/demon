@@ -51,3 +51,23 @@ bool rasterizer_load_vertex_shaders(void) {
 
     return true;
 }
+
+bool rasterizer_init_vertex_shaders(void) {
+    size_t i = 0;
+    while(i < RASTERIZER_VERTEX_SHADER_COUNT) {
+        RasterizerVertexShader *shader = &rasterizer_vertex_shaders[i];
+        if(shader->shader != NULL) {
+            IDirect3DVertexShader9_Release(shader->shader);
+            shader->shader = NULL;
+        }
+        i++;
+    }
+
+    bool success = rasterizer_load_vertex_shaders();
+    if(!success) {
+        CRASHF_DEBUG("Failed to load vsh.bin");
+        return false;
+    }
+
+    return true;
+}
