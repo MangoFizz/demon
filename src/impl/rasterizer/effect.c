@@ -171,7 +171,7 @@ bool rasterizer_init_effects(void) {
 
     effect_entry = &rasterizer_effects[0];
     effect = effect_entry->effect;
-    params = GlobalAlloc(0, 0x18);
+    params = GlobalAlloc(0, sizeof(D3DXHANDLE) * 6);
     params[0] = ID3DXEffect_GetParameterByName(effect, NULL, "c_material_color");
     params[1] = ID3DXEffect_GetParameterByName(effect, NULL, "c_plasma_animation");
     params[2] = ID3DXEffect_GetParameterByName(effect, NULL, "c_primary_color");
@@ -183,7 +183,7 @@ bool rasterizer_init_effects(void) {
     for(size_t i = 1; i <= 3; i++) {
         effect_entry = &rasterizer_effects[i];
         effect = effect_entry->effect;
-        params = GlobalAlloc(0, 0x04);
+        params = GlobalAlloc(0, sizeof(D3DXHANDLE));
         params[0] = ID3DXEffect_GetParameterByName(effect, NULL, "c_material_color");
         effect_entry->params = params;
     }
@@ -191,7 +191,7 @@ bool rasterizer_init_effects(void) {
     for(size_t i = 32; i <= 34; i++) {
         effect_entry = &rasterizer_effects[i];
         effect = effect_entry->effect;
-        params = GlobalAlloc(0, 0x0C);
+        params = GlobalAlloc(0, sizeof(D3DXHANDLE) * 3);
         params[0] = ID3DXEffect_GetParameterByName(effect, NULL, "c_eye_forward");
         params[1] = ID3DXEffect_GetParameterByName(effect, NULL, "c_view_perpendicular_color");
         params[2] = ID3DXEffect_GetParameterByName(effect, NULL, "c_view_parallel_color");
@@ -201,7 +201,7 @@ bool rasterizer_init_effects(void) {
     for(size_t i = 37; i <= 39; i++) {
         effect_entry = &rasterizer_effects[i];
         effect = effect_entry->effect;
-        params = GlobalAlloc(0, 0x0C);
+        params = GlobalAlloc(0, sizeof(D3DXHANDLE) * 3);
         params[0] = ID3DXEffect_GetParameterByName(effect, NULL, "c_eye_forward");
         params[1] = ID3DXEffect_GetParameterByName(effect, NULL, "c_view_perpendicular_color");
         params[2] = ID3DXEffect_GetParameterByName(effect, NULL, "c_view_parallel_color");
@@ -211,7 +211,7 @@ bool rasterizer_init_effects(void) {
     for(size_t i = 40; i <= 43; i++) {
         effect_entry = &rasterizer_effects[i];
         effect = effect_entry->effect;
-        params = GlobalAlloc(0, 0x10);
+        params = GlobalAlloc(0, sizeof(D3DXHANDLE) * 4);
         params[0] = ID3DXEffect_GetParameterByName(effect, NULL, "c_specular_brightness");
         params[1] = ID3DXEffect_GetParameterByName(effect, NULL, "c_view_perpendicular_color");
         params[2] = ID3DXEffect_GetParameterByName(effect, NULL, "c_view_parallel_color");
@@ -220,7 +220,7 @@ bool rasterizer_init_effects(void) {
     }
 
     effect_entry = &rasterizer_effects[106];
-    params = GlobalAlloc(0, 0x10);
+    params = GlobalAlloc(0, sizeof(D3DXHANDLE) * 4);
     effect = effect_entry->effect;
     params[0] = ID3DXEffect_GetParameterByName(effect, NULL, "c_eye_forward");
     params[1] = ID3DXEffect_GetParameterByName(effect, NULL, "c_view_perpendicular_color");
@@ -230,7 +230,7 @@ bool rasterizer_init_effects(void) {
 
     effect_entry = &rasterizer_effects[107];
     effect = effect_entry->effect;
-    params = GlobalAlloc(0, 0x0C);
+    params = GlobalAlloc(0, sizeof(D3DXHANDLE) * 3);
     params[0] = ID3DXEffect_GetParameterByName(effect, NULL, "c_eye_forward");
     params[1] = ID3DXEffect_GetParameterByName(effect, NULL, "c_view_perpendicular_color");
     params[2] = ID3DXEffect_GetParameterByName(effect, NULL, "c_view_parallel_color");
@@ -238,7 +238,7 @@ bool rasterizer_init_effects(void) {
 
     effect_entry = &rasterizer_effects[108];
     effect = effect_entry->effect;
-    params = GlobalAlloc(0, 0x0C);
+    params = GlobalAlloc(0, sizeof(D3DXHANDLE) * 3);
     params[0] = ID3DXEffect_GetParameterByName(effect, NULL, "c_eye_forward");
     params[1] = ID3DXEffect_GetParameterByName(effect, NULL, "c_view_perpendicular_color");
     params[2] = ID3DXEffect_GetParameterByName(effect, NULL, "c_view_parallel_color");
@@ -246,7 +246,7 @@ bool rasterizer_init_effects(void) {
 
     effect_entry = &rasterizer_effects[114];
     effect = effect_entry->effect;
-    params = GlobalAlloc(0, 0x08);
+    params = GlobalAlloc(0, sizeof(D3DXHANDLE) * 2);
     params[0] = ID3DXEffect_GetParameterByName(effect, NULL, "c_desaturation_tint");
     params[1] = ID3DXEffect_GetParameterByName(effect, NULL, "c_light_enhancement");
     effect_entry->params = params;
@@ -254,7 +254,7 @@ bool rasterizer_init_effects(void) {
     for(size_t i = 116; i <= 121; i++) {
         effect_entry = &rasterizer_effects[i];
         effect = effect_entry->effect;
-        params = GlobalAlloc(0, 0x14);
+        params = GlobalAlloc(0, sizeof(D3DXHANDLE) * 5);
         params[0] = ID3DXEffect_GetParameterByName(effect, NULL, "c_primary_change_color");
         params[1] = ID3DXEffect_GetParameterByName(effect, NULL, "c_fog_color_correction_0");
         params[2] = ID3DXEffect_GetParameterByName(effect, NULL, "c_fog_color_correction_E");
