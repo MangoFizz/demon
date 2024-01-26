@@ -14,10 +14,7 @@
 typedef struct RasterizerEffect {
     ID3DXEffect *effect;
     uint32_t unknown_1;
-    D3DXHANDLE texture_0;
-    D3DXHANDLE texture_1;
-    D3DXHANDLE texture_2;
-    D3DXHANDLE texture_3;
+    D3DXHANDLE textures[4];
     D3DXHANDLE *params;
     uint32_t unknown_2;
 } RasterizerEffect;

@@ -94,10 +94,10 @@ bool rasterizer_load_effect_texture_parameters(size_t effect_index) {
         }
     }
 
-    effect_entry->texture_0 = ID3DXEffect_GetParameterByName(effect, NULL, "Texture0");
-    effect_entry->texture_1 = ID3DXEffect_GetParameterByName(effect, NULL, "Texture1");
-    effect_entry->texture_2 = ID3DXEffect_GetParameterByName(effect, NULL, "Texture2");
-    effect_entry->texture_3 = ID3DXEffect_GetParameterByName(effect, NULL, "Texture3");
+    effect_entry->textures[0] = ID3DXEffect_GetParameterByName(effect, NULL, "Texture0");
+    effect_entry->textures[1] = ID3DXEffect_GetParameterByName(effect, NULL, "Texture1");
+    effect_entry->textures[2] = ID3DXEffect_GetParameterByName(effect, NULL, "Texture2");
+    effect_entry->textures[3] = ID3DXEffect_GetParameterByName(effect, NULL, "Texture3");
 
     return version_found;
 }
