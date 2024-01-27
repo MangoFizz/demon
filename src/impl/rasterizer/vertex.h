@@ -5,15 +5,12 @@
 #include <stdbool.h>
 #include <d3d9.h>
 
-#define RASTERIZER_VERTEX_SHADER_COUNT 64
+#define RASTERIZER_VERTEX_DECLARATION_COUNT 20
 
-/**
- * @todo Add an enum for the vertex shader indices.
- */
-
-typedef struct RasterizerVertexShader {
-    IDirect3DVertexShader9 *shader;
-    uint32_t unknown_1;
-} RasterizerVertexShader;
+typedef struct RasterizerVertexDeclaration {
+    IDirect3DVertexDeclaration9 *declaration;
+    uint32_t fvf;
+    uint32_t fvf_2; // ??? seems to be another D3DFVF
+} RasterizerVertexDeclaration;
 
 #endif
