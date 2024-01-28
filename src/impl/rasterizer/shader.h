@@ -18,9 +18,9 @@
  */
 bool read_shader_file(const char *filename, char **buffer, size_t *bytes_read);
 
-/**
- * @todo Add an enum for the effect indices.
- */
+enum RasterizerEffectIndex {
+    RASTERIZER_SCREEN_EFFECT_INDEX = 114,
+};
 
 typedef struct RasterizerEffect {
     ID3DXEffect *effect;
@@ -75,6 +75,13 @@ bool rasterizer_initialize_vertex_shaders(void);
  * @return A pointer to the vertex shader struct, or NULL if index is out of bounds.
  */
 RasterizerVertexShader *get_rasterizer_vertex_shader(size_t index);
+
+/**
+ * Initializes screen effects.
+ * 
+ * @return true if successful, false if not.
+ */
+bool rasterizer_initialize_screen_effects(void);
 
 typedef struct RasterizerShaderVersion {
     int8_t minor;

@@ -9,6 +9,7 @@
 
 RasterizerEffect *rasterizer_effects = (RasterizerEffect *)(0x694BC8);
 ID3DXEffectPool **rasterizer_effect_pool = (ID3DXEffectPool **)(0x70CA80);
+D3DXHANDLE *rasterizer_screen_effect_techniques = (D3DXHANDLE *)(0x70CA3C);
 D3DXMACRO rasterizer_effects_defines[2];
 uint32_t *pci_vendor_id = (uint32_t *)(0x71238C);
 uint32_t *pci_device_id = (uint32_t *)(0x712390);
@@ -446,6 +447,34 @@ D3DXHANDLE rasterizer_find_effect_technique_from_name(ID3DXEffect *effect, const
         return NULL;
     }
     return technique_handle;
+}
+
+bool rasterizer_initialize_screen_effects(void) {
+    ID3DXEffect *effect = rasterizer_effects[RASTERIZER_SCREEN_EFFECT_INDEX].effect;
+
+    #define ASSERT_TECHNIQUE_FOUND(name, index) { \
+        D3DXHANDLE technique_handle = rasterizer_find_effect_technique_from_name(effect, name); \
+        if(technique_handle == NULL) { \
+            return false; \
+        } \
+        rasterizer_screen_effect_techniques[index] = technique_handle; \
+    }
+
+    ASSERT_TECHNIQUE_FOUND("VideoOn", 0);
+    ASSERT_TECHNIQUE_FOUND("VideoOffNonConvolved", 1);
+    ASSERT_TECHNIQUE_FOUND("VideoOffConvolvedMask", 2);
+    ASSERT_TECHNIQUE_FOUND("VideoOffConvolvedMaskThreeStage", 3);
+    ASSERT_TECHNIQUE_FOUND("VideoOffConvolvedMaskFilterLightAndDesaturation", 4);
+    ASSERT_TECHNIQUE_FOUND("VideoOffConvolvedMaskFilterLight", 5);
+    ASSERT_TECHNIQUE_FOUND("VideoOffConvolvedMaskFilterDesaturation", 6);
+    ASSERT_TECHNIQUE_FOUND("VideoOffConvolved", 7);
+    ASSERT_TECHNIQUE_FOUND("VideoOffConvolvedFilterLightAndDesaturation", 8);
+    ASSERT_TECHNIQUE_FOUND("VideoOffConvolvedFilterLight", 9);
+    ASSERT_TECHNIQUE_FOUND("VideoOffConvolvedFilterDesaturation", 10);
+
+    #undef ASSERT_TECHNIQUE_FOUND
+
+    return true;
 }
 
 RasterizerVertexShader *get_rasterizer_vertex_shader(size_t index) {
