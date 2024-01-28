@@ -114,3 +114,14 @@ bool rasterizer_initialize_vertex_declarations(void) {
 
     return success;
 }
+
+void rasterizer_dispose_vertex_declarations(void) {
+    for(size_t i = 0; i < RASTERIZER_VERTEX_DECLARATION_COUNT; i++) {
+        if(vertex_declarations[i].declaration != NULL) {
+            IDirect3DVertexDeclaration9_Release(vertex_declarations[i].declaration);
+            vertex_declarations[i].declaration = NULL;
+        }
+        vertex_declarations[i].fvf = 0;
+        vertex_declarations[i].fvf_2 = 0;
+    }
+}

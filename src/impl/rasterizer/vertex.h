@@ -13,4 +13,16 @@ typedef struct RasterizerVertexDeclaration {
     uint32_t fvf_2; // ??? seems to be another D3DFVF
 } RasterizerVertexDeclaration;
 
+/**
+ * Initializes vertex declarations.
+ * 
+ * @return true if successful, false if not.
+ */
+bool rasterizer_initialize_vertex_declarations(void);
+
+/**
+ * Disposes vertex declarations.
+ */
+void rasterizer_dispose_vertex_declarations(void);
+
 #endif
