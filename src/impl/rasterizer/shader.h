@@ -20,6 +20,7 @@ bool read_shader_file(const char *filename, char **buffer, size_t *bytes_read);
 
 enum RasterizerEffectIndex {
     RASTERIZER_SCREEN_EFFECT_INDEX = 114,
+    RASTERIZER_SCREEN_FLASH_EFFECT_INDEX
 };
 
 typedef struct RasterizerEffect {
@@ -82,6 +83,13 @@ RasterizerVertexShader *get_rasterizer_vertex_shader(size_t index);
  * @return true if successful, false if not.
  */
 bool rasterizer_load_screen_effect_techniques(void);
+
+/**
+ * Loads screen flash effect techniques.
+ * 
+ * @return true if successful, false if not.
+ */
+bool rasterizer_load_screen_flash_effect_techniques(void);
 
 typedef struct RasterizerShaderVersion {
     int8_t minor;

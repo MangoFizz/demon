@@ -8,13 +8,14 @@
 #include "shader.h"
 
 RasterizerEffect *rasterizer_effects = (RasterizerEffect *)(0x694BC8);
-ID3DXEffectPool **rasterizer_effect_pool = (ID3DXEffectPool **)(0x70CA80);
+RasterizerVertexShader *rasterizer_vertex_shaders = (RasterizerVertexShader *)(0x695B08);
 D3DXHANDLE *rasterizer_screen_effect_techniques = (D3DXHANDLE *)(0x70CA3C);
+D3DXHANDLE *rasterizer_screen_flash_effect_techniques = (D3DXHANDLE *)(0x70CA68);
+ID3DXEffectPool **rasterizer_effect_pool = (ID3DXEffectPool **)(0x70CA80);
 D3DXMACRO rasterizer_effects_defines[2];
 uint32_t *pci_vendor_id = (uint32_t *)(0x71238C);
 uint32_t *pci_device_id = (uint32_t *)(0x712390);
 RasterizerShaderVersion *shader_current_version = (RasterizerShaderVersion *)(0x7B062C);
-RasterizerVertexShader *rasterizer_vertex_shaders = (RasterizerVertexShader *)(0x695B08);
 bool *shaders_disabled = (bool *)(0x7B061C); // this is set to true when -use00 is set
 const RasterizerShaderVersion minimum_shader_version = {1, 1};
 
@@ -471,6 +472,29 @@ bool rasterizer_load_screen_effect_techniques(void) {
     ASSERT_TECHNIQUE_FOUND("VideoOffConvolvedFilterLightAndDesaturation", 8);
     ASSERT_TECHNIQUE_FOUND("VideoOffConvolvedFilterLight", 9);
     ASSERT_TECHNIQUE_FOUND("VideoOffConvolvedFilterDesaturation", 10);
+
+    #undef ASSERT_TECHNIQUE_FOUND
+
+    return true;
+}
+
+bool rasterizer_load_screen_flash_effect_techniques(void) {
+    ID3DXEffect *effect = rasterizer_effects[RASTERIZER_SCREEN_FLASH_EFFECT_INDEX].effect;
+
+    #define ASSERT_TECHNIQUE_FOUND(name, index) { \
+        D3DXHANDLE technique_handle = rasterizer_find_effect_technique_from_name(effect, name); \
+        if(technique_handle == NULL) { \
+            return false; \
+        } \
+        rasterizer_screen_flash_effect_techniques[index] = technique_handle; \
+    }
+
+    ASSERT_TECHNIQUE_FOUND("FlashLighten", 0);
+    ASSERT_TECHNIQUE_FOUND("FlashDarken", 1);
+    ASSERT_TECHNIQUE_FOUND("FlashMax", 2);
+    ASSERT_TECHNIQUE_FOUND("FlashMin", 3);
+    ASSERT_TECHNIQUE_FOUND("FlashInvert", 4);
+    ASSERT_TECHNIQUE_FOUND("FlashTint", 5);
 
     #undef ASSERT_TECHNIQUE_FOUND
 

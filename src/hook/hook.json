@@ -162,5 +162,6 @@
     "rasterizer_dispose_vertex_declarations": { "address": "0x52B660", "replace": true },
     "rasterizer_dispose_effects": { "address": "0x52B080", "replace": true },
     "rasterizer_find_effect_technique_from_name": { "address": "0x52B240", "replace": true, "use_return_value": true, "arguments": ["edi", "0"] },
-    "rasterizer_load_screen_effect_techniques": { "address": "0x528860", "replace": true, "use_return_value": true }
+    "rasterizer_load_screen_effect_techniques": { "address": "0x528860", "replace": true, "use_return_value": true },
+    "rasterizer_load_screen_flash_effect_techniques": { "address": "0x529D60", "replace": true, "use_return_value": true }
 }
