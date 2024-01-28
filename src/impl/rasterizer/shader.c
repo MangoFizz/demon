@@ -93,31 +93,31 @@ bool rasterizer_create_effect(int effect_index, char *shader_bytecode, size_t by
 bool rasterizer_load_effect_texture_parameters(size_t effect_index) {
     RasterizerEffect *effect_entry = rasterizer_effects + effect_index;
     ID3DXEffect *effect = effect_entry->effect;
-    char version[40];
-    bool version_found = false;
+    char technique_name[40];
+    bool technique_found = false;
     
     if(*pci_vendor_id == 0 && *pci_device_id != 0x270D) {
         int8_t major_version = shader_current_version->major;
         int8_t minor_version = shader_current_version->minor;
         bool technique_valid = false;
         D3DXHANDLE technique_handle;
-        while(major_version >= 0 && !version_found) {
-            while(minor_version >= 0 && !version_found) {
-                sprintf(version, "ps_%d_%d", major_version, minor_version);
-                technique_handle = ID3DXEffect_GetTechniqueByName(effect, version);
+        while(major_version >= 0 && !technique_found) {
+            while(minor_version >= 0 && !technique_found) {
+                sprintf(technique_name, "ps_%d_%d", major_version, minor_version);
+                technique_handle = ID3DXEffect_GetTechniqueByName(effect, technique_name);
                 
-                version_found = technique_valid;
+                technique_found = technique_valid;
                 if(technique_handle != NULL) {
                     HRESULT res = ID3DXEffect_ValidateTechnique(effect, technique_handle);
                     technique_valid = res == D3D_OK;
                 }
                 minor_version--;
-                version_found = technique_valid;
+                technique_found = technique_valid;
             }
             major_version--;
             minor_version = 9;
         }
-        if(version_found) {
+        if(technique_found) {
             HRESULT res = ID3DXEffect_SetTechnique(effect, technique_handle);
         }
         else {
@@ -128,8 +128,8 @@ bool rasterizer_load_effect_texture_parameters(size_t effect_index) {
             else {
                 format = "TDefault_ps";
             }
-            sprintf(version, "%s", format);
-            technique_handle = ID3DXEffect_GetTechniqueByName(effect, version);
+            sprintf(technique_name, "%s", format);
+            technique_handle = ID3DXEffect_GetTechniqueByName(effect, technique_name);
             if(technique_handle == NULL) {
                 D3DXHANDLE next_technique_handle;
                 HRESULT res = ID3DXEffect_FindNextValidTechnique(effect, technique_handle, &next_technique_handle);
@@ -143,13 +143,13 @@ bool rasterizer_load_effect_texture_parameters(size_t effect_index) {
                 }
             }
         }
-        version_found = true;
+        technique_found = true;
     }
     else {
-        sprintf(version, "fallback");
-        D3DXHANDLE technique_handle = ID3DXEffect_GetTechniqueByName(effect, version);
-        version_found = technique_handle != NULL;
-        if(!version_found) {
+        sprintf(technique_name, "fallback");
+        D3DXHANDLE technique_handle = ID3DXEffect_GetTechniqueByName(effect, technique_name);
+        technique_found = technique_handle != NULL;
+        if(!technique_found) {
             return false;
         }
     }
@@ -159,7 +159,7 @@ bool rasterizer_load_effect_texture_parameters(size_t effect_index) {
     effect_entry->textures[2] = ID3DXEffect_GetParameterByName(effect, NULL, "Texture2");
     effect_entry->textures[3] = ID3DXEffect_GetParameterByName(effect, NULL, "Texture3");
 
-    return version_found;
+    return technique_found;
 }
 
 bool rasterizer_load_effects(void) {
@@ -417,6 +417,35 @@ void rasterizer_dispose_effects(void) {
         ID3DXEffectPool_Release(*rasterizer_effect_pool);
         *rasterizer_effect_pool = NULL;
     }
+}
+
+D3DXHANDLE rasterizer_find_effect_technique_from_name(ID3DXEffect *effect, const char *name) {
+    char technique_name[128];
+    int8_t major_version = shader_current_version->major;
+    int8_t minor_version = shader_current_version->minor;
+    bool technique_found = false;
+    bool technique_valid = false;
+    D3DXHANDLE technique_handle;
+    while(major_version >= 0 && !technique_found) {
+        while(minor_version >= 0 && !technique_found) {
+            sprintf(technique_name, "%s_ps_%d_%d", name, major_version, minor_version);
+            technique_handle = ID3DXEffect_GetTechniqueByName(effect, technique_name);
+            
+            technique_found = technique_valid;
+            if(technique_handle != NULL) {
+                HRESULT res = ID3DXEffect_ValidateTechnique(effect, technique_handle);
+                technique_valid = res == D3D_OK;
+            }
+            minor_version--;
+            technique_found = technique_valid;
+        }
+        major_version--;
+        minor_version = 9;
+    }
+    if(!technique_found) {
+        return NULL;
+    }
+    return technique_handle;
 }
 
 RasterizerVertexShader *get_rasterizer_vertex_shader(size_t index) {

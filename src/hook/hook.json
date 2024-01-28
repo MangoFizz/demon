@@ -160,5 +160,6 @@
 
     "rasterizer_initialize_vertex_declarations": { "address": "0x52B2D0", "replace": true, "use_return_value": true },
     "rasterizer_dispose_vertex_declarations": { "address": "0x52B660", "replace": true },
-    "rasterizer_dispose_effects": { "address": "0x52B080", "replace": true }
+    "rasterizer_dispose_effects": { "address": "0x52B080", "replace": true },
+    "rasterizer_find_effect_technique_from_name": { "address": "0x52B240", "replace": true, "use_return_value": true, "arguments": ["edi", "0"] }
 }
