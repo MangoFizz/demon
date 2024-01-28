@@ -77,11 +77,11 @@ bool rasterizer_initialize_vertex_shaders(void);
 RasterizerVertexShader *get_rasterizer_vertex_shader(size_t index);
 
 /**
- * Initializes screen effects.
+ * Loads screen effect techniques.
  * 
  * @return true if successful, false if not.
  */
-bool rasterizer_initialize_screen_effects(void);
+bool rasterizer_load_screen_effect_techniques(void);
 
 typedef struct RasterizerShaderVersion {
     int8_t minor;

@@ -449,7 +449,7 @@ D3DXHANDLE rasterizer_find_effect_technique_from_name(ID3DXEffect *effect, const
     return technique_handle;
 }
 
-bool rasterizer_initialize_screen_effects(void) {
+bool rasterizer_load_screen_effect_techniques(void) {
     ID3DXEffect *effect = rasterizer_effects[RASTERIZER_SCREEN_EFFECT_INDEX].effect;
 
     #define ASSERT_TECHNIQUE_FOUND(name, index) { \
