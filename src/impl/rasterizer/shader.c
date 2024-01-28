@@ -398,6 +398,27 @@ bool rasterizer_initialize_vertex_shaders(void) {
     return true;
 }
 
+void rasterizer_dispose_effects(void) {
+    for(size_t i = 0; i < RASTERIZER_EFFECTS_COUNT; i++) {
+        RasterizerEffect *current_entry = &rasterizer_effects[i];
+        if(current_entry->effect != NULL) {
+            ID3DXEffect_Release(current_entry->effect);
+            current_entry->effect = NULL;
+        }
+        for(size_t j = 0; j < sizeof(current_entry->textures) / sizeof(current_entry->textures[0]); j++) {
+            current_entry->textures[j] = NULL;
+        }
+        if(current_entry->params != NULL) {
+            GlobalFree(current_entry->params);
+            current_entry->params = NULL;
+        }
+    }
+    if(*rasterizer_effect_pool != NULL) {
+        ID3DXEffectPool_Release(*rasterizer_effect_pool);
+        *rasterizer_effect_pool = NULL;
+    }
+}
+
 RasterizerVertexShader *get_rasterizer_vertex_shader(size_t index) {
     if(index >= RASTERIZER_VERTEX_SHADER_COUNT) {
         return NULL;

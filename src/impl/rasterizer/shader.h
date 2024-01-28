@@ -38,6 +38,11 @@ typedef struct RasterizerEffect {
 bool rasterizer_effects_initialize(void);
 
 /**
+ * Disposes effect shaders.
+ */
+void rasterizer_dispose_effects(void);
+
+/**
  * Gets an effect shader by index.
  * 
  * @param index     The index of the effect shader.

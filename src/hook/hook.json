@@ -158,5 +158,6 @@
     "rasterizer_load_vertex_shaders": { "address": "0x52B800", "replace": true, "use_return_value": true },
     "rasterizer_initialize_vertex_shaders": { "address": "0x52B920", "replace": true, "use_return_value": true },
 
-    "rasterizer_initialize_vertex_declarations": { "address": "0x52B2D0", "replace": true, "use_return_value": true }
+    "rasterizer_initialize_vertex_declarations": { "address": "0x52B2D0", "replace": true, "use_return_value": true },
+    "rasterizer_dispose_effects": { "address": "0x52B080", "replace": true }
 }
