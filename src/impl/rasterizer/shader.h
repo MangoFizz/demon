@@ -72,8 +72,8 @@ bool rasterizer_initialize_vertex_shaders(void);
 RasterizerVertexShader *get_rasterizer_vertex_shader(size_t index);
 
 typedef struct RasterizerShaderVersion {
-    uint8_t major;
-    uint8_t minor;
+    int8_t minor;
+    int8_t major;
 } RasterizerShaderVersion;
 
 /**

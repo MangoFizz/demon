@@ -96,9 +96,9 @@ bool rasterizer_load_effect_texture_parameters(size_t effect_index) {
     char version[40];
     bool version_found = false;
     
-    if(*pci_vendor_id == 0 && *pci_device_id == 0x270D) {
-        uint8_t major_version = shader_current_version->major;
-        uint8_t minor_version = shader_current_version->minor;
+    if(*pci_vendor_id == 0 && *pci_device_id != 0x270D) {
+        int8_t major_version = shader_current_version->major;
+        int8_t minor_version = shader_current_version->minor;
         bool technique_valid = false;
         D3DXHANDLE technique_handle;
         while(major_version >= 0 && !version_found) {
